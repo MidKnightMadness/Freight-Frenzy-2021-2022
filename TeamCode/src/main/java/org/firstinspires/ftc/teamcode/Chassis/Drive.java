@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.Chassis;
 
-public abstract class Drive {
+import org.firstinspires.ftc.teamcode.Common.Assembly;
+
+public abstract class Drive  extends Assembly {
 }

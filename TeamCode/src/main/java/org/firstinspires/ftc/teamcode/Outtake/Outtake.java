@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.Outtake;
 
-public abstract class Outtake {
+import org.firstinspires.ftc.teamcode.Common.Assembly;
+
+public abstract class Outtake extends Assembly {
 }
