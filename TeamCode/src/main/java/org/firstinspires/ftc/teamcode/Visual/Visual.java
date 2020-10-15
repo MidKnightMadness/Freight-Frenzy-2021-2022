@@ -1,4 +1,4 @@
 package org.firstinspires.ftc.teamcode.Visual;
 
-public interface Visual {
+public abstract class Visual {
 }
