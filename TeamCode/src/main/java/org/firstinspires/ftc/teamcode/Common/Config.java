@@ -7,4 +7,5 @@ public class Config {
     public static final String DRIVEBR = "BR";
 
     public static final String INTAKE = "Intake";
+    public static final String OUTTAKE = "Outtake";
 }

@@ -1,12 +1,13 @@
-package org.firstinspires.ftc.teamcode.Intake;
+package org.firstinspires.ftc.teamcode.Outtake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Outtake.Outtake;
 
 
-public class SampleOuttake extends Outtake{
+public class SampleOuttake extends Outtake {
 
     //declare intake motor
     DcMotor motor;
@@ -16,7 +17,7 @@ public class SampleOuttake extends Outtake{
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
-        motor = hardwareMap.dcMotor.get("Intake");
+        motor = hardwareMap.dcMotor.get("Outtake");
         //motor2 = hardwareMap.dcMotor.get("Intake2")
     }
 
