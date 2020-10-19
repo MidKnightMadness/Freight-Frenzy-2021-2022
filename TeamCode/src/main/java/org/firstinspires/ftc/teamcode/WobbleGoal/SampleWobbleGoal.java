@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.WobbleGoal;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.Common.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -17,28 +18,28 @@ public class SampleWobbleGoal extends WobbleGoal{
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
         motor = hardwareMap.dcMotor.get(Config.WOBBLEM);
-        servo = hardwareMap.servo.get(Config.WOBBLES);
+        servo1 = hardwareMap.servo.get(Config.WOBBLES);
     }
 
-    //start motor
+    //start elevator motor
     @Override
     public void start() {
         motor.setPower(1);
     }
 
-    //stop motor
+    //stop elevator motor
     @Override
     public void stop() {
         motor.setPower(0);
     }
 
-    //manually set motor speed
+    //manually set elevator motor speed
     @Override
     public void setSpeed(double speed) {
         motor.setPower(speed);
     }
 
-    //Set servo position
+    //Set arm position
     @Override
     public void setPos(double pos)
     {

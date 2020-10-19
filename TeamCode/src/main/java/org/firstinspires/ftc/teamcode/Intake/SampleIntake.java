@@ -17,7 +17,7 @@ public class SampleIntake extends Intake{
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
         motorL = hardwareMap.dcMotor.get(Config.INTAKEL);
-        motorR = hardwareMap.dcMotor.get(Config.INTAKER)
+        motorR = hardwareMap.dcMotor.get(Config.INTAKER);
     }
 
     //start motor
