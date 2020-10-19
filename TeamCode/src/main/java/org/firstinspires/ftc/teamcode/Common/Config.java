@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Common;
 
+//contains constants for config file
 public class Config {
     //Drive motors
     public static final String DRIVEFL = "FL";

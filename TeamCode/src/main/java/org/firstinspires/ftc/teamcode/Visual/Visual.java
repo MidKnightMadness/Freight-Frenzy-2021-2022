@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.Visual;
 
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.teamcode.Common.Assembly;
-import org.firstinspires.ftc.teamcode.Common.Position;
 
 public abstract class Visual extends Assembly {
-    public abstract Position getPosition();
+
+    public abstract VectorF getPosition();
+
+    public enum STARTERSTACK {A,B,C}
+    public abstract STARTERSTACK getStartStack();
 }
