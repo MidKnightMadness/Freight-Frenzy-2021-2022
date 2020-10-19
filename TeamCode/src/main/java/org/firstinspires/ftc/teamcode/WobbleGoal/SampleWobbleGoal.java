@@ -18,7 +18,6 @@ public class SampleWobbleGoal extends WobbleGoal{
     //close value
     private double closed = 0.10;
 
-
     //initialize motor
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
