@@ -16,8 +16,8 @@ public class SampleWobbleGoal extends WobbleGoal{
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
-        motor = hardwareMap.dcMotor.get("Intake");
-        //servo = hardwareMap.servo.get("ServoNameHere");
+        motor = hardwareMap.dcMotor.get(Config.WOBBLEM);
+        servo = hardwareMap.servo.get(Config.WOBBLES);
     }
 
     //start motor

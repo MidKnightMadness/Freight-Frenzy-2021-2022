@@ -9,34 +9,35 @@ import org.firstinspires.ftc.teamcode.Common.Config;
 public class SampleIntake extends Intake{
 
     //declare intake motor
-    private DcMotor motor;
-    private DcMotor motor2;
+    private DcMotor motorL;
+    private DcMotor motorR;
 
     //initialize motor
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
-        motor = hardwareMap.dcMotor.get(Config.INTAKE);
+        motorL = hardwareMap.dcMotor.get(Config.INTAKEL);
+        motorR = hardwareMap.dcMotor.get(Config.INTAKER)
     }
 
     //start motor
     @Override
     public void start() {
-        motor.setPower(1);
-        motor.setPower(-1);
+        motorL.setPower(1);
+        motorR.setPower(-1);
     }
 
     //stop motor
     @Override
     public void stop() {
-        motor.setPower(0);
-        motor2.setPower(0);
+        motorL.setPower(0);
+        motorR.setPower(0);
     }
 
     //manually set motor speed
     @Override
     public void setSpeed(double speed) {
-        motor.setPower(speed);
-        motor2.setPower(-speed);
+        motorL.setPower(speed);
+        motorR.setPower(-speed);
     }
 }
