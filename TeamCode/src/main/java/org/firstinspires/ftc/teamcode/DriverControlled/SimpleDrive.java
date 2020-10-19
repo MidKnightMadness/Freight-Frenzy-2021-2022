@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.Common.Config;
+
 @TeleOp
 public class SimpleDrive extends OpMode {
 
@@ -14,10 +16,10 @@ public class SimpleDrive extends OpMode {
 
     @Override
     public void init() {
-        TL = hardwareMap.dcMotor.get("TL");
-        TR = hardwareMap.dcMotor.get("TR");
-        BL = hardwareMap.dcMotor.get("BL");
-        BR = hardwareMap.dcMotor.get("BR");
+        TL = hardwareMap.dcMotor.get(Config.DRIVEFL);
+        TR = hardwareMap.dcMotor.get(Config.DRIVEFR);
+        BL = hardwareMap.dcMotor.get(Config.DRIVEBL);
+        BR = hardwareMap.dcMotor.get(Config.DRIVEBR);
     }
 
     @Override

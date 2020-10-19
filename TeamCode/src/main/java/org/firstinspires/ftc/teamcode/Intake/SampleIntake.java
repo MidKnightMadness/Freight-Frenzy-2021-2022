@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Common.Config;
 
 public class SampleIntake extends Intake{
 
@@ -15,7 +16,7 @@ public class SampleIntake extends Intake{
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
-        motor = hardwareMap.dcMotor.get("Intake");
+        motor = hardwareMap.dcMotor.get(Config.INTAKE);
     }
 
     //start motor
