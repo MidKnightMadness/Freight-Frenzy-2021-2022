@@ -16,8 +16,9 @@ public abstract class WobbleGoal extends Assembly {
         this.hardwareMap = hardwareMap;
         this.telemetry = telemetry;
     }
-    public abstract void start();
+    public abstract void lift();
+    public abstract void drop();
     public abstract void stop();
-    public abstract void setSpeed(double speed);
-    public abstract void setPos(double pos);
+    public abstract void open();
+    public abstract void close();
 }

@@ -12,6 +12,10 @@ public class SampleWobbleGoal extends WobbleGoal{
     private DcMotor motor;
     //declare servo
     private Servo servo1;
+    //open value
+    private double open = 1.00;
+    //close value
+    private double closed = 0.10;
 
     //initialize motor
     @Override
@@ -21,10 +25,16 @@ public class SampleWobbleGoal extends WobbleGoal{
         servo1 = hardwareMap.servo.get(Config.WOBBLES);
     }
 
-    //start elevator motor
+    //move elevator up
     @Override
-    public void start() {
+    public void lift() {
         motor.setPower(1);
+    }
+
+    //move elevator down
+    @Override
+    public void drop(){
+        motor.setPower(-1);
     }
 
     //stop elevator motor
@@ -33,16 +43,14 @@ public class SampleWobbleGoal extends WobbleGoal{
         motor.setPower(0);
     }
 
-    //manually set elevator motor speed
+    //Open claw
     @Override
-    public void setSpeed(double speed) {
-        motor.setPower(speed);
+    public void open() {
+        servo1.setPosition(open);
     }
 
-    //Set arm position
-    @Override
-    public void setPos(double pos)
-    {
-        servo1.setPosition(pos);
+    //Close claw
+    public void close() {
+        servo1.setPosition(closed);
     }
 }
