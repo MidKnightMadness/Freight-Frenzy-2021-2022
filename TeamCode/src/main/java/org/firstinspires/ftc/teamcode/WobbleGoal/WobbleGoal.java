@@ -19,4 +19,5 @@ public abstract class WobbleGoal extends Assembly {
     public abstract void start();
     public abstract void stop();
     public abstract void setSpeed(double speed);
+    public abstract void setPos(double pos);
 }

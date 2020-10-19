@@ -8,9 +8,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class SampleWobbleGoal extends WobbleGoal{
 
     //declare motor
-    public DcMotor motor;
+    private DcMotor motor;
     //declare servo
-    //public Servo servo;
+    private Servo servo1;
 
     //initialize motor
     @Override
@@ -36,5 +36,12 @@ public class SampleWobbleGoal extends WobbleGoal{
     @Override
     public void setSpeed(double speed) {
         motor.setPower(speed);
+    }
+
+    //Set servo position
+    @Override
+    public void setPos(double pos)
+    {
+        servo1.setPosition(pos);
     }
 }

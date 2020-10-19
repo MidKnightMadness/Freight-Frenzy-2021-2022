@@ -8,7 +8,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class SampleIntake extends Intake{
 
     //declare intake motor
-    DcMotor motor;
+    private DcMotor motor;
+    private DcMotor motor2;
 
     //initialize motor
     @Override
@@ -21,17 +22,20 @@ public class SampleIntake extends Intake{
     @Override
     public void start() {
         motor.setPower(1);
+        motor.set Power(-1);
     }
 
     //stop motor
     @Override
     public void stop() {
         motor.setPower(0);
+        motor2.setPower(0);
     }
 
     //manually set motor speed
     @Override
     public void setSpeed(double speed) {
         motor.setPower(speed);
+        motor2.setPower(-speed);
     }
 }

@@ -7,10 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp
 public class SimpleDrive extends OpMode {
 
-    DcMotor TL;
-    DcMotor TR;
-    DcMotor BL;
-    DcMotor BR;
+    private DcMotor TL;
+    private DcMotor TR;
+    private DcMotor BL;
+    private DcMotor BR;
 
     @Override
     public void init() {
