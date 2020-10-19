@@ -1,20 +1,23 @@
-package org.firstinspires.ftc.teamcode.Intake;
+package org.firstinspires.ftc.teamcode.WobbleGoal;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class SampleIntake extends Intake{
+public class SampleWobbleGoal extends WobbleGoal{
 
-    //declare intake motor
-    DcMotor motor;
+    //declare motor
+    public DcMotor motor;
+    //declare servo
+    //public Servo servo;
 
     //initialize motor
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
         motor = hardwareMap.dcMotor.get("Intake");
+        //servo = hardwareMap.servo.get("ServoNameHere");
     }
 
     //start motor
