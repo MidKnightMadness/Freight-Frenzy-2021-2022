@@ -23,7 +23,7 @@ public class SampleIntake extends Intake{
     @Override
     public void start() {
         motor.setPower(1);
-        motor.set Power(-1);
+        motor.setPower(-1);
     }
 
     //stop motor
