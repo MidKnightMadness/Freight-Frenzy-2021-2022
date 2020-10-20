@@ -12,15 +12,9 @@ public abstract class WobbleGoal extends Assembly {
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
 
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        super.init(hardwareMap, telemetry);
-        motor = hardwareMap.dcMotor.get(Config.WOBBLEM);
-        servo1 = hardwareMap.servo.get(Config.WOBBLES);
-    }
-
-    public void lift();
-    public void drop();
-    public void stop();
-    public void open();
-    public void close();
+    public abstract void lift();
+    public abstract void drop();
+    public abstract void stop();
+    public abstract void open();
+    public abstract void close();
 }
