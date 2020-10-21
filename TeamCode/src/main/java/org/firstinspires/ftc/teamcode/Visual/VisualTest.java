@@ -33,12 +33,9 @@ public class VisualTest extends Visual{
 
     public void update()
     {
-        boolean targetVisible;
         //check if any trackables are visible.
-        targetVisible = false;
         for (VuforiaTrackable trackable : targetsUltimateGoal) {
             if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-                targetVisible = true;
                 //get the robot's position on the field (null if no information available)
                 OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
@@ -54,11 +51,9 @@ public class VisualTest extends Visual{
         return position;
     }
 
-    /*
     public Orientation getRotation(){
-        rotation = new Orientation(Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES).firstAngle, Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES).secondAngle, Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES).thirdAngle);
+        return Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
     }
-    */
 
     public Visual.STARTERSTACK getStartStack()
     {
