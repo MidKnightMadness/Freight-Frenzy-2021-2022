@@ -37,6 +37,7 @@ public class VuforiaTest extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
         //get camera
         webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
@@ -106,6 +107,7 @@ public class VuforiaTest extends LinearOpMode {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
+            telemetry.addLine("I'm alive!");
         }
 
         //stop tracking
