@@ -9,9 +9,6 @@ import org.firstinspires.ftc.teamcode.Common.Assembly;
 
 public abstract class WobbleGoal extends Assembly {
 
-    public HardwareMap hardwareMap;
-    public Telemetry telemetry;
-
     public abstract void lift();
     public abstract void drop();
     public abstract void stop();

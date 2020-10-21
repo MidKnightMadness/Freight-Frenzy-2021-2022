@@ -21,6 +21,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 public class VisualTest extends Visual{
 
     private VectorF position;
+    private Orientation rotation;
     private VuforiaLocalizer vuforia;
     OpenGLMatrix lastLocation = new OpenGLMatrix();
     VuforiaTrackables targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
@@ -32,12 +33,9 @@ public class VisualTest extends Visual{
 
     public void update()
     {
-        boolean targetVisible;
         //check if any trackables are visible.
-        targetVisible = false;
         for (VuforiaTrackable trackable : targetsUltimateGoal) {
             if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-                targetVisible = true;
                 //get the robot's position on the field (null if no information available)
                 OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
@@ -54,10 +52,8 @@ public class VisualTest extends Visual{
     }
 
     public Orientation getRotation(){
-        Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-        return rotation;
+        return Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
     }
-
 
     public Visual.STARTERSTACK getStartStack()
     {
