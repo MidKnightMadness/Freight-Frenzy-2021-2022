@@ -21,7 +21,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 public class VisualTest extends Visual{
 
     private VectorF position;
-    private Orientation rotation;
     private VuforiaLocalizer vuforia;
     OpenGLMatrix lastLocation = new OpenGLMatrix();
     VuforiaTrackables targetsUltimateGoal = this.vuforia.loadTrackablesFromAsset("UltimateGoal");
@@ -54,11 +53,11 @@ public class VisualTest extends Visual{
         return position;
     }
 
-    /*
     public Orientation getRotation(){
-        rotation = new Orientation(Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES).firstAngle, Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES).secondAngle, Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES).thirdAngle);
+        Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+        return rotation;
     }
-    */
+
 
     public Visual.STARTERSTACK getStartStack()
     {
