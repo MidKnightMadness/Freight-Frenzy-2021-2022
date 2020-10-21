@@ -11,8 +11,5 @@ public abstract class Drive  extends Assembly {
     public HardwareMap hardwareMap;
     public Telemetry telemetry;
 
-    public abstract void start();
-    public abstract void stop();
-    public abstract void setSpeed(double speed);
-
+    public abstract void drive(double forwards, double sideways, double turn);
 }
