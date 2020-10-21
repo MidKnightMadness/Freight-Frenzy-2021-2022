@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+//base class for subassemblies to use that contains the init code
 public abstract class Assembly {
 
     private HardwareMap hardwareMap;
