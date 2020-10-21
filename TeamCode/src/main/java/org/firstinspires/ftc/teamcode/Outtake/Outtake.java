@@ -10,9 +10,6 @@ import org.firstinspires.ftc.teamcode.Common.Assembly;
 
 public abstract class Outtake extends Assembly {
 
-    public HardwareMap hardwareMap;
-    public Telemetry telemetry;
-
     public abstract void start();
     public abstract void stop();
     public abstract void setSpeed(double speed);
