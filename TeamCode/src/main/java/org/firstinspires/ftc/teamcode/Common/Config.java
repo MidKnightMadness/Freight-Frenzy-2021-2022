@@ -18,4 +18,8 @@ public class Config {
     public static final String OUTTAKES = "OuttakeS";
     public static final String WOBBLES1 = "WobbleS1";
     public static final String WOBBLES2 = "WobbleS2";
+    public static final String WOBBLES = "WobbleS";
+
+    //Webcam
+    public static final String WEBCAM = "Webcam 1";
 }
