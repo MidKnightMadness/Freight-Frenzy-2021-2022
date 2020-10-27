@@ -11,9 +11,11 @@ public class Config {
     //Subassembly motors
     public static final String INTAKEL = "IntakeL";
     public static final String INTAKER = "IntakeR";
-    public static final String OUTTAKE = "Outtake";
+    public static final String OUTTAKEM = "OuttakeM";
     public static final String WOBBLEM = "WobbleM";
 
     //Subassembly servos
-    public static final String WOBBLES = "WobbleS";
+    public static final String OUTTAKES = "OuttakeS";
+    public static final String WOBBLES1 = "WobbleS1";
+    public static final String WOBBLES2 = "WobbleS2";
 }
