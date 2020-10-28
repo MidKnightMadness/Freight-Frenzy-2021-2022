@@ -7,8 +7,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 //base class for subassemblies to use that contains the init code
 public abstract class Assembly {
 
-    private HardwareMap hardwareMap;
-    private Telemetry telemetry;
+    protected HardwareMap hardwareMap;
+    protected Telemetry telemetry;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry){
         this.hardwareMap = hardwareMap;
