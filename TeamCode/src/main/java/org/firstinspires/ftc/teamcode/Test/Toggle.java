@@ -20,17 +20,19 @@ public class Toggle extends OpMode {
     @Override
     public void loop() {
         if(!lastLeftBumper && gamepad1.left_bumper) {
-            toggle = 1;
-        }
-        else if(lastLeftBumper && gamepad1.left_bumper) {
-            toggle = 0;
+            if(toggle == 1) {
+                toggle = 0;
+            }
+            else if(toggle == 0) {
+                toggle = 1;
+            }
         }
 
-        if(toggle == 1) {
-            telemetry.addLine("enabled");
-        }
         if(toggle == 0) {
             telemetry.addLine("disabled");
+        }
+        if(toggle == 1) {
+            telemetry.addLine("enabled");
         }
 
         lastLeftBumper = gamepad1.left_bumper;
