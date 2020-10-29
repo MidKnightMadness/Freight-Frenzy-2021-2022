@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Intake.SampleIntake;
 public class Toggle extends OpMode {
 
     private int toggle = 0;
+    private boolean lastLeftBumper = false;
 
     @Override
     public void init() {
@@ -18,10 +19,10 @@ public class Toggle extends OpMode {
 
     @Override
     public void loop() {
-        if(gamepad1.left_bumper && toggle == 0) {
+        if(!lastLeftBumper && gamepad1.left_bumper) {
             toggle = 1;
         }
-        else if(gamepad1.left_bumper && toggle == 1) {
+        else if(lastLeftBumper && gamepad1.left_bumper) {
             toggle = 0;
         }
 
@@ -31,5 +32,7 @@ public class Toggle extends OpMode {
         if(toggle == 0) {
             telemetry.addLine("disabled");
         }
+
+        lastLeftBumper = gamepad1.left_bumper;
     }
 }
