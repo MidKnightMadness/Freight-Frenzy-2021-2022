@@ -23,7 +23,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
-public class VisualTest extends Visual{
+public class SampleVisual extends Visual{
 
     private VectorF position;
     private Orientation rotation;
@@ -33,6 +33,12 @@ public class VisualTest extends Visual{
 
     private TFObjectDetector tfod;
     STARTERSTACK starterstack;
+
+    // Constants for perimeter targets
+    private static final float mmPerInch = 25.4f;
+    private static final float halfField = 72 * mmPerInch;
+    private static final float quadField = 36 * mmPerInch;
+    private static final float mmTargetHeight = 6 * mmPerInch;
 
     public void init(HardwareMap hardwareMap, Telemetry telemetry)
     {
@@ -44,7 +50,34 @@ public class VisualTest extends Visual{
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         targetsUltimateGoal = vuforia.loadTrackablesFromAsset("UltimateGoal");
+
+        //set trackable positions
+        //Red Alliance Target
+        targetsUltimateGoal.get(2).setLocation(OpenGLMatrix
+                .translation(0, -halfField, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180)));
+
+        //Blue Alliance Target
+        targetsUltimateGoal.get(3).setLocation(OpenGLMatrix
+                .translation(0, halfField, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0)));
+        //Front Wall Target
+        targetsUltimateGoal.get(4).setLocation(OpenGLMatrix
+                .translation(-halfField, 0, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90)));
+
+        // The tower goal targets are located a quarter field length from the ends of the back perimeter wall.
+        //Blue Tower Goal Target
+        targetsUltimateGoal.get(0).setLocation(OpenGLMatrix
+                .translation(halfField, quadField, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , -90)));
+        //Red Tower Goal Target
+        targetsUltimateGoal.get(1).setLocation(OpenGLMatrix
+                .translation(halfField, -quadField, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
         targetsUltimateGoal.activate();
+
+
 
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
