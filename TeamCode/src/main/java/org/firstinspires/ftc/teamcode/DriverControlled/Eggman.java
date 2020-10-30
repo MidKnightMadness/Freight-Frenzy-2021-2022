@@ -21,7 +21,10 @@ public class Eggman extends OpMode {
     private Intake intake = new SampleIntake();
     private Outtake outtake = new SampleOuttake();
     private WobbleGoal wobbleGoal = new SampleWobbleGoal();
-    private int toggle = 0;
+    private int intToggle = 0;
+    private boolean lastLeftBumper = false;
+    private int outToggle = 0;
+    private boolean lastRightBumper = false;
 
     @Override
     public void init() {
@@ -33,28 +36,43 @@ public class Eggman extends OpMode {
 
     @Override
     public void loop() {
+        //drive controlled by left stick and right stick
         drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-        if(gamepad1.right_bumper) {
+        //intake is a toggle controlled by left bumper
+        if(!lastLeftBumper && gamepad1.left_bumper) {
+            if(intToggle == 1) {
+                intToggle = 0;
+            }
+            else if(intToggle == 0) {
+                intToggle = 1;
+            }
+        }
+        if(intToggle == 0) {
+            outtake.start();
+        }
+        if(intToggle == 1) {
+            outtake.stop();
+        }
+        lastLeftBumper = gamepad1.left_bumper;
+
+        //outtake is a toggle controlled by right bumper
+        if(!lastRightBumper && gamepad1.right_bumper) {
+            if(outToggle == 1) {
+                outToggle = 0;
+            }
+            else if(outToggle == 0) {
+                outToggle = 1;
+            }
+        }
+        if(outToggle == 0) {
             intake.start();
         }
-        else {
+        if(outToggle == 1) {
             intake.stop();
         }
+        lastRightBumper = gamepad1.right_bumper;
 
-        if(gamepad1.left_bumper && toggle == 0) {
-            toggle = 1;
-        }
-        else if (gamepad1.left_bumper && toggle == 1) {
-            toggle = 0;
-        }
-
-        if(toggle == 1) {
-            intake.start();
-        }
-        else if(toggle == 0) {
-            intake.stop();
-        }
 
         if(gamepad1.a) {
             wobbleGoal.open();
