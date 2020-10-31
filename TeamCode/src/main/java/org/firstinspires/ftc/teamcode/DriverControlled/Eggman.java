@@ -25,6 +25,8 @@ public class Eggman extends OpMode {
     private boolean lastLeftBumper = false;
     private int outToggle = 0;
     private boolean lastRightBumper = false;
+    private int openWobToggle = 0;
+    private boolean lastAButton = false;
 
     @Override
     public void init() {
@@ -49,10 +51,10 @@ public class Eggman extends OpMode {
             }
         }
         if(intToggle == 0) {
-            outtake.start();
+            outtake.stop();
         }
         if(intToggle == 1) {
-            outtake.stop();
+            outtake.start();
         }
         lastLeftBumper = gamepad1.left_bumper;
 
@@ -66,26 +68,29 @@ public class Eggman extends OpMode {
             }
         }
         if(outToggle == 0) {
-            intake.start();
+            intake.stop();
         }
         if(outToggle == 1) {
-            intake.stop();
+            intake.start();
         }
         lastRightBumper = gamepad1.right_bumper;
 
-
-        if(gamepad1.a) {
-            wobbleGoal.open();
+        //wobble goal toggles between open and close using a button
+        if(!lastAButton && gamepad1.a) {
+            if(openWobToggle == 1) {
+                openWobToggle = 0;
+            }
+            else if(openWobToggle == 0) {
+                openWobToggle = 1;
+            }
         }
-        else {
-            wobbleGoal.stop();
-        }
-        if(gamepad1.b) {
+        if(openWobToggle == 0) {
             wobbleGoal.close();
         }
-        else {
-            wobbleGoal.stop();
+        if(openWobToggle == 1) {
+            wobbleGoal.open();
         }
+        lastAButton = gamepad1.a;
     }
 
 }

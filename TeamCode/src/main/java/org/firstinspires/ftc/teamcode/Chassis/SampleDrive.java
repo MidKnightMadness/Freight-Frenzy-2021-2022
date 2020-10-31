@@ -16,6 +16,8 @@ public class SampleDrive extends Drive{
     private DcMotorEx motorBL;
     private DcMotorEx motorBR;
     private final double maxVel = 2500;
+    private double xPosition;
+    private double yPosition;
 
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -32,5 +34,25 @@ public class SampleDrive extends Drive{
         motorFR.setVelocity((forwards + sideways - turn) * maxVel);
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways - turn) * maxVel);
+    }
+
+    @Override
+    public void moveToPosition(double x, double y) {
+        //get x and y position (i dunno how)
+        xPosition = 1;
+        yPosition = -1;
+
+        while(xPosition < x) {
+            drive(0, 1, 0);
+        }
+        while(xPosition > x) {
+            drive(0, -1,0);
+        }
+        while(yPosition < y) {
+            drive(1,0,0);
+        }
+        while(yPosition > y) {
+            drive(-1,0,0);
+        }
     }
 }
