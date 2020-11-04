@@ -58,10 +58,12 @@ public class SampleDrive extends Drive{
         while((x > xPosition && y > yPosition) || (x > xPosition && y < yPosition)) {
             drive(0,0,1);
             xPosition = currentPosition.get(0);
+            yPosition = currentPosition.get(2);
         }
         //while the target is in the II/III Quadrant in relation to the bot, turn counterclockwise until facing target
         while((x < xPosition && y < yPosition) || (x < xPosition && y > yPosition)) {
             drive(0,0,-1);
+            xPosition = currentPosition.get(0);
             yPosition = currentPosition.get(2);
         }
         //the target is now directly in front of the bot, behind the bot, to the left of the bot, or to the right of the bot
