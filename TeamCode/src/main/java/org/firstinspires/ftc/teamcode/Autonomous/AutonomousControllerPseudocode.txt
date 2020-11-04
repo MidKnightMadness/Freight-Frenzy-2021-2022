@@ -1,0 +1,52 @@
+Pseudocode:
+
+Variables:
+ - enum dropZone
+
+Objects:
+ - Chassis drive
+ - Intake intake
+ - Outtake outtake
+ - WobbleGoal wobble
+ - Visual v
+
+Functions:
+ @Autonomous
+ + runOpMode():void
+       pick up wobble goal
+       rotate camera towards starter stack? (depends on camera location + orientation)
+
+       scan starter stack
+       if starter stack height is 0
+           dropZone is STARTERSTACK A
+       else if starter stack height is 1
+           dropZone is STARTERSTACK B
+       else if starter stack height is 4
+           dropZone is STARTERSTACK C
+
+       if dropZone is A
+           move forward to nav image
+       else
+           move to the side
+           move forward to nav image
+
+       rotate camera towards nav image
+       scan nav image
+
+       if dropZone is A
+           rotate so wobble goal is in/above zone(?)
+           drop wobble goal
+       else if dropZone is B
+           move to zone B
+           drop wobble goal
+       else if dropZone is C
+           move to zone C
+           drop wobble goal
+
+       move to launch line
+       align with power shot 1
+       shoot power shot 1
+       align with power shot 2
+       shoot power shot 2
+       align with power shot 3
+       shoot power shot 3
