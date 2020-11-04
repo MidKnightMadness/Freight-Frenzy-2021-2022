@@ -22,4 +22,7 @@ public class Config {
 
     //Webcam
     public static final String WEBCAM = "Webcam 1";
+
+    //IMU
+    public static final String IMU = "imu";
 }

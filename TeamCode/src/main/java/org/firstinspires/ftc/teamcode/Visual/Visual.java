@@ -13,5 +13,7 @@ public abstract class Visual extends Assembly {
 
     public enum STARTERSTACK {A,B,C}
     public abstract STARTERSTACK getStartStack();
+    public abstract double getRingOffset();
+
     public abstract void update();
 }
