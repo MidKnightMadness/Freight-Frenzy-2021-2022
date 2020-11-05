@@ -39,57 +39,112 @@ public class SampleDrive extends Drive{
 
     @Override
     public void moveToPosition(double x, double y) {
-        double angle = visual.getRotation().thirdAngle; //replace with .getIMU or whatever
+        double angle = visual.getRotation().thirdAngle;
         VectorF currentPosition = visual.getPosition();
-        double xPosition = currentPosition.get(0);
-        double yPosition = currentPosition.get(2);
+        double positionX = currentPosition.get(0);
+        double positionY = currentPosition.get(2);
 
-        //align bot to field's/target's positive y-axis
+        //turn bot until facing field's positive y-axis
         while(angle > 0){
             drive(0,0,-1);
-            angle = visual.getRotation().thirdAngle; //replace with .getIMU or whatever
+            angle = visual.getRotation().thirdAngle;
         }
         while(angle < 0){
             drive(0,0,1);
-            angle = visual.getRotation().thirdAngle; //replace with .getIMU or whatever
+            angle = visual.getRotation().thirdAngle;
         }
 
-        //while the target is in the I/IV Quadrant in relation to the bot, turn clockwise until facing target
-        while((x > xPosition && y > yPosition) || (x > xPosition && y < yPosition)) {
+        //while the target is in the I/IV Quadrant in relation to the bot, turn clockwise until target is on bot's x-axis or y-axis
+        while((x > positionX && y > positionY) || (x > positionX && y < positionY)) {
             drive(0,0,1);
-            xPosition = currentPosition.get(0);
-            yPosition = currentPosition.get(2);
+            positionX = currentPosition.get(0);
+            positionY = currentPosition.get(2);
         }
-        //while the target is in the II/III Quadrant in relation to the bot, turn counterclockwise until facing target
-        while((x < xPosition && y < yPosition) || (x < xPosition && y > yPosition)) {
+        //while the target is in the II/III Quadrant in relation to the bot, turn counterclockwise until target is on bot's x-axis or y-axis
+        while((x < positionX && y < positionY) || (x < positionX && y > positionY)) {
             drive(0,0,-1);
-            xPosition = currentPosition.get(0);
-            yPosition = currentPosition.get(2);
+            positionX = currentPosition.get(0);
+            positionY = currentPosition.get(2);
         }
         //the target is now directly in front of the bot, behind the bot, to the left of the bot, or to the right of the bot
 
-        //move forwards if the bot is in front
-        while(yPosition < y) {
+        //move forwards if the target is in front
+        while(positionY < y) {
             drive(1,0,0);
-            yPosition = currentPosition.get(2);
+            positionY = currentPosition.get(2);
         }
-        //move backwards if the bot is in back
-        while(yPosition > y) {
+        //move backwards if the target is in back
+        while(positionY > y) {
             drive(-1,0,0);
-            yPosition = currentPosition.get(2);
+            positionY = currentPosition.get(2);
         }
 
-        //move left if the bot is to the left
-        while(xPosition < x) {
+        //move left if the target is to the left
+        while(positionX < x) {
             drive(0, 1, 0);
-            xPosition = currentPosition.get(0);
+            positionX = currentPosition.get(0);
         }
-        //move right if the bot is to the right
-        while(xPosition > x) {
-            drive(0, -1,0);
-            xPosition = currentPosition.get(0);
+        //move right if the target is to the right
+        while(positionX > x) {
+            drive(0, -1, 0);
+            positionX = currentPosition.get(0);
+        }
+    }
+
+    @Override
+    public void moveToPosition(VectorF target) {
+        double angle = visual.getRotation().thirdAngle;
+        VectorF currentPosition = visual.getPosition();
+        double positionX = currentPosition.get(0);
+        double positionY = currentPosition.get(2);
+        target = visual.getPosition();
+        double targetX = target.get(0);
+        double targetY = target.get(2);
+
+        //turn bot until facing field's positive y-axis
+        while(angle > 0){
+            drive(0,0,-1);
+            angle = visual.getRotation().thirdAngle;
+        }
+        while(angle < 0){
+            drive(0,0,1);
+            angle = visual.getRotation().thirdAngle;
         }
 
+        //while the target is in the I/IV Quadrant in relation to the bot, turn clockwise until target is on bot's x-axis or y-axis
+        while((targetX > positionX && targetY > positionY) || (targetX > positionX && targetY < positionY)) {
+            drive(0,0,1);
+            positionX = currentPosition.get(0);
+            positionY = currentPosition.get(2);
+        }
+        //while the target is in the II/III Quadrant in relation to the bot, turn counterclockwise until target is on bot's x-axis or y-axis
+        while((targetX < positionX && targetY < positionY) || (targetX < positionX && targetY > positionY)) {
+            drive(0,0,-1);
+            positionX = currentPosition.get(0);
+            positionY = currentPosition.get(2);
+        }
+        //the target is now directly in front of the bot, behind the bot, to the left of the bot, or to the right of the bot
 
+        //move forwards if the target is in front
+        while(positionY < targetY) {
+            drive(1,0,0);
+            positionY = currentPosition.get(2);
+        }
+        //move backwards if the target is in back
+        while(positionY > targetY) {
+            drive(-1,0,0);
+            positionY = currentPosition.get(2);
+        }
+
+        //move left if the target is to the left
+        while(positionX < targetX) {
+            drive(0, 1, 0);
+            positionX = currentPosition.get(0);
+        }
+        //move right if the target is to the right
+        while(positionX > targetX) {
+            drive(0, -1, 0);
+            positionX = currentPosition.get(0);
+        }
     }
 }
