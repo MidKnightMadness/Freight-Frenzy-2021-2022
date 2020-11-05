@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.Common.Config;
 import org.firstinspires.ftc.teamcode.Visual.Visual;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 
+import static org.firstinspires.ftc.teamcode.Common.Constants.encoderTicksPerInch;
+
 public class SampleDrive extends Drive{
 
     //declare wheel motors
@@ -27,6 +29,11 @@ public class SampleDrive extends Drive{
         motorFR = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFR);
         motorBL = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEBL);
         motorBR = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEBR);
+
+        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
@@ -93,58 +100,25 @@ public class SampleDrive extends Drive{
 
     @Override
     public void moveToPosition(VectorF target) {
-        double angle = visual.getRotation().thirdAngle;
-        VectorF currentPosition = visual.getPosition();
-        double positionX = currentPosition.get(0);
-        double positionY = currentPosition.get(2);
-        target = visual.getPosition();
         double targetX = target.get(0);
         double targetY = target.get(2);
 
-        //turn bot until facing field's positive y-axis
-        while(angle > 0){
-            drive(0,0,-1);
-            angle = visual.getRotation().thirdAngle;
-        }
-        while(angle < 0){
-            drive(0,0,1);
-            angle = visual.getRotation().thirdAngle;
-        }
+        moveToPosition(targetX, targetY);
+    }
 
-        //while the target is in the I/IV Quadrant in relation to the bot, turn clockwise until target is on bot's x-axis or y-axis
-        while((targetX > positionX && targetY > positionY) || (targetX > positionX && targetY < positionY)) {
-            drive(0,0,1);
-            positionX = currentPosition.get(0);
-            positionY = currentPosition.get(2);
-        }
-        //while the target is in the II/III Quadrant in relation to the bot, turn counterclockwise until target is on bot's x-axis or y-axis
-        while((targetX < positionX && targetY < positionY) || (targetX < positionX && targetY > positionY)) {
-            drive(0,0,-1);
-            positionX = currentPosition.get(0);
-            positionY = currentPosition.get(2);
-        }
-        //the target is now directly in front of the bot, behind the bot, to the left of the bot, or to the right of the bot
+    @Override
+    public void move(double inchesX, double inchesY) {
+        inchesX *= encoderTicksPerInch;
+        inchesY *= encoderTicksPerInch;
 
-        //move forwards if the target is in front
-        while(positionY < targetY) {
-            drive(1,0,0);
-            positionY = currentPosition.get(2);
-        }
-        //move backwards if the target is in back
-        while(positionY > targetY) {
-            drive(-1,0,0);
-            positionY = currentPosition.get(2);
-        }
+        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        //move left if the target is to the left
-        while(positionX < targetX) {
-            drive(0, 1, 0);
-            positionX = currentPosition.get(0);
-        }
-        //move right if the target is to the right
-        while(positionX > targetX) {
-            drive(0, -1, 0);
-            positionX = currentPosition.get(0);
-        }
+        motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int)inchesY + (int)inchesX);
+        motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int)inchesY + (int)inchesX);
+        motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
+        motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
     }
 }
