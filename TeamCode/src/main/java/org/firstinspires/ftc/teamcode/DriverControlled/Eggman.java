@@ -51,10 +51,10 @@ public class Eggman extends OpMode {
             }
         }
         if(intToggle == 0) {
-            outtake.stop();
+            intake.stop();
         }
         if(intToggle == 1) {
-            outtake.start();
+            intake.start();
         }
         lastLeftBumper = gamepad1.left_bumper;
 
@@ -68,10 +68,10 @@ public class Eggman extends OpMode {
             }
         }
         if(outToggle == 0) {
-            intake.stop();
+            outtake.stop();
         }
         if(outToggle == 1) {
-            intake.start();
+            outtake.start();
         }
         lastRightBumper = gamepad1.right_bumper;
 

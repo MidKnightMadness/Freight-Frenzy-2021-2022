@@ -40,8 +40,6 @@ public class SampleVisual extends Visual{
 
     double ringOffset;
 
-    BNO055IMU imu;
-
     // Constants for perimeter targets
     private static final float mmPerInch = 25.4f;
     private static final float halfField = 72 * mmPerInch;
@@ -93,28 +91,6 @@ public class SampleVisual extends Visual{
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset("UltimateGoal.tflite", "Quad", "Single");
         tfod.activate();
-
-
-
-        // Set up the parameters with which we will use our IMU. Note that integration
-        // algorithm here just reports accelerations to the logcat log; it doesn't actually
-        // provide positional information.
-        BNO055IMU.Parameters IMUParameters = new BNO055IMU.Parameters();
-        IMUParameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        IMUParameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        IMUParameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        IMUParameters.loggingEnabled      = true;
-        IMUParameters.loggingTag          = "IMU";
-        IMUParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
-        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-        // and named "imu".
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(IMUParameters);
-
-        // Start the logging of measured acceleration
-        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
     }
 
     public void update()
@@ -169,5 +145,4 @@ public class SampleVisual extends Visual{
     public double getRingOffset() {
         return ringOffset;
     }
-
 }
