@@ -23,6 +23,11 @@ public class Config {
     //Webcam
     public static final String WEBCAM = "Webcam 1";
 
+    //Distance Sensors
+    public static final String DISTANCESENSORFRONT = "Distance Sensor F";
+    public static final String DISTANCESENSORLEFT = "Distance Sensor L";
+    public static final String DISTANCESENSORRIGHT = "Distance Sensor R";
+
     //IMU
     public static final String IMU = "imu";
 }

@@ -16,5 +16,4 @@ public class MrBonesWildRide extends LinearOpMode {
 
         drive.moveToPosition(1,1);
     }
-
 }
