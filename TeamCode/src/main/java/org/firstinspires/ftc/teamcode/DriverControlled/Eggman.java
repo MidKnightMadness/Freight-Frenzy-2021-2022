@@ -96,12 +96,6 @@ public class Eggman extends OpMode {
         if(gamepad1.b) {
             drive.moveToPosition(1,1);
         }
-        if(gamepad1.x) {
-            drive.move(1,1);
-        }
-        if(gamepad1.y) {
-            drive.turn(1);
-        }
     }
 
 }
