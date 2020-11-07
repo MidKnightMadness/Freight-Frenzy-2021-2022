@@ -1,0 +1,43 @@
+Pseudocode:
+
+Variables:
+ - int intToggle
+ - boolean lastLeftBumper
+ - int outToggle
+ - boolean lastRightBumper
+ - int openWobToggle
+ - boolean lastAButton
+
+Objects:
+ - Drive drive
+ - Intake intake
+ - Outtake outtake
+ - WobbleGoal wobbleGoal
+
+Functions:
+ + init():void
+        initialize all subassemblies
+
+@Teleop
+ + loop():void
+        activate drive and monitor its joysticks + move in accordance
+
+        if intake is not on and the intake bumper is pressed
+            if intake is on
+                turn intake off
+            else
+                turn intake on
+        continue monitoring the intake bumper
+
+        if outtake is not on and the outtake bumper is pressed
+            if outtake is on
+                turn outtake off
+            else
+                turn outtake on
+        continue monitoring the outtake bumper
+
+        if wobbleGoal is not open and the wobbleGoal button is pressed
+            if wobbleGoal is open
+                close wobbleGoal
+            else
+                open wobbleGoal

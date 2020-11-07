@@ -14,7 +14,6 @@ Functions:
  @Autonomous
  + runOpMode():void
        pick up wobble goal
-       rotate camera towards starter stack? (depends on camera location + orientation)
 
        scan starter stack
        if starter stack height is 0
@@ -25,22 +24,20 @@ Functions:
            dropZone is STARTERSTACK C
 
        if dropZone is A
-           move forward to nav image
+           move forward to drop zones
        else
            move to the side
-           move forward to nav image
-
-       rotate camera towards nav image
-       scan nav image
+           move forward to drop zones
 
        if dropZone is A
-           rotate so wobble goal is in/above zone(?)
+           rotate so wobble goal is in zone
            drop wobble goal
        else if dropZone is B
-           move to zone B
+           move forward to zone B
+           rotate so wobble goal is in zone
            drop wobble goal
        else if dropZone is C
-           move to zone C
+           move forward to zone C
            drop wobble goal
 
        move to launch line

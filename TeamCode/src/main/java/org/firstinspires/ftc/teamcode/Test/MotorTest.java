@@ -1,11 +1,12 @@
-package org.firstinspires.ftc.teamcode.DriverControlled;
+package org.firstinspires.ftc.teamcode.Test;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 @TeleOp
-public class PowerShot extends OpMode {
+public class MotorTest extends OpMode {
     DcMotor motor;
 
     @Override
@@ -15,7 +16,6 @@ public class PowerShot extends OpMode {
 
     @Override
     public void loop() {
-        motor.setPower(-0.8);
+        motor.setPower(-1);
     }
 }
-
