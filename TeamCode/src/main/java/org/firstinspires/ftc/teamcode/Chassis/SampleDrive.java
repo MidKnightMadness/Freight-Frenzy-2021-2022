@@ -25,6 +25,8 @@ public class SampleDrive extends Drive{
     private DcMotorEx motorBR;
     private final double maxVel = 2500;
     private Visual visual;
+    private double currentX = 0;
+    private double currentY = 0;
 
     BNO055IMU imu;
 
@@ -73,69 +75,10 @@ public class SampleDrive extends Drive{
     }
 
     @Override
-    public void moveToPosition(double x, double y) {
-        double angle = imu.getAngularOrientation().thirdAngle;
-        VectorF currentPosition = visual.getPosition();
-        double positionX = currentPosition.get(0);
-        double positionY = currentPosition.get(2);
-
-        //turn bot until facing field's positive y-axis
-        while(angle > 0){
-            drive(0,0,-1);
-            angle = imu.getAngularOrientation().thirdAngle;
-        }
-        while(angle < 0){
-            drive(0,0,1);
-            angle = imu.getAngularOrientation().thirdAngle;
-        }
-
-        //while the target is in the I/IV Quadrant in relation to the bot, turn clockwise until target is on bot's x-axis or y-axis
-        while((x > positionX && y > positionY) || (x > positionX && y < positionY)) {
-            drive(0,0,1);
-            positionX = currentPosition.get(0);
-            positionY = currentPosition.get(2);
-        }
-        //while the target is in the II/III Quadrant in relation to the bot, turn counterclockwise until target is on bot's x-axis or y-axis
-        while((x < positionX && y < positionY) || (x < positionX && y > positionY)) {
-            drive(0,0,-1);
-            positionX = currentPosition.get(0);
-            positionY = currentPosition.get(2);
-        }
-        //the target is now directly in front of the bot, behind the bot, to the left of the bot, or to the right of the bot
-
-        //move forwards if the target is in front
-        while(positionY < y) {
-            drive(1,0,0);
-            positionY = currentPosition.get(2);
-        }
-        //move backwards if the target is in back
-        while(positionY > y) {
-            drive(-1,0,0);
-            positionY = currentPosition.get(2);
-        }
-
-        //move left if the target is to the left
-        while(positionX < x) {
-            drive(0, 1, 0);
-            positionX = currentPosition.get(0);
-        }
-        //move right if the target is to the right
-        while(positionX > x) {
-            drive(0, -1, 0);
-            positionX = currentPosition.get(0);
-        }
-    }
-
-    @Override
-    public void moveToPosition(VectorF target) {
-        double targetX = target.get(0);
-        double targetY = target.get(2);
-
-        moveToPosition(targetX, targetY);
-    }
-
-    @Override
     public void move(double inchesX, double inchesY) {
+        currentX += inchesX;
+        currentY += inchesY;
+
         inchesX *= encoderTicksPerInch;
         inchesY *= encoderTicksPerInch;
 
@@ -149,4 +92,88 @@ public class SampleDrive extends Drive{
         motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
         motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
     }
+
+    @Override
+    public void turn(double degrees) {
+        double targetAngle = imu.getAngularOrientation().thirdAngle + degrees;
+
+        while(targetAngle != imu.getAngularOrientation().thirdAngle) {
+            if(targetAngle > imu.getAngularOrientation().thirdAngle) {
+                drive(0,0,1);
+            }
+            else if(targetAngle < imu.getAngularOrientation().thirdAngle)  {
+                drive(0,0,-1);
+            }
+        }
+
+    }
+
+    @Override
+    public void moveToPosition(double x, double y) {
+        double angle = imu.getAngularOrientation().thirdAngle;
+        double distanceFromX = x;
+        double distanceFromY = y;
+
+        if(currentX > 0) {
+            distanceFromX = Math.abs(currentX - x);
+        }
+        else if(currentX < 0) {
+            distanceFromX  = Math.abs(x - currentX);
+        }
+        if(currentY > 0) {
+            distanceFromY = Math.abs(currentY -  y);
+        }
+        else if(currentY < 0) {
+            distanceFromY = Math.abs(y - currentY);
+        }
+        double distance = Math.sqrt(Math.pow(distanceFromX, 2) + Math.pow(distanceFromY, 2));
+
+        //turn bot until facing field's positive y-axis
+        while(angle !=  0)  {
+            if(angle > 0){
+                drive(0,0,-1);
+                angle = imu.getAngularOrientation().thirdAngle;
+            }
+            else if(angle < 0){
+                drive(0,0,1);
+                angle = imu.getAngularOrientation().thirdAngle;
+            }
+        }
+
+        //calculate the angle of the bot to the target using trigonometry
+        double targetAngle = (90 - Math.asin(distanceFromY * distance));
+        if(x > currentX && y < currentY) {
+            targetAngle += 90;
+        }
+        else if(x < currentX && y > currentY) {
+            targetAngle *= -1;
+        }
+        else if(x < currentX && y < currentY) {
+            targetAngle = (-targetAngle) - 90;
+        }
+
+        //turn until the bot is facing the target
+        while(imu.getAngularOrientation().thirdAngle != targetAngle) {
+            if (targetAngle > 0) {
+                drive(0, 0, 1);
+            }
+            else if (targetAngle < 0) {
+                drive(0, 0, -1);
+            }
+        }
+        //the target is now directly in front of the bot
+
+        //drive to the target
+        move(0, distance);
+    }
+
+    @Override
+    public void moveToPosition(VectorF target) {
+        double targetX = target.get(0);
+        double targetY = target.get(2);
+
+        moveToPosition(targetX, targetY);
+    }
+
+
 }

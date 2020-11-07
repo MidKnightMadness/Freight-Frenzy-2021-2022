@@ -91,6 +91,17 @@ public class Eggman extends OpMode {
             wobbleGoal.open();
         }
         lastAButton = gamepad1.a;
+
+
+        if(gamepad1.b) {
+            drive.moveToPosition(1,1);
+        }
+        if(gamepad1.x) {
+            drive.move(1,1);
+        }
+        if(gamepad1.y) {
+            drive.turn(1);
+        }
     }
 
 }
