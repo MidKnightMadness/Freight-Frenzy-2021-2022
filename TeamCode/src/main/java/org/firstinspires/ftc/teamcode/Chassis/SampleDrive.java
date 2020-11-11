@@ -76,8 +76,7 @@ public class SampleDrive extends Drive{
 
     @Override
     public void move(double inchesX, double inchesY) {
-        currentX += inchesX;
-        currentY += inchesY;
+
 
         inchesX *= encoderTicksPerInch;
         inchesY *= encoderTicksPerInch;
@@ -110,6 +109,7 @@ public class SampleDrive extends Drive{
 
     @Override
     public void moveToPosition(double x, double y) {
+
         double angle = imu.getAngularOrientation().thirdAngle;
         double distanceFromX = x;
         double distanceFromY = y;
