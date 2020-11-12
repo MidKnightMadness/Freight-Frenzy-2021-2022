@@ -135,7 +135,6 @@ public class SampleDrive extends Drive{
     @Override
     public void moveToPosition(double x, double y) {
 
-        double angle = imu.getAngularOrientation().thirdAngle;
         double distanceFromX = x;
         double distanceFromY = y;
 
@@ -154,14 +153,12 @@ public class SampleDrive extends Drive{
         double distance = Math.sqrt(Math.pow(distanceFromX, 2) + Math.pow(distanceFromY, 2));
 
         //turn bot until facing field's positive y-axis
-        while(angle !=  0)  {
-            if(angle > 0){
+        while(imu.getAngularOrientation().thirdAngle !=  0)  {
+            if(imu.getAngularOrientation().thirdAngle > 0){
                 drive(0,0,-1);
-                angle = imu.getAngularOrientation().thirdAngle;
             }
-            else if(angle < 0){
+            else if(imu.getAngularOrientation().thirdAngle < 0){
                 drive(0,0,1);
-                angle = imu.getAngularOrientation().thirdAngle;
             }
         }
 
