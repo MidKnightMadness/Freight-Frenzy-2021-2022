@@ -105,6 +105,10 @@ public class SampleDrive extends Drive{
             motorFR.setPower(0.5);
             motorBL.setPower(0.5);
             motorBR.setPower(0.5);
+            telemetry.addLine("FL: " + motorFL.getCurrentPosition());
+            telemetry.addLine("FR: " + motorFR.getCurrentPosition());
+            telemetry.addLine("BL: " + motorBL.getCurrentPosition());
+            telemetry.addLine("BR: " + motorBR.getCurrentPosition());
         }
 
         telemetry.addLine("Not dead!");
