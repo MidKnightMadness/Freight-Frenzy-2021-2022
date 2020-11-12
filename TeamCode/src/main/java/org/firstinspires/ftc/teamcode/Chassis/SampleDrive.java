@@ -75,65 +75,46 @@ public class SampleDrive extends Drive{
 
     @Override
     public void move(double inchesX, double inchesY) {
+        double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
+        double movingDirection = Math.asin(inchesX/hypotenuse) + imu.getAngularOrientation().firstAngle;
         inchesX *= encoderTicksPerInch;
         inchesY *= encoderTicksPerInch;
-
-        /*
-        motorFL.setTargetPosition(0);
-        motorFR.setTargetPosition(0);
-        motorBL.setTargetPosition(0);
-        motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
-        */
-        telemetry.addLine("Hello! I'm alive!");
 
         motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int)inchesY + (int)inchesX);
         motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int)inchesY + (int)inchesX);
         motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
         motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
 
-        telemetry.addLine("Still alive!");
-
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        telemetry.addLine("Still ok!");
-
         while(motorFL.getTargetPosition() != motorFL.getCurrentPosition() && motorFR.getTargetPosition() != motorFR.getCurrentPosition() && motorBL.getTargetPosition() != motorBL.getCurrentPosition() && motorBR.getTargetPosition() != motorBR.getCurrentPosition()) {
-            motorFL.setPower(0.5);
-            motorFR.setPower(0.5);
-            motorBL.setPower(0.5);
-            motorBR.setPower(0.5);
-            telemetry.addLine("FL: " + motorFL.getCurrentPosition());
-            telemetry.addLine("FR: " + motorFR.getCurrentPosition());
-            telemetry.addLine("BL: " + motorBL.getCurrentPosition());
-            telemetry.addLine("BR: " + motorBR.getCurrentPosition());
+            motorFL.setPower(1);
+            motorFR.setPower(1);
+            motorBL.setPower(1);
+            motorBR.setPower(1);
         }
-
-        telemetry.addLine("Not dead!");
 
         motorFL.setPower(0);
         motorFR.setPower(0);
         motorBL.setPower(0);
         motorBR.setPower(0);
-
-        telemetry.addLine("Finished!");
     }
 
     @Override
     public void turn(double degrees) {
-        double targetAngle = imu.getAngularOrientation().thirdAngle + degrees;
+        double targetAngle = imu.getAngularOrientation().firstAngle + degrees;
 
-        while(targetAngle != imu.getAngularOrientation().thirdAngle) {
-            if(targetAngle > imu.getAngularOrientation().thirdAngle) {
+        while(targetAngle != imu.getAngularOrientation().firstAngle) {
+            if(targetAngle > imu.getAngularOrientation().firstAngle) {
                 drive(0,0,1);
             }
-            else if(targetAngle < imu.getAngularOrientation().thirdAngle)  {
+            else if(targetAngle < imu.getAngularOrientation().firstAngle)  {
                 drive(0,0,-1);
             }
         }
-
     }
 
     @Override
@@ -154,43 +135,19 @@ public class SampleDrive extends Drive{
         else if(currentY < 0) {
             distanceFromY = Math.abs(y - currentY);
         }
-        double distance = Math.sqrt(Math.pow(distanceFromX, 2) + Math.pow(distanceFromY, 2));
 
         //turn bot until facing field's positive y-axis
-        while(imu.getAngularOrientation().thirdAngle !=  0)  {
-            if(imu.getAngularOrientation().thirdAngle > 0){
+        while(imu.getAngularOrientation().firstAngle !=  0)  {
+            if(imu.getAngularOrientation().firstAngle > 0){
                 drive(0,0,-1);
             }
-            else if(imu.getAngularOrientation().thirdAngle < 0){
+            else if(imu.getAngularOrientation().firstAngle < 0){
                 drive(0,0,1);
             }
         }
 
-        //calculate the angle of the bot to the target using trigonometry
-        double targetAngle = (90 - Math.asin(distanceFromY * distance));
-        if(x > currentX && y < currentY) {
-            targetAngle += 90;
-        }
-        else if(x < currentX && y > currentY) {
-            targetAngle *= -1;
-        }
-        else if(x < currentX && y < currentY) {
-            targetAngle = (-targetAngle) - 90;
-        }
-
-        //turn until the bot is facing the target
-        while(imu.getAngularOrientation().thirdAngle != targetAngle) {
-            if (targetAngle > 0) {
-                drive(0, 0, 1);
-            }
-            else if (targetAngle < 0) {
-                drive(0, 0, -1);
-            }
-        }
-        //the target is now directly in front of the bot
-
         //drive to the target
-        move(0, distance);
+        move(distanceFromX, distanceFromY);
     }
 
     @Override
