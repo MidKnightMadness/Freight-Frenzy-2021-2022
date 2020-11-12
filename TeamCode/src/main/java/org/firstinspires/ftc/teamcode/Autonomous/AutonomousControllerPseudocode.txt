@@ -1,8 +1,5 @@
 Pseudocode:
 
-Variables:
- - enum dropZone
-
 Objects:
  - Chassis drive
  - Intake intake
@@ -14,31 +11,17 @@ Functions:
  @Autonomous
  + runOpMode():void
        pick up wobble goal
-
        scan starter stack
        if starter stack height is 0
-           dropZone is STARTERSTACK A
+           move forward to drop zone A
        else if starter stack height is 1
-           dropZone is STARTERSTACK B
-       else if starter stack height is 4
-           dropZone is STARTERSTACK C
-
-       if dropZone is A
-           move forward to drop zones
-       else
-           move to the side
-           move forward to drop zones
-
-       if dropZone is A
-           rotate so wobble goal is in zone
-           drop wobble goal
-       else if dropZone is B
+           move to side
            move forward to zone B
            rotate so wobble goal is in zone
-           drop wobble goal
        else if dropZone is C
+           move to side
            move forward to zone C
-           drop wobble goal
+       drop wobble goal
 
        move to launch line
        align with power shot 1

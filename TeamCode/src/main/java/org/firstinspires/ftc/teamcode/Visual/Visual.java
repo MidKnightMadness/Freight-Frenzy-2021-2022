@@ -11,7 +11,7 @@ public abstract class Visual extends Assembly {
     public abstract VectorF getPosition();
     public abstract Orientation getRotation();
 
-    public enum STARTERSTACK {A,B,C}
+    public enum STARTERSTACK {A,B,C};
     public abstract STARTERSTACK getStartStack();
     public abstract double getRingOffset();
 

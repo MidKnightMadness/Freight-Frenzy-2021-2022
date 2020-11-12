@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.Common.Assembly;
 import org.firstinspires.ftc.teamcode.Common.Config;
+import org.firstinspires.ftc.teamcode.Test.PowerShot;
 import org.firstinspires.ftc.teamcode.Visual.Visual;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 
@@ -43,8 +44,6 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-
-
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
@@ -76,20 +75,46 @@ public class SampleDrive extends Drive{
 
     @Override
     public void move(double inchesX, double inchesY) {
-
-
         inchesX *= encoderTicksPerInch;
         inchesY *= encoderTicksPerInch;
+
+        /*
+        motorFL.setTargetPosition(0);
+        motorFR.setTargetPosition(0);
+        motorBL.setTargetPosition(0);
+        motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
+        */
+        telemetry.addLine("Hello! I'm alive!");
+
+        motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int)inchesY + (int)inchesX);
+        motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int)inchesY + (int)inchesX);
+        motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
+        motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
+
+        telemetry.addLine("Still alive!");
 
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int)inchesY + (int)inchesX);
-        motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int)inchesY + (int)inchesX);
-        motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
-        motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
+        telemetry.addLine("Still ok!");
+
+        while(motorFL.getTargetPosition() != motorFL.getCurrentPosition() && motorFR.getTargetPosition() != motorFR.getCurrentPosition() && motorBL.getTargetPosition() != motorBL.getCurrentPosition() && motorBR.getTargetPosition() != motorBR.getCurrentPosition()) {
+            motorFL.setPower(0.5);
+            motorFR.setPower(0.5);
+            motorBL.setPower(0.5);
+            motorBR.setPower(0.5);
+        }
+
+        telemetry.addLine("Not dead!");
+
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorBL.setPower(0);
+        motorBR.setPower(0);
+
+        telemetry.addLine("Finished!");
     }
 
     @Override
