@@ -138,7 +138,6 @@ public class SampleDrive extends Drive{
 
     @Override
     public void moveToPosition(double x, double y) {
-
         telemetry.addLine("Start");
         double distanceFromX = x;
         double distanceFromY = y;
@@ -156,15 +155,24 @@ public class SampleDrive extends Drive{
             distanceFromY = Math.abs(y - currentY);
         }
 
+        boolean angleTolerance = false;
+
         telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
 
         //turn bot until facing field's positive y-axis
-        while(imu.getAngularOrientation().firstAngle !=  0)  {
-            if(imu.getAngularOrientation().firstAngle > 0){
+        while(!angleTolerance)  {
+            angleTolerance = imu.getAngularOrientation().firstAngle >= -5 && imu.getAngularOrientation().firstAngle <= 5;
+            if(imu.getAngularOrientation().firstAngle > 45){
                 drive(0,0,-1);
             }
-            else if(imu.getAngularOrientation().firstAngle < 0){
+            else if(imu.getAngularOrientation().firstAngle < -45){
                 drive(0,0,1);
+            }
+            else if(imu.getAngularOrientation().firstAngle > 0){
+                drive(0,0,imu.getAngularOrientation().firstAngle/(-50));
+            }
+            else if(imu.getAngularOrientation().firstAngle < 0) {
+                drive(0,0,imu.getAngularOrientation().firstAngle/(-50));
             }
         }
 
