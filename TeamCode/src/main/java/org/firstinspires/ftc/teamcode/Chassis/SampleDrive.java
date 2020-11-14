@@ -39,6 +39,10 @@ public class SampleDrive extends Drive{
         motorBL = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEBL);
         motorBR = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEBR);
 
+        motorFL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -68,9 +72,9 @@ public class SampleDrive extends Drive{
     @Override
     public void drive(double forwards, double sideways, double turn) {
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
-        motorFR.setVelocity((forwards + sideways - turn) * maxVel);
+        motorFR.setVelocity((forwards + sideways + turn) * maxVel);
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
-        motorBR.setVelocity((forwards - sideways - turn) * maxVel);
+        motorBR.setVelocity((forwards - sideways + turn) * maxVel);
     }
     @Override
     public void move(double inchesX, double inchesY) {
@@ -152,7 +156,8 @@ public class SampleDrive extends Drive{
             distanceFromY = Math.abs(y - currentY);
         }
 
-        telemetry.addLine("Start turn");
+        telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
+
         //turn bot until facing field's positive y-axis
         while(imu.getAngularOrientation().firstAngle !=  0)  {
             if(imu.getAngularOrientation().firstAngle > 0){
@@ -163,9 +168,13 @@ public class SampleDrive extends Drive{
             }
         }
 
-        telemetry.addLine("Start drive");
+        telemetry.addData("dist from X", distanceFromX);
+        telemetry.addData("dist from Y", distanceFromY);
+
         //drive to the target
+        telemetry.addLine("start move");
         move(distanceFromX, distanceFromY);
+        telemetry.addLine("end move");
     }
 
     @Override
