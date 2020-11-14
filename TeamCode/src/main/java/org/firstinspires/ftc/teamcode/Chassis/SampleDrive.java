@@ -72,11 +72,13 @@ public class SampleDrive extends Drive{
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways - turn) * maxVel);
     }
-
     @Override
     public void move(double inchesX, double inchesY) {
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         double movingDirection = Math.asin(inchesX/hypotenuse) + imu.getAngularOrientation().firstAngle;
+        currentX += Math.sin(movingDirection) * hypotenuse;
+        currentY += Math.cos(movingDirection) * hypotenuse;
+
         inchesX *= encoderTicksPerInch;
         inchesY *= encoderTicksPerInch;
 
@@ -96,11 +98,14 @@ public class SampleDrive extends Drive{
             motorBL.setPower(1);
             motorBR.setPower(1);
         }
-
         motorFL.setPower(0);
         motorFR.setPower(0);
         motorBL.setPower(0);
         motorBR.setPower(0);
+        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override

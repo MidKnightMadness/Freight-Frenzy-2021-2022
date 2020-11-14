@@ -14,7 +14,8 @@ public class MrBonesWildRide extends LinearOpMode {
         drive.init(hardwareMap, telemetry);
         waitForStart();
 
-        drive.move(1,1);
+        drive.moveToPosition(1,1);
+        drive.moveToPosition(0,0);
         while(!isStopRequested()) {
         }
     }
