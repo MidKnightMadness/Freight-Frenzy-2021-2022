@@ -102,10 +102,10 @@ public class SampleDrive extends Drive{
         boolean motorBRTolerance = false;
 
         while(!motorFLTolerance || !motorFRTolerance || !motorBLTolerance || !motorBRTolerance) {
-            motorFLTolerance = (motorFL.getCurrentPosition() >= motorFL.getTargetPosition() - 0.1 && motorFL.getCurrentPosition() <= motorFL.getTargetPosition() + 0.1);
-            motorFRTolerance = (motorFR.getCurrentPosition() >= motorFR.getTargetPosition() - 0.1 && motorFR.getCurrentPosition() <= motorFR.getTargetPosition() + 0.1);
-            motorBLTolerance = (motorBL.getCurrentPosition() >= motorBL.getTargetPosition() - 0.1 && motorBL.getCurrentPosition() <= motorBL.getTargetPosition() + 0.1);
-            motorBRTolerance = (motorBR.getCurrentPosition() >= motorBR.getTargetPosition() - 0.1 && motorBR.getCurrentPosition() <= motorBR.getTargetPosition() + 0.1);
+            motorFLTolerance = (motorFL.getCurrentPosition() >= motorFL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorFL.getCurrentPosition() <= motorFL.getTargetPosition() + (encoderTicksPerInch * 0.1));
+            motorFRTolerance = (motorFR.getCurrentPosition() >= motorFR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorFR.getCurrentPosition() <= motorFR.getTargetPosition() + (encoderTicksPerInch * 0.1));
+            motorBLTolerance = (motorBL.getCurrentPosition() >= motorBL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBL.getCurrentPosition() <= motorBL.getTargetPosition() + (encoderTicksPerInch * 0.1));
+            motorBRTolerance = (motorBR.getCurrentPosition() >= motorBR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBR.getCurrentPosition() <= motorBR.getTargetPosition() + (encoderTicksPerInch * 0.1));
 
             motorFL.setPower(1);
             motorFR.setPower(1);
