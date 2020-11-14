@@ -181,7 +181,18 @@ public class SampleDrive extends Drive{
 
         //drive to the target
         telemetry.addLine("start move");
-        move(distanceFromX, distanceFromY);
+        if(x > currentX && y > currentY) {
+            move(distanceFromX, distanceFromY);
+        }
+        else if(x > currentX && y < currentY) {
+            move(distanceFromX, -distanceFromY);
+        }
+        else if(x < currentX && y > currentY) {
+            move(-distanceFromX, distanceFromY);
+        }
+        else if(x < currentX && y < currentY) {
+            move(-distanceFromX, -distanceFromY);
+        }
         telemetry.addLine("end move");
     }
 
