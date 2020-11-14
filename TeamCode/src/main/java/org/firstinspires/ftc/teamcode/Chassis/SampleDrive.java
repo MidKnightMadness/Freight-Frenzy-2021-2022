@@ -125,13 +125,21 @@ public class SampleDrive extends Drive{
     @Override
     public void turn(double degrees) {
         double targetAngle = imu.getAngularOrientation().firstAngle + degrees;
+        boolean angleTolerance = false;
 
-        while(targetAngle != imu.getAngularOrientation().firstAngle) {
-            if(targetAngle > imu.getAngularOrientation().firstAngle) {
+        while(!angleTolerance)  {
+            angleTolerance = imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5;
+            if(imu.getAngularOrientation().firstAngle > 45){
+                drive(0,0,-1);
+            }
+            else if(imu.getAngularOrientation().firstAngle < -45){
                 drive(0,0,1);
             }
-            else if(targetAngle < imu.getAngularOrientation().firstAngle)  {
-                drive(0,0,-1);
+            else if(imu.getAngularOrientation().firstAngle > 0){
+                drive(0,0,imu.getAngularOrientation().firstAngle/(-50));
+            }
+            else if(imu.getAngularOrientation().firstAngle < 0) {
+                drive(0,0,imu.getAngularOrientation().firstAngle/(-50));
             }
         }
     }
@@ -160,21 +168,7 @@ public class SampleDrive extends Drive{
         telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
 
         //turn bot until facing field's positive y-axis
-        while(!angleTolerance)  {
-            angleTolerance = imu.getAngularOrientation().firstAngle >= -5 && imu.getAngularOrientation().firstAngle <= 5;
-            if(imu.getAngularOrientation().firstAngle > 45){
-                drive(0,0,-1);
-            }
-            else if(imu.getAngularOrientation().firstAngle < -45){
-                drive(0,0,1);
-            }
-            else if(imu.getAngularOrientation().firstAngle > 0){
-                drive(0,0,imu.getAngularOrientation().firstAngle/(-50));
-            }
-            else if(imu.getAngularOrientation().firstAngle < 0) {
-                drive(0,0,imu.getAngularOrientation().firstAngle/(-50));
-            }
-        }
+        turn(-imu.getAngularOrientation().firstAngle);
 
         telemetry.addData("dist from X", distanceFromX);
         telemetry.addData("dist from Y", distanceFromY);
