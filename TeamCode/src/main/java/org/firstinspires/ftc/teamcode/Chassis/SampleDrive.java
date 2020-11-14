@@ -92,7 +92,17 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while(motorFL.getTargetPosition() != motorFL.getCurrentPosition() && motorFR.getTargetPosition() != motorFR.getCurrentPosition() && motorBL.getTargetPosition() != motorBL.getCurrentPosition() && motorBR.getTargetPosition() != motorBR.getCurrentPosition()) {
+        boolean motorFLTolerance = false;
+        boolean motorFRTolerance = false;
+        boolean motorBLTolerance = false;
+        boolean motorBRTolerance = false;
+
+        while(!motorFLTolerance || !motorFRTolerance || !motorBLTolerance || !motorBRTolerance) {
+            motorFLTolerance = (motorFL.getCurrentPosition() >= motorFL.getTargetPosition() - 0.1 && motorFL.getCurrentPosition() <= motorFL.getTargetPosition() + 0.1);
+            motorFRTolerance = (motorFR.getCurrentPosition() >= motorFR.getTargetPosition() - 0.1 && motorFR.getCurrentPosition() <= motorFR.getTargetPosition() + 0.1);
+            motorBLTolerance = (motorBL.getCurrentPosition() >= motorBL.getTargetPosition() - 0.1 && motorBL.getCurrentPosition() <= motorBL.getTargetPosition() + 0.1);
+            motorBRTolerance = (motorBR.getCurrentPosition() >= motorBR.getTargetPosition() - 0.1 && motorBR.getCurrentPosition() <= motorBR.getTargetPosition() + 0.1);
+
             motorFL.setPower(1);
             motorFR.setPower(1);
             motorBL.setPower(1);
