@@ -80,8 +80,8 @@ public class SampleDrive extends Drive{
     public void move(double inchesX, double inchesY) {
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         double movingDirection = (-Math.asin(inchesX/hypotenuse)) + imu.getAngularOrientation().firstAngle;
-        currentX += Math.sin(movingDirection) * hypotenuse;
-        currentY += Math.cos(movingDirection) * hypotenuse;
+        currentX += Math.sin(-movingDirection) * hypotenuse;
+        currentY += Math.cos(-movingDirection) * hypotenuse;
 
         inchesX *= encoderTicksPerInch;
         inchesY *= encoderTicksPerInch;
@@ -128,7 +128,7 @@ public class SampleDrive extends Drive{
         boolean angleTolerance = false;
 
         while(!angleTolerance)  {
-            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5);
+            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-1 && imu.getAngularOrientation().firstAngle <= targetAngle+1);
             telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
             if(imu.getAngularOrientation().firstAngle > 90 + targetAngle){
                 drive(0,0,1);
