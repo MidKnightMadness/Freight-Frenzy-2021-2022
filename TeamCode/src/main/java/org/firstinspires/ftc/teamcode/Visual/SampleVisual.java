@@ -86,11 +86,12 @@ public class SampleVisual extends Visual{
 
 
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfodParameters.minResultConfidence = 0.5f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset("UltimateGoal.tflite", "Quad", "Single");
         tfod.activate();
+        telemetry.addLine("visual initialized");
     }
 
     public void update()
