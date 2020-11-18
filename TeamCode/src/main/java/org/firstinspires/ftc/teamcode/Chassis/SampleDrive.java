@@ -128,7 +128,7 @@ public class SampleDrive extends Drive{
         boolean angleTolerance = false;
 
         while(!angleTolerance)  {
-            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5);
+            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-1 && imu.getAngularOrientation().firstAngle <= targetAngle+1);
             telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
             if(imu.getAngularOrientation().firstAngle > 45 + targetAngle){
                 drive(0,0,1);
