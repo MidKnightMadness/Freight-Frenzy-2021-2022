@@ -66,7 +66,7 @@ public class SampleDrive extends Drive{
         imu.initialize(IMUParameters);
 
         // Start the logging of measured acceleration
-        imu.startAccelerationIntegration(new Position(), new Velocity(), 100);
+        imu.startAccelerationIntegration(new Position(), new Velocity(), 10);
     }
 
     @Override
