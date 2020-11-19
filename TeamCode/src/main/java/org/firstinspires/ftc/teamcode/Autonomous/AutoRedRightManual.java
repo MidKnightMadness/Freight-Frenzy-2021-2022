@@ -26,20 +26,25 @@ public class AutoRedRightManual extends LinearOpMode {
     public void runOpMode()
     {
         drive.init(hardwareMap, telemetry);
+        telemetry.addLine("Drive initialized!");
+        telemetry.update();
         //intake.init(hardwareMap, telemetry);
         //outtake.init(hardwareMap, telemetry);
         //wobbleGoal.init(hardwareMap, telemetry);
         visual.init(hardwareMap, telemetry);
+        telemetry.addLine("Visual initialized!");
+        telemetry.update();
 
-        waitForStart();
-
+        while (!isStarted() && !isStopRequested());
         //wobbleGoal.close();
         //Do we lift it????
 
-        drive.move(-8,8);
+        drive.move(-10,10);
         sleep(10);
         visual.update();
-        drive.move(8,0);
+        telemetry.addLine("Zone: " + visual.getStartStack());
+        telemetry.update();
+        drive.move(10,0);
 
         if(visual.getStartStack() == Visual.STARTERSTACK.A)
         {
@@ -47,12 +52,11 @@ public class AutoRedRightManual extends LinearOpMode {
         }
         else if (visual.getStartStack() == Visual.STARTERSTACK.B)
         {
-            drive.move(-10, 86);
+            drive.move(-15, 86);
         }
         else
         {
             drive.move(-5,110);
-            sleep(10);
         }
         //wobbleGoal.open();
 
@@ -62,7 +66,7 @@ public class AutoRedRightManual extends LinearOpMode {
         }
         else if (visual.getStartStack() == Visual.STARTERSTACK.B)
         {
-            drive.move(-21.25, -32);
+            drive.move(-16.25, -32);
         }
         else
         {
@@ -77,10 +81,11 @@ public class AutoRedRightManual extends LinearOpMode {
         //outtake.feed();
         //outtake.stop();
 
+        visual.stop();
+
         while(!isStopRequested())
         {
 
         }
-
     }
 }
