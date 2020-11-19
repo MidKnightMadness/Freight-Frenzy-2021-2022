@@ -68,10 +68,10 @@ public class VelocityDrive extends OpMode {
 
     @Override
     public void loop() {
-        FL.setVelocity((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) * 250);
-        FR.setVelocity((gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) * 250);
-        BL.setVelocity((-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) * 250);
-        BR.setVelocity((gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) * 250);
+        FL.setVelocity((-gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) * 2500);
+        FR.setVelocity((gamepad1.left_stick_y + gamepad1.left_stick_x + gamepad1.right_stick_x) * 2500);
+        BL.setVelocity((-gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) * 2500);
+        BR.setVelocity((gamepad1.left_stick_y - gamepad1.left_stick_x + gamepad1.right_stick_x) * 2500);
 
         telemetry.addData("FL vel", FL.getVelocity());
         telemetry.addData("FR vel", FR.getVelocity());

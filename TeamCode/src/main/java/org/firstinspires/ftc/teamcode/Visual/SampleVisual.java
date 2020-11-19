@@ -116,7 +116,7 @@ public class SampleVisual extends Visual{
             if(updatedRecognitions.size() == 0)  //no rings detected, starting stack A
                 starterstack = STARTERSTACK.A;
             else{
-                for (Recognition recognition:updatedRecognitions) {
+                for (Recognition recognition : updatedRecognitions) {
                     String label = recognition.getLabel();
                     if(label.equals("Single"))  //single ring detected, B
                         starterstack = STARTERSTACK.B;
