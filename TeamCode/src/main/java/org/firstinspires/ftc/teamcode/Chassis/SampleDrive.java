@@ -140,7 +140,7 @@ public class SampleDrive extends Drive{
                 drive(0,0,(imu.getAngularOrientation().firstAngle-targetAngle)/(50));
             }
             else if(imu.getAngularOrientation().firstAngle < targetAngle) {
-                drive(0,0,(imu.getAngularOrientation().firstAngle-targetAngle)/(50));
+                drive(0,0,(targetAngle-imu.getAngularOrientation().firstAngle)/(50));
             }
             telemetry.update();
         }
