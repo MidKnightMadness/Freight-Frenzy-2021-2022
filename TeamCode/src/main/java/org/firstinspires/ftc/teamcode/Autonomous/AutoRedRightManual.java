@@ -36,20 +36,24 @@ public class AutoRedRightManual extends LinearOpMode {
         //wobbleGoal.close();
         //Do we lift it????
 
+        drive.move(-8,8);
+        sleep(10);
         visual.update();
+        drive.move(8,0);
+
         if(visual.getStartStack() == Visual.STARTERSTACK.A)
         {
-            drive.move(-3,70);
+            drive.move(-5,62);
         }
         else if (visual.getStartStack() == Visual.STARTERSTACK.B)
         {
-            drive.move(-23, 94);
+            drive.move(-10, 86);
         }
         else
         {
-            drive.move(-3,128);
+            drive.move(-5,110);
+            sleep(10);
         }
-
         //wobbleGoal.open();
 
         if(visual.getStartStack() == Visual.STARTERSTACK.A)
@@ -58,7 +62,7 @@ public class AutoRedRightManual extends LinearOpMode {
         }
         else if (visual.getStartStack() == Visual.STARTERSTACK.B)
         {
-            drive.move(-26.25, -32);
+            drive.move(-21.25, -32);
         }
         else
         {
@@ -72,5 +76,11 @@ public class AutoRedRightManual extends LinearOpMode {
         drive.move(-7.5,0);
         //outtake.feed();
         //outtake.stop();
+
+        while(!isStopRequested())
+        {
+
+        }
+
     }
 }

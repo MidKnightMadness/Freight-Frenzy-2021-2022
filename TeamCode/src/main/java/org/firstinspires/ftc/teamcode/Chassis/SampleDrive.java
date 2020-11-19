@@ -155,7 +155,8 @@ public class SampleDrive extends Drive{
             telemetry.update();
         }
         drive(0,0,0);
-
+        telemetry.addLine("Done");
+        telemetry.update();
     }
 
     @Override
