@@ -134,7 +134,7 @@ public class SampleDrive extends Drive{
         boolean angleTolerance = false;
 
         while(!angleTolerance)  {
-            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5i);
+            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5);
             if(degrees == 180 || degrees == -180){
                 angleTolerance = imu.getAngularOrientation().firstAngle >= 175 || imu.getAngularOrientation().firstAngle < -175;
             }
