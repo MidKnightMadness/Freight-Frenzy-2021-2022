@@ -121,7 +121,7 @@ public class SampleVisual extends Visual{
                     if(label.equals("Single"))  //single ring detected, B
                         starterstack = STARTERSTACK.B;
                     else if(label.equals("Quad"))  //4 rings detected, C
-                        starterstack = STARTERSTACK.B;
+                        starterstack = STARTERSTACK.C;
                     else
                         telemetry.addLine(label + " is not a known label");
 

@@ -23,8 +23,7 @@ public class AutoRedRightManual extends LinearOpMode {
     private SampleVisual visual = new SampleVisual();
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         drive.init(hardwareMap, telemetry);
         telemetry.addLine("Drive initialized!");
         telemetry.update();
@@ -35,57 +34,49 @@ public class AutoRedRightManual extends LinearOpMode {
         telemetry.addLine("Visual initialized!");
         telemetry.update();
 
-        while (!isStarted() && !isStopRequested());
+        while (!isStarted() && !isStopRequested()) ;
         //wobbleGoal.close();
         //Do we lift it????
 
-        drive.move(-10,10);
-        sleep(10);
-        visual.update();
-        telemetry.addLine("Zone: " + visual.getStartStack());
-        telemetry.update();
-        drive.move(10,0);
+        if(!isStopRequested()){
 
-        if(visual.getStartStack() == Visual.STARTERSTACK.A)
-        {
-            drive.move(-5,62);
-        }
-        else if (visual.getStartStack() == Visual.STARTERSTACK.B)
-        {
-            drive.move(-15, 86);
-        }
-        else
-        {
-            drive.move(-5,110);
-        }
-        //wobbleGoal.open();
+            drive.move(-13, 12);
+            sleep(10);
+            visual.update();
+            telemetry.addLine("Zone: " + visual.getStartStack());
+            telemetry.update();
+            drive.move(13, 0);
 
-        if(visual.getStartStack() == Visual.STARTERSTACK.A)
-        {
-            drive.move(-26.25,-8);
-        }
-        else if (visual.getStartStack() == Visual.STARTERSTACK.B)
-        {
-            drive.move(-16.25, -32);
-        }
-        else
-        {
-            drive.move(-26.25,-66);
-        }
+            if (visual.getStartStack() == Visual.STARTERSTACK.A) {
+                drive.move(-5, 62);
+            } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
+                drive.move(-15, 82);
+            } else {
+                drive.move(-5, 106);
+            }
+            //wobbleGoal.open();
 
-        //outtake.stop();
-        //outtake.feed();
-        drive.move(-7.5,0);
-        //outtake.feed();
-        drive.move(-7.5,0);
-        //outtake.feed();
-        //outtake.stop();
+            if (visual.getStartStack() == Visual.STARTERSTACK.A) {
+                drive.move(-26.25, -16);
+            } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
+                drive.move(-16.25, -40);
+            } else {
+                drive.move(-26.25, -74);
+            }
 
-        visual.stop();
+            //outtake.start();
+            //outtake.feed();
+            drive.move(-7.5, 0);
+            //outtake.feed();
+            drive.move(-7.5, 0);
+            //outtake.feed();
+            //outtake.stop();
 
-        while(!isStopRequested())
-        {
+            visual.stop();
 
+            while (!isStopRequested()){
+
+            }
         }
     }
 }
