@@ -52,7 +52,7 @@ public class AutoRedRightManual extends LinearOpMode {
             } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
                 drive.move(-15, 82);
             } else {
-                drive.move(-5, 106);
+                drive.move(-5, 104);
             }
             //wobbleGoal.open();
 
@@ -61,7 +61,7 @@ public class AutoRedRightManual extends LinearOpMode {
             } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
                 drive.move(-16.25, -40);
             } else {
-                drive.move(-26.25, -74);
+                drive.move(-26.25, -63);
             }
 
             //outtake.start();
@@ -74,9 +74,7 @@ public class AutoRedRightManual extends LinearOpMode {
 
             visual.stop();
 
-            while (!isStopRequested()){
-
-            }
+            telemetry.addLine("Program End");
         }
     }
 }

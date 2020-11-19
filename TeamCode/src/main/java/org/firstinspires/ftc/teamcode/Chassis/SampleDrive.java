@@ -216,5 +216,14 @@ public class SampleDrive extends Drive{
         moveToPosition(targetX, targetY);
     }
 
+    @Override
+    public void stop()
+    {
+        motorBR.setPower(0);
+        motorFR.setPower(0);
+        motorBL.setPower(0);
+        motorFL.setPower(0);
+
+    }
 
 }
