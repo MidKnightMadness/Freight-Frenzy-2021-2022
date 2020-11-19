@@ -46,6 +46,7 @@ public class SampleVisual extends Visual{
     private static final float quadField = 36 * mmPerInch;
     private static final float mmTargetHeight = 6 * mmPerInch;
 
+    @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry)
     {
         super.init(hardwareMap, telemetry);
@@ -81,7 +82,7 @@ public class SampleVisual extends Visual{
         targetsUltimateGoal.get(1).setLocation(OpenGLMatrix
                 .translation(halfField, -quadField, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
-        targetsUltimateGoal.activate();
+//        targetsUltimateGoal.activate();
 
 
 
@@ -94,6 +95,7 @@ public class SampleVisual extends Visual{
         telemetry.addLine("visual initialized");
     }
 
+    @Override
     public void update()
     {
         //check if any trackables are visible.
@@ -114,29 +116,35 @@ public class SampleVisual extends Visual{
             if(updatedRecognitions.size() == 0)  //no rings detected, starting stack A
                 starterstack = STARTERSTACK.A;
             else{
-                Recognition recognition = updatedRecognitions.get(0);
-                String label = recognition.getLabel();
-                if(label.equals("Single"))  //single ring detected, B
-                    starterstack = STARTERSTACK.B;
-                else if(label.equals("Quad"))  //4 rings detected, C
-                    starterstack = STARTERSTACK.B;
-                else
-                    telemetry.addLine(label + " is not a known label");
+                for (Recognition recognition:updatedRecognitions) {
+                    String label = recognition.getLabel();
+                    if(label.equals("Single"))  //single ring detected, B
+                        starterstack = STARTERSTACK.B;
+                    else if(label.equals("Quad"))  //4 rings detected, C
+                        starterstack = STARTERSTACK.B;
+                    else
+                        telemetry.addLine(label + " is not a known label");
 
-                ringOffset = (recognition.getLeft() + recognition.getRight()) / 2;
+                    ringOffset = (recognition.getLeft() + recognition.getRight()) / 2;
+
+                    telemetry.addData("visual", starterstack);
+                }
             }
         }
     }
 
+    @Override
     public VectorF getPosition(){
         position = new VectorF(lastLocation.getTranslation().get(0), lastLocation.getTranslation().get(1), lastLocation.getTranslation().get(2));
         return position;
     }
 
+    @Override
     public Orientation getRotation(){
         return Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
     }
 
+    @Override
     public Visual.STARTERSTACK getStartStack()
     {
         return starterstack;
@@ -145,5 +153,10 @@ public class SampleVisual extends Visual{
     @Override
     public double getRingOffset() {
         return ringOffset;
+    }
+
+    @Override
+    public void stop() {
+        tfod.shutdown();
     }
 }
