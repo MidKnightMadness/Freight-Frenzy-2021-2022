@@ -113,6 +113,8 @@ public class SampleVisual extends Visual{
         //check if any rings visible
         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
         if (updatedRecognitions != null) {
+            telemetry.addData("groups detected", updatedRecognitions.size());
+
             if(updatedRecognitions.size() == 0)  //no rings detected, starting stack A
                 starterstack = STARTERSTACK.A;
             else{
@@ -127,7 +129,7 @@ public class SampleVisual extends Visual{
 
                     ringOffset = (recognition.getLeft() + recognition.getRight()) / 2;
 
-                    telemetry.addData("visual", starterstack);
+                    telemetry.addData("visual detects", label);
                 }
             }
         }
