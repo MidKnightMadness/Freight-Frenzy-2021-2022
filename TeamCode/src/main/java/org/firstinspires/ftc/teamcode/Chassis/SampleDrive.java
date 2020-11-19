@@ -107,10 +107,18 @@ public class SampleDrive extends Drive{
             motorBLTolerance = (motorBL.getCurrentPosition() >= motorBL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBL.getCurrentPosition() <= motorBL.getTargetPosition() + (encoderTicksPerInch * 0.1));
             motorBRTolerance = (motorBR.getCurrentPosition() >= motorBR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBR.getCurrentPosition() <= motorBR.getTargetPosition() + (encoderTicksPerInch * 0.1));
 
-            motorFL.setPower(1);
-            motorFR.setPower(1);
-            motorBL.setPower(1);
-            motorBR.setPower(1);
+            if(hypotenuse > 24) {
+                motorFL.setPower(1);
+                motorFR.setPower(1);
+                motorBL.setPower(1);
+                motorBR.setPower(1);
+            }
+            else if(hypotenuse <= 24) {
+                motorFL.setPower(0.5);
+                motorFR.setPower(0.5);
+                motorBL.setPower(0.5);
+                motorBR.setPower(0.5);
+            }
         }
         motorFL.setPower(0);
         motorFR.setPower(0);
