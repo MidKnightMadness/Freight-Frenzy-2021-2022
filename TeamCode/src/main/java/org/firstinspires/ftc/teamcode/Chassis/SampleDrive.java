@@ -140,7 +140,6 @@ public class SampleDrive extends Drive{
             }
 
             telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
-            telemetry.update();
             if(imu.getAngularOrientation().firstAngle > 90 + targetAngle){
                 drive(0,0,1);
             }
@@ -153,12 +152,8 @@ public class SampleDrive extends Drive{
             else if(imu.getAngularOrientation().firstAngle < targetAngle) {
                 drive(0,0,-(targetAngle-imu.getAngularOrientation().firstAngle)/(50));
             }
-            telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
             telemetry.update();
         }
-        drive(0,0,0);
-        telemetry.addLine("Done");
-        telemetry.update();
     }
 
     @Override
