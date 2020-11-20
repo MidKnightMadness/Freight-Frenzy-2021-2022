@@ -185,6 +185,11 @@ public class SampleDrive extends Drive{
     }
 
     @Override
+    public void alignForward() {
+        turn(-imu.getAngularOrientation().firstAngle);
+    }
+
+    @Override
     public void moveToPosition(double x, double y) {
         telemetry.addLine("Start");
         double distanceFromX = x;
@@ -206,7 +211,7 @@ public class SampleDrive extends Drive{
         telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
 
         //turn bot until facing field's positive y-axis
-        turn(-imu.getAngularOrientation().firstAngle);
+        alignForward();
 
         telemetry.addData("dist from X", distanceFromX);
         telemetry.addData("dist from Y", distanceFromY);
