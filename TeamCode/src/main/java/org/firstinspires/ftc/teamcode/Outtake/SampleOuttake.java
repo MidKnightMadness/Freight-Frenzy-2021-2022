@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Outtake.Outtake;
 
+import java.util.concurrent.Callable;
+
 
 public class SampleOuttake extends Outtake {
 
@@ -46,7 +48,7 @@ public class SampleOuttake extends Outtake {
         try {
             wait(10);
         }
-        catch (InterruptedException e){}
+        catch (InterruptedException ignored){}
         servo.setPosition(0);                      //closed position
     }
 }

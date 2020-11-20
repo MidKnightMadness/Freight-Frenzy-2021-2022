@@ -30,17 +30,23 @@ public class DistanceSensorDriveTest extends OpMode {
     @Override
     public void loop() {
         double distOffx = (distR.getDistance(DistanceUnit.INCH) - 24) / 10;
-        double distOffy = (distF.getDistance(DistanceUnit.INCH) - 24) / 10;
-        double turn = gamepad1.right_stick_x;
+        double distOffy = -(distF.getDistance(DistanceUnit.INCH) - 24) / 10;
+        double turn = drive.getAngle() / 100;
         telemetry.addData("distance to right", distOffx);
         telemetry.addData("distance to front", distOffy);
 
         if(!gamepad1.a || distOffy >= 200){
-            distOffy = -gamepad1.left_stick_y;
+            distOffy = gamepad1.left_stick_y;
         }
         if(!gamepad1.b || distOffx >= 200){
             distOffx = gamepad1.left_stick_x;
         }
-        drive.drive(distOffy, -distOffx, turn);
+        if(!gamepad1.x){
+            turn = gamepad1.right_stick_x;
+        }
+        telemetry.addData("diving y", distOffy);
+        telemetry.addData("diving x", -distOffx);
+        telemetry.addData("turning", turn);
+        drive.drive(distOffy, distOffx, turn);
     }
 }

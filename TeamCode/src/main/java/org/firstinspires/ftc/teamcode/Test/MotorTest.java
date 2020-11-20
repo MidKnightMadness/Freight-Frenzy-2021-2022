@@ -16,6 +16,6 @@ public class MotorTest extends OpMode {
 
     @Override
     public void loop() {
-        motor.setPower(-1);
+        motor.setPower(gamepad1.left_stick_y);
     }
 }

@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.Test.PowerShot;
 import org.firstinspires.ftc.teamcode.Visual.Visual;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 
+import java.util.concurrent.Callable;
+
 import static org.firstinspires.ftc.teamcode.Common.Constants.encoderTicksPerInch;
 
 public class SampleDrive extends Drive{
@@ -101,7 +103,16 @@ public class SampleDrive extends Drive{
         boolean motorBLTolerance = false;
         boolean motorBRTolerance = false;
 
-        while(!motorFLTolerance || !motorFRTolerance || !motorBLTolerance || !motorBRTolerance) {
+        while((!motorFLTolerance || !motorFRTolerance || !motorBLTolerance || !motorBRTolerance)) {
+            try {
+                if(isStopRequested.call())
+                    break;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
+
             motorFLTolerance = (motorFL.getCurrentPosition() >= motorFL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorFL.getCurrentPosition() <= motorFL.getTargetPosition() + (encoderTicksPerInch * 0.1));
             motorFRTolerance = (motorFR.getCurrentPosition() >= motorFR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorFR.getCurrentPosition() <= motorFR.getTargetPosition() + (encoderTicksPerInch * 0.1));
             motorBLTolerance = (motorBL.getCurrentPosition() >= motorBL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBL.getCurrentPosition() <= motorBL.getTargetPosition() + (encoderTicksPerInch * 0.1));
@@ -225,5 +236,11 @@ public class SampleDrive extends Drive{
         motorFL.setPower(0);
 
     }
+
+    @Override
+    public double getAngle() {
+        return imu.getAngularOrientation().firstAngle;
+    }
+
 
 }

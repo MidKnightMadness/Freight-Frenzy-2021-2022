@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.Visual.Visual;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 
+import java.util.concurrent.Callable;
+
 @Autonomous
 public class AutoRedRightManual extends LinearOpMode {
     private Drive drive = new SampleDrive();
@@ -24,6 +26,9 @@ public class AutoRedRightManual extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        //create stop requested callable
+        Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
+
         drive.init(hardwareMap, telemetry);
         telemetry.addLine("Drive initialized!");
         telemetry.update();
@@ -34,19 +39,23 @@ public class AutoRedRightManual extends LinearOpMode {
         telemetry.addLine("Visual initialized!");
         telemetry.update();
 
-        while (!isStarted() && !isStopRequested()) ;
+        while (!isStarted() && !isStopRequested())
+            idle();
         //wobbleGoal.close();
         //Do we lift it????
 
         if(!isStopRequested()){
 
+            //move up to starting stack
             drive.move(-13, 12);
             sleep(10);
+            //get starting stack
             visual.update();
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
             drive.move(13, 0);
 
+            //move to correct drop zone
             if (visual.getStartStack() == Visual.STARTERSTACK.A) {
                 drive.move(-5, 62);
             } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
@@ -54,16 +63,19 @@ public class AutoRedRightManual extends LinearOpMode {
             } else {
                 drive.move(-5, 104);
             }
+            //release wobble goal
             //wobbleGoal.open();
 
+            //move to shooting positions
             if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-                drive.move(-26.25, -16);
+                drive.move(-26.25, -20);
             } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
                 drive.move(-16.25, -40);
             } else {
                 drive.move(-26.25, -63);
             }
 
+            //shoot power shots
             //outtake.start();
             //outtake.feed();
             drive.move(-7.5, 0);
@@ -72,9 +84,9 @@ public class AutoRedRightManual extends LinearOpMode {
             //outtake.feed();
             //outtake.stop();
 
-            visual.stop();
 
             telemetry.addLine("Program End");
         }
+        visual.stop();
     }
 }

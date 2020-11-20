@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.Outtake.SampleOuttake;
 import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 
+import java.util.concurrent.Callable;
+
 @TeleOp
 public class Eggman extends OpMode {
 
