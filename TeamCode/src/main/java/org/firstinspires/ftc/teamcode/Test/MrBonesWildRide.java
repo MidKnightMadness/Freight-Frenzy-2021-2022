@@ -14,6 +14,7 @@ public class MrBonesWildRide extends LinearOpMode {
         drive.init(hardwareMap, telemetry);
         waitForStart();
 
+        //30 went counter clockwise
         drive.turn(20);
         drive.move(10,10);
         drive.moveToPosition(0,0);
