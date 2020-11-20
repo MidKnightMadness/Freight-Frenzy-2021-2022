@@ -17,7 +17,7 @@ public class MrBonesWildRide extends LinearOpMode {
         //30 went counter clockwise
         drive.turn(20);
         drive.move(10,10);
-        drive.moveToPosition(0,0);
+        drive.moveToTower();
         while(!isStopRequested()) {
         }
         telemetry.addLine("bingas");

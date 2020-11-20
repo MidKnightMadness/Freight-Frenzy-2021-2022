@@ -19,6 +19,7 @@ public abstract class Drive extends Assembly {
 
     public abstract void moveToPosition(double x, double y);
     public abstract void moveToPosition(VectorF target);
+    public abstract void moveToTower();
 
     public abstract double getAngle();
 

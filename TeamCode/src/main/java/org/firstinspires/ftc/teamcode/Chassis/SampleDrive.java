@@ -242,6 +242,12 @@ public class SampleDrive extends Drive{
     }
 
     @Override
+    public void moveToTower() {
+        //add code to change depending on which line we start on
+        moveToPosition(-12.25,55.5);
+    }
+
+    @Override
     public void stop()
     {
         motorBR.setPower(0);
