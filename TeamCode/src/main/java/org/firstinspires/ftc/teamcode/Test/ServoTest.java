@@ -12,7 +12,7 @@ public class ServoTest extends OpMode {
 
     @Override
     public void init() {
-        servo = hardwareMap.servo.get(Config.OUTTAKES);
+        servo = hardwareMap.servo.get(Config.OUTTAKESERVO);
     }
 
     @Override

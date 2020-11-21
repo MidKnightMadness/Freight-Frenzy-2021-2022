@@ -22,8 +22,8 @@ public class SampleOuttake extends Outtake {
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
-        motor = hardwareMap.dcMotor.get(Config.OUTTAKEM);
-        servo = hardwareMap.servo.get(Config.OUTTAKES);
+        motor = hardwareMap.dcMotor.get(Config.OUTTAKEMOTOR);
+        servo = hardwareMap.servo.get(Config.OUTTAKESERVO);
     }
 
     //start motor

@@ -11,14 +11,12 @@ public class Config {
     //Subassembly motors
     public static final String INTAKEL = "IntakeL";
     public static final String INTAKER = "IntakeR";
-    public static final String OUTTAKEM = "Outtake";
-    public static final String WOBBLEM = "WobbleM";
+    public static final String OUTTAKEMOTOR = "Outtake";
+    public static final String WOBBLEMOTOR= "WobbleM";
 
     //Subassembly servos
-    public static final String OUTTAKES = "Outtake S";
-    public static final String WOBBLES1 = "WobbleS1";
-    public static final String WOBBLES2 = "WobbleS2";
-    public static final String WOBBLES = "WobbleS";
+    public static final String OUTTAKESERVO = "Outtake S";
+    public static final String WOBBLESERVO = "WobbleS";
 
     //Webcam
     public static final String WEBCAM = "Webcam 1";
