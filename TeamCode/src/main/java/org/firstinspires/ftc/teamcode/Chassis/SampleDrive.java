@@ -168,7 +168,6 @@ public class SampleDrive extends Drive{
                 angleTolerance = imu.getAngularOrientation().firstAngle >= 175 || imu.getAngularOrientation().firstAngle < -175;
             }
 
-            telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
             if(imu.getAngularOrientation().firstAngle > 90 + targetAngle){
                 drive(0,0,1);
             }
@@ -181,7 +180,6 @@ public class SampleDrive extends Drive{
             else if(imu.getAngularOrientation().firstAngle < targetAngle) {
                 drive(0,0,-0.5);
             }
-            telemetry.update();
         }
     }
 
@@ -192,9 +190,8 @@ public class SampleDrive extends Drive{
 
     @Override
     public void moveToPosition(double x, double y) {
-        telemetry.addLine("Start");
-        double distanceFromX = x;
-        double distanceFromY = y;
+        double distanceFromX = Math.abs(x);
+        double distanceFromY = Math.abs(y);
 
         if(currentX > 0) {
             distanceFromX = Math.abs(currentX - x);
@@ -209,16 +206,11 @@ public class SampleDrive extends Drive{
             distanceFromY = Math.abs(y - currentY);
         }
 
-        telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
-
         //turn bot until facing field's positive y-axis
         alignForward();
 
-        telemetry.addData("dist from X", distanceFromX);
-        telemetry.addData("dist from Y", distanceFromY);
 
         //drive to the target
-        telemetry.addLine("start move");
         if(x > currentX && y > currentY) {
             move(distanceFromX, distanceFromY);
         }
@@ -231,7 +223,6 @@ public class SampleDrive extends Drive{
         else if(x < currentX && y < currentY) {
             move(-distanceFromX, -distanceFromY);
         }
-        telemetry.addLine("end move");
     }
 
     @Override
