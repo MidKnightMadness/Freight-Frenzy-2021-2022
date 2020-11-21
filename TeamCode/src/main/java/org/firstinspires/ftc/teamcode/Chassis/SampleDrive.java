@@ -141,6 +141,7 @@ public class SampleDrive extends Drive{
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
         double targetAngle = imu.getAngularOrientation().firstAngle + degrees;
