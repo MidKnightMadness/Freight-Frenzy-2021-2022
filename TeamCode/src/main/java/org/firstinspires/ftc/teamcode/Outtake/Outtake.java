@@ -14,5 +14,6 @@ public abstract class Outtake extends Assembly {
     public abstract void stop();
     public abstract void setSpeed(double speed);
     public abstract void feed();
+    public abstract void resetFeed();
 
 }
