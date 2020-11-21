@@ -172,19 +172,42 @@ public class SampleDrive extends Drive{
             currentAngle = convertAngle(currentAngle + 1);
             clockwiseDist++;
         }
-
         currentAngle = imu.getAngularOrientation().firstAngle;
-
         while(currentAngle != targetAngle) {
             currentAngle = convertAngle(currentAngle - 1);
             counterClockwiseDist--;
         }
+        counterClockwiseDist = Math.abs(counterClockwiseDist);
 
         boolean angleTolerance = false;
         while(!angleTolerance)  {
-            angleTolerance = (currentAngle >= convertAngle(targetAngle - 5) && currentAngle <= convertAngle(targetAngle + 5));
+            angleTolerance = (imu.getAngularOrientation().firstAngle >= convertAngle(targetAngle - 5) && imu.getAngularOrientation().firstAngle <= convertAngle(targetAngle + 5));
 
+            //update clockwise and counterClockwise distances
+            currentAngle = imu.getAngularOrientation().firstAngle;
+            while(currentAngle != targetAngle) {
+                currentAngle = convertAngle(currentAngle + 1);
+                clockwiseDist++;
+            }
+            currentAngle = imu.getAngularOrientation().firstAngle;
+            while(currentAngle != targetAngle) {
+                currentAngle = convertAngle(currentAngle - 1);
+                counterClockwiseDist--;
+            }
+            counterClockwiseDist = Math.abs(counterClockwiseDist);
 
+            if(clockwiseDist > counterClockwiseDist && counterClockwiseDist > 90){
+                drive(0,0,-1);
+            }
+            else if(counterClockwiseDist > clockwiseDist && clockwiseDist > 90) {
+                drive(0,0,1);
+            }
+            else if(clockwiseDist > counterClockwiseDist){
+                drive(0,0,-0.5);
+            }
+            else if(counterClockwiseDist > clockwiseDist) {
+                drive(0,0,0.5);
+            }
         }
         drive(0,0,0);
     }
@@ -248,7 +271,40 @@ public class SampleDrive extends Drive{
     @Override
     public void moveToTower() {
         //add code to change depending on which line we start on
-        moveToPosition(-12.5,55.5);
+        if(1 == 1) {
+            moveToPosition(-12.5, 55.5);
+        }
+        else if(0 == 1) {
+            moveToPosition(12.5,55.5);
+        }
+    }
+
+    @Override
+    public void moveToPower1() {
+        if(1 == 1) {
+            moveToPosition(-29.5,55.5);
+        }
+        else if(0 == 1) {
+            moveToPosition(-4.5,55.5);
+        }
+    }
+    @Override
+    public void moveToPower2() {
+        if(1 == 1) {
+            moveToPosition(-37.5,55.5);
+        }
+        else if(0 == 1) {
+            moveToPosition(-12.5,55.5);
+        }
+    }
+    @Override
+    public void moveToPower3() {
+        if(1 == 1) {
+            moveToPosition(-45.5,55.5);
+        }
+        else if(0 == 1) {
+            moveToPosition(-20.5,55.5);
+        }
     }
 
     @Override
