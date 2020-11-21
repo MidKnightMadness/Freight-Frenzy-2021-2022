@@ -38,6 +38,9 @@ public class Eggman extends OpMode {
     public void loop() {
         //drive controlled by left stick and right stick
         drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        if(gamepad1.x) {
+            drive.moveToTower();
+        }
 
         //intake is a toggle controlled by left bumper
         if(!lastLeftBumper && gamepad1.left_bumper) {
