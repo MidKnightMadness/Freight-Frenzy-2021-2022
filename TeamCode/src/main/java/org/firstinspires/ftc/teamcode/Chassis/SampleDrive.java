@@ -163,22 +163,12 @@ public class SampleDrive extends Drive{
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
-        double targetAngle = imu.getAngularOrientation().firstAngle + degrees;
-        if(targetAngle > 180){
-            targetAngle -= 360;
-        }
-        else if(targetAngle < -180){
-            targetAngle = 360 - targetAngle;
-        }
+        double targetAngle = convertAngle(imu.getAngularOrientation().firstAngle + degrees);
         boolean angleTolerance = false;
 
         while(!angleTolerance)  {
             angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5);
-            if(degrees == 180 || degrees == -180){
-                angleTolerance = imu.getAngularOrientation().firstAngle >= 175 || imu.getAngularOrientation().firstAngle < -175;
-            }
 
-            telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
             if(imu.getAngularOrientation().firstAngle > 90 + targetAngle){
                 drive(0,0,1);
             }
@@ -191,7 +181,6 @@ public class SampleDrive extends Drive{
             else if(imu.getAngularOrientation().firstAngle < targetAngle) {
                 drive(0,0,-0.5);
             }
-            telemetry.update();
         }
     }
 
