@@ -163,6 +163,15 @@ public class SampleDrive extends Drive{
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
+        try {
+            if(isStopRequested.call())
+                return;
+        }
+        catch (NullPointerException exception){
+            telemetry.addLine("You need to set isStopRequested when using move");
+        }
+        catch (Exception ignored) {}
+
         double currentAngle = imu.getAngularOrientation().firstAngle;
         double targetAngle = convertAngle(currentAngle + degrees);
         double clockwiseDist = 0;
