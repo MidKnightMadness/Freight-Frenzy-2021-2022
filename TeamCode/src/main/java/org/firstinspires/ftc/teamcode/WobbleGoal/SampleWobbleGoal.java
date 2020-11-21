@@ -14,9 +14,9 @@ public class SampleWobbleGoal extends WobbleGoal{
     //declare servo
     private Servo servo1;
     //open value
-    private double open = 1.00;
+    private final double open = 1.00;
     //close value
-    private double closed = 0.10;
+    private final double closed = 0.10;
 
     //initialize motor
     @Override

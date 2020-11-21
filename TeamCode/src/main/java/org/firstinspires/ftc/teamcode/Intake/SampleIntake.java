@@ -14,19 +14,22 @@ public class SampleIntake extends Intake{
 
     //start motor
     @Override
-    public void start() { intakeMotorL.setPower(1);
+    public void start() {
+        intakeMotorL.setPower(1);
         intakeMotorR.setPower(-1);
     }
 
     //stop motor
     @Override
-    public void stop() { intakeMotorL.setPower(0);
+    public void stop() {
+        intakeMotorL.setPower(0);
         intakeMotorR.setPower(0);
     }
 
     //manually set motor speed
     @Override
-    public void setSpeed(double speed) { intakeMotorL.setPower(speed);
+    public void setSpeed(double speed) {
+        intakeMotorL.setPower(speed);
         intakeMotorR.setPower(-speed);
     }
 }
