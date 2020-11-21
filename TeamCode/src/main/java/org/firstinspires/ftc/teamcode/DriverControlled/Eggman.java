@@ -23,12 +23,8 @@ public class Eggman extends OpMode {
     private Intake intake = new SampleIntake();
     private Outtake outtake = new SampleOuttake();
     private WobbleGoal wobbleGoal = new SampleWobbleGoal();
-    private int intToggle = 0;
-    private boolean lastLeftBumper = false;
-    private int outToggle = 0;
-    private boolean lastRightBumper = false;
-    private int openWobToggle = 0;
-    private boolean lastAButton = false;
+    private int intToggle, outToggle, openWobToggle, liftWobToggle, lowerWobToggle = 0;
+    private boolean lastLeftBumper, lastRightBumper, lastBButton, lastYButton, lastAButton = false;
 
     @Override
     public void init() {
@@ -78,7 +74,7 @@ public class Eggman extends OpMode {
         lastRightBumper = gamepad1.right_bumper;
 
         //wobble goal toggles between open and close using a button
-        if(!lastAButton && gamepad1.a) {
+        if(!lastBButton && gamepad1.b) {
             if(openWobToggle == 1) {
                 openWobToggle = 0;
             }
@@ -92,12 +88,40 @@ public class Eggman extends OpMode {
         if(openWobToggle == 1) {
             wobbleGoal.open();
         }
+        lastBButton = gamepad1.b;
+
+        if(!lastYButton && gamepad1.y) {
+            if(liftWobToggle == 1) {
+                liftWobToggle = 0;
+            }
+            else if(liftWobToggle == 0) {
+                liftWobToggle = 1;
+            }
+        }
+        if(liftWobToggle == 0) {
+            wobbleGoal.stop();
+        }
+        if(liftWobToggle == 1) {
+            wobbleGoal.lift();
+        }
+        lastYButton = gamepad1.y;
+
+        if(!lastAButton && gamepad1.a) {
+            if(lowerWobToggle == 1) {
+                lowerWobToggle = 0;
+            }
+            else if(lowerWobToggle == 0) {
+                lowerWobToggle = 1;
+            }
+        }
+        if(lowerWobToggle == 0) {
+            wobbleGoal.stop();
+        }
+        if(lowerWobToggle == 1) {
+            wobbleGoal.drop();
+        }
         lastAButton = gamepad1.a;
 
-
-        if(gamepad1.b) {
-            drive.moveToPosition(1,1);
-        }
     }
 
 }

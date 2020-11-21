@@ -163,29 +163,30 @@ public class SampleDrive extends Drive{
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
-        double targetAngle = imu.getAngularOrientation().firstAngle + degrees;
-        convertAngle(targetAngle);
+        double currentAngle = imu.getAngularOrientation().firstAngle;
+        double targetAngle = convertAngle(currentAngle + degrees);
+        double clockwiseDist = 0;
+        double counterClockwiseDist = 0;
+
+        while(currentAngle != targetAngle) {
+            currentAngle = convertAngle(currentAngle + 1);
+            clockwiseDist++;
+        }
+
+        currentAngle = imu.getAngularOrientation().firstAngle;
+
+        while(currentAngle != targetAngle) {
+            currentAngle = convertAngle(currentAngle - 1);
+            counterClockwiseDist--;
+        }
 
         boolean angleTolerance = false;
         while(!angleTolerance)  {
-            angleTolerance = (imu.getAngularOrientation().firstAngle >= convertAngle(targetAngle - 5) && imu.getAngularOrientation().firstAngle <= convertAngle(targetAngle + 5));
-            if(targetAngle-5 <= -180 || targetAngle+5 >= 180){
-                angleTolerance = imu.getAngularOrientation().firstAngle >= convertAngle(targetAngle-5) || imu.getAngularOrientation().firstAngle < convertAngle(targetAngle+5);
-            }
+            angleTolerance = (currentAngle >= convertAngle(targetAngle - 5) && currentAngle <= convertAngle(targetAngle + 5));
 
-            if(imu.getAngularOrientation().firstAngle > 90 + targetAngle){
-                drive(0,0,1);
-            }
-            else if(imu.getAngularOrientation().firstAngle < -90 + targetAngle){
-                drive(0,0,-1);
-            }
-            else if(imu.getAngularOrientation().firstAngle > targetAngle){
-                drive(0,0,0.5);
-            }
-            else if(imu.getAngularOrientation().firstAngle < targetAngle) {
-                drive(0,0,-0.5);
-            }
+
         }
+        drive(0,0,0);
     }
 
     @Override
