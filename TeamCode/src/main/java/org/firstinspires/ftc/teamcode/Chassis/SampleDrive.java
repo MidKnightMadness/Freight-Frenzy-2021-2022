@@ -80,7 +80,7 @@ public class SampleDrive extends Drive{
     }
 
     @Override
-    public void move(double inchesX, double inchesY) {
+    public void moveWithPower(double inchesX, double inchesY, double power) {
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         double movingDirection = (-Math.asin(inchesX/hypotenuse)) + imu.getAngularOrientation().firstAngle;
         currentX += Math.sin(-movingDirection) * hypotenuse;
@@ -120,16 +120,16 @@ public class SampleDrive extends Drive{
             motorBRTolerance = (motorBR.getCurrentPosition() >= motorBR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBR.getCurrentPosition() <= motorBR.getTargetPosition() + (encoderTicksPerInch * 0.1));
 
             if(hypotenuse > 24) {
-                motorFL.setPower(1);
-                motorFR.setPower(1);
-                motorBL.setPower(1);
-                motorBR.setPower(1);
+                motorFL.setPower(power);
+                motorFR.setPower(power);
+                motorBL.setPower(power);
+                motorBR.setPower(power);
             }
             else if(hypotenuse <= 24) {
-                motorFL.setPower(0.5);
-                motorFR.setPower(0.5);
-                motorBL.setPower(0.5);
-                motorBR.setPower(0.5);
+                motorFL.setPower(power/2);
+                motorFR.setPower(power/2);
+                motorBL.setPower(power/2);
+                motorBR.setPower(power/2);
             }
         }
         motorFL.setPower(0);
@@ -142,29 +142,34 @@ public class SampleDrive extends Drive{
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    @Override
+    public void move(double inchesX, double inchesY) {
+        moveWithPower(inchesX, inchesY, 1);
+    }
+
+
+    public double convertAngle(double degrees) {
+        if(degrees > 180) {
+            return degrees - 360;
+        }
+        else if(degrees < -180) {
+            return 360 - degrees;
+        }
+        else{
+            return degrees;
+        }
+    }
+
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
         double targetAngle = imu.getAngularOrientation().firstAngle + degrees;
-        if(targetAngle > 180){
-            targetAngle -= 360;
-        }
-        else if(targetAngle < -180){
-            targetAngle = 360 - targetAngle;
-        }
+        convertAngle(targetAngle);
+
         boolean angleTolerance = false;
-
         while(!angleTolerance)  {
-            try {
-                if(isStopRequested.call())
-                    break;
-            }
-            catch (NullPointerException exception){
-                telemetry.addLine("You need to set isStopRequested when using move");
-            }
-            catch (Exception ignored) {}
 
-            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5);
+            angleTolerance = (imu.getAngularOrientation().firstAngle >= convertAngle(targetAngle - 5) && imu.getAngularOrientation().firstAngle <= convertAngle(targetAngle + 5));
             if(targetAngle == 180 || targetAngle == -180){
                 angleTolerance = imu.getAngularOrientation().firstAngle >= 175 || imu.getAngularOrientation().firstAngle < -175;
             }
