@@ -78,6 +78,7 @@ public class SampleDrive extends Drive{
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
     }
+
     @Override
     public void move(double inchesX, double inchesY) {
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
@@ -106,7 +107,7 @@ public class SampleDrive extends Drive{
         while((!motorFLTolerance || !motorFRTolerance || !motorBLTolerance || !motorBRTolerance)) {
             try {
                 if(isStopRequested.call())
-                    break;
+                    return;
             }
             catch (NullPointerException exception){
                 telemetry.addLine("You need to set isStopRequested when using move");
@@ -223,6 +224,12 @@ public class SampleDrive extends Drive{
         else if(x < currentX && y < currentY) {
             move(-distanceFromX, -distanceFromY);
         }
+
+        alignForward();
+
+        telemetry.addData("x position", currentX);
+        telemetry.addData("y position", currentY);
+        telemetry.update();
     }
 
     @Override
@@ -236,7 +243,7 @@ public class SampleDrive extends Drive{
     @Override
     public void moveToTower() {
         //add code to change depending on which line we start on
-        moveToPosition(-12.25,55.5);
+        moveToPosition(-12.5,55.5);
     }
 
     @Override

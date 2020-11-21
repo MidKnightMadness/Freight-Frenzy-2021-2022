@@ -30,63 +30,75 @@ public class AutoRedRightManual extends LinearOpMode {
         Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
 
         drive.init(hardwareMap, telemetry);
+        drive.isStopRequested = stopRequestedCall;
         telemetry.addLine("Drive initialized!");
         telemetry.update();
         //intake.init(hardwareMap, telemetry);
         //outtake.init(hardwareMap, telemetry);
         //wobbleGoal.init(hardwareMap, telemetry);
-        visual.init(hardwareMap, telemetry);
-        telemetry.addLine("Visual initialized!");
+        //visual.init(hardwareMap, telemetry);
+        //telemetry.addLine("Visual initialized!");
         telemetry.update();
 
-        while (!isStarted() && !isStopRequested())
+        while (!isStarted() && !isStopRequested() && opModeIsActive()) {
             idle();
+        }
+
+        if(isStopRequested())
+        {
+            return;
+        }
+
         //wobbleGoal.close();
         //Do we lift it????
 
-        if(!isStopRequested()){
+        //move up to starting stack
+        drive.move(-13, 12);
+        sleep(10);
+        //get starting stack
+        //visual.update();
+        telemetry.addLine("Zone: " + visual.getStartStack());
+        telemetry.update();
+        drive.move(13, 0);
 
-            //move up to starting stack
-            drive.move(-13, 12);
-            sleep(10);
-            //get starting stack
-            visual.update();
-            telemetry.addLine("Zone: " + visual.getStartStack());
-            telemetry.update();
-            drive.move(13, 0);
+        drive.move(-5, 58);
+        drive.move(-40.25, -20);
 
-            //move to correct drop zone
-            if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-                drive.move(-5, 62);
-            } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-                drive.move(-15, 82);
-            } else {
-                drive.move(-5, 104);
-            }
-            //release wobble goal
-            //wobbleGoal.open();
-
-            //move to shooting positions
-            if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-                drive.move(-26.25, -20);
-            } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-                drive.move(-16.25, -40);
-            } else {
-                drive.move(-26.25, -63);
-            }
-
-            //shoot power shots
-            //outtake.start();
-            //outtake.feed();
-            drive.move(-7.5, 0);
-            //outtake.feed();
-            drive.move(-7.5, 0);
-            //outtake.feed();
-            //outtake.stop();
-
-
-            telemetry.addLine("Program End");
+        //move to correct drop zone
+        /*
+        if (visual.getStartStack() == Visual.STARTERSTACK.A) {
+            drive.move(-5, 58);
+        } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
+            drive.move(-15, 78);
+        } else {
+            drive.move(-5, 100);
         }
+
+        //release wobble goal
+        //wobbleGoal.open();
+
+        //move to shooting positions
+        if (visual.getStartStack() == Visual.STARTERSTACK.A) {
+            drive.move(-40.25, -20);
+        } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
+            drive.move(-30.25, -40);
+        } else {
+            drive.move(-40.25, -63);
+        }
+         */
+
+        //shoot power shots
+        //outtake.start();
+        //outtake.feed();
+        drive.move(-7.5, 0);
+        //outtake.feed();
+        drive.move(-7.5, 0);
+        //outtake.feed();
+        //outtake.stop();
+
+
+        telemetry.addLine("Program End :)");
+
         visual.stop();
     }
 }
