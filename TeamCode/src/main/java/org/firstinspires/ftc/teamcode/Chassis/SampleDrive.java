@@ -177,16 +177,16 @@ public class SampleDrive extends Drive{
         double clockwiseDist = 0;
         double counterClockwiseDist = 0;
 
-        while(currentAngle != targetAngle) {
+        while((int)currentAngle != targetAngle) {
             currentAngle = convertAngle(currentAngle + 1);
-            clockwiseDist++;
+            counterClockwiseDist++;
         }
         currentAngle = imu.getAngularOrientation().firstAngle;
-        while(currentAngle != targetAngle) {
+        while((int)currentAngle != targetAngle) {
             currentAngle = convertAngle(currentAngle - 1);
-            counterClockwiseDist--;
+            clockwiseDist--;
         }
-        counterClockwiseDist = Math.abs(counterClockwiseDist);
+        clockwiseDist = Math.abs(clockwiseDist);
 
         boolean angleTolerance = false;
         while(!angleTolerance)  {
@@ -194,16 +194,16 @@ public class SampleDrive extends Drive{
 
             //update clockwise and counterClockwise distances
             currentAngle = imu.getAngularOrientation().firstAngle;
-            while(currentAngle != targetAngle) {
+            while((int)currentAngle != targetAngle) {
                 currentAngle = convertAngle(currentAngle + 1);
-                clockwiseDist++;
+                counterClockwiseDist++;
             }
             currentAngle = imu.getAngularOrientation().firstAngle;
-            while(currentAngle != targetAngle) {
+            while((int)currentAngle != targetAngle) {
                 currentAngle = convertAngle(currentAngle - 1);
-                counterClockwiseDist--;
+                clockwiseDist--;
             }
-            counterClockwiseDist = Math.abs(counterClockwiseDist);
+            clockwiseDist = Math.abs(clockwiseDist);
 
             if(clockwiseDist > counterClockwiseDist && counterClockwiseDist > 90){
                 drive(0,0,-1);
