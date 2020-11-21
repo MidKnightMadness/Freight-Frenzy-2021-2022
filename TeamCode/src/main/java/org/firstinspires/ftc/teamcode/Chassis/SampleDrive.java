@@ -163,63 +163,38 @@ public class SampleDrive extends Drive{
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
-        try {
-            if(isStopRequested.call())
-                return;
+        double targetAngle = imu.getAngularOrientation().firstAngle + degrees;
+        if(targetAngle > 180){
+            targetAngle -= 360;
         }
-        catch (NullPointerException exception){
-            telemetry.addLine("You need to set isStopRequested when using move");
+        else if(targetAngle < -180){
+            targetAngle = 360 - targetAngle;
         }
-        catch (Exception ignored) {}
-
-        double currentAngle = imu.getAngularOrientation().firstAngle;
-        double targetAngle = convertAngle(currentAngle + degrees);
-        double clockwiseDist = 0;
-        double counterClockwiseDist = 0;
-
-        while((int)currentAngle != targetAngle) {
-            currentAngle = convertAngle(currentAngle + 1);
-            counterClockwiseDist++;
-        }
-        currentAngle = imu.getAngularOrientation().firstAngle;
-        while((int)currentAngle != targetAngle) {
-            currentAngle = convertAngle(currentAngle - 1);
-            clockwiseDist--;
-        }
-        clockwiseDist = Math.abs(clockwiseDist);
-
         boolean angleTolerance = false;
+
         while(!angleTolerance)  {
-            angleTolerance = (imu.getAngularOrientation().firstAngle >= convertAngle(targetAngle - 5) && imu.getAngularOrientation().firstAngle <= convertAngle(targetAngle + 5));
+            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5);
+            if(degrees == 180 || degrees == -180){
+                angleTolerance = imu.getAngularOrientation().firstAngle >= 175 || imu.getAngularOrientation().firstAngle < -175;
+            }
 
-            //update clockwise and counterClockwise distances
-            currentAngle = imu.getAngularOrientation().firstAngle;
-            while((int)currentAngle != targetAngle) {
-                currentAngle = convertAngle(currentAngle + 1);
-                counterClockwiseDist++;
-            }
-            currentAngle = imu.getAngularOrientation().firstAngle;
-            while((int)currentAngle != targetAngle) {
-                currentAngle = convertAngle(currentAngle - 1);
-                clockwiseDist--;
-            }
-            clockwiseDist = Math.abs(clockwiseDist);
-
-            if(clockwiseDist > counterClockwiseDist && counterClockwiseDist > 90){
-                drive(0,0,-1);
-            }
-            else if(counterClockwiseDist > clockwiseDist && clockwiseDist > 90) {
+            telemetry.addData("imu angle", imu.getAngularOrientation().firstAngle);
+            if(imu.getAngularOrientation().firstAngle > 90 + targetAngle){
                 drive(0,0,1);
             }
-            else if(clockwiseDist > counterClockwiseDist){
-                drive(0,0,-0.5);
+            else if(imu.getAngularOrientation().firstAngle < -90 + targetAngle){
+                drive(0,0,-1);
             }
-            else if(counterClockwiseDist > clockwiseDist) {
+            else if(imu.getAngularOrientation().firstAngle > targetAngle){
                 drive(0,0,0.5);
             }
+            else if(imu.getAngularOrientation().firstAngle < targetAngle) {
+                drive(0,0,-0.5);
+            }
+            telemetry.update();
         }
-        drive(0,0,0);
     }
+
 
     @Override
     public void alignForward() {
