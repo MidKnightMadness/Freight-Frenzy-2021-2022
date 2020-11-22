@@ -45,7 +45,7 @@ public class SampleOuttake extends Outtake {
     }
 
     @Override
-    public void feed() {
+    public void feedRun() {
         servo.setPosition(0.8);                     //open/feeding position
     }
 
@@ -53,5 +53,15 @@ public class SampleOuttake extends Outtake {
     public void resetFeed()
     {
         servo.setPosition(0.2);                      //closed position
+    }
+
+    @Override
+    public void feed(){
+        feedRun();
+        try { wait(2000); }                  //Try-catch exception may not work -- Test
+        catch (InterruptedException exception){}
+        resetFeed();
+        try { wait(2000); }
+        catch (InterruptedException exception){}
     }
 }

@@ -25,15 +25,15 @@ public class ShootTest extends LinearOpMode{
         sleep(2000);
         out.resetFeed();
         sleep(1000);
-        out.feed();
+        out.feedRun();
         sleep(2500);
         out.resetFeed();
         sleep(1000);
-        out.feed();
+        out.feedRun();
         sleep(2000);
         out.resetFeed();
         sleep(1000);
-        out.feed();
+        out.feedRun();
         sleep(2000);
         out.resetFeed();
         sleep(1000);
