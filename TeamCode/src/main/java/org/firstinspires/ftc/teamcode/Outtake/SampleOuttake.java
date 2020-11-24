@@ -55,7 +55,7 @@ public class SampleOuttake extends Outtake {
     }
 
     //Calculate launch velocity, in feet per second
-    static double launchVelocity(double x, double y, double z) {
+    public static double getLaunchVelocity(double x, double y, double z) {
         double a = 30.; //Launch angle (from ground)
         double bMin = 15.; //minimum velocity (ft/s)
         double bMax = 50.; //maximum velocity (ft/s)
