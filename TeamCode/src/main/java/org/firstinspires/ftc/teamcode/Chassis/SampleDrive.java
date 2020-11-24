@@ -28,8 +28,8 @@ public class SampleDrive extends Drive{
     private DcMotorEx motorBR;
     private final double maxVel = 2500;
     private Visual visual;
-    private double currentX = 0;
-    private double currentY = 0;
+    public double currentX = 0;
+    public double currentY = 0;
 
     BNO055IMU imu;
 
@@ -80,7 +80,7 @@ public class SampleDrive extends Drive{
     }
 
     @Override
-    public void moveWithPower(double inchesX, double inchesY, double power) {
+    public void move(double inchesX, double inchesY, double power) {
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         double movingDirection = (-Math.asin(inchesX/hypotenuse)) + imu.getAngularOrientation().firstAngle;
         currentX += Math.sin(-movingDirection) * hypotenuse;
@@ -144,7 +144,7 @@ public class SampleDrive extends Drive{
 
     @Override
     public void move(double inchesX, double inchesY) {
-        moveWithPower(inchesX, inchesY, 1);
+        move(inchesX, inchesY, 1);
     }
 
 
@@ -153,7 +153,7 @@ public class SampleDrive extends Drive{
             return degrees - 360;
         }
         else if(degrees < -180) {
-            return 360 - degrees;
+            return degrees + 360;
         }
         else{
             return degrees;
@@ -164,24 +164,60 @@ public class SampleDrive extends Drive{
     @Override
     public void turn(double degrees) {
         double targetAngle = convertAngle(imu.getAngularOrientation().firstAngle + degrees);
+        double currentAngle;
+        double clockwiseDistance = 0;
+        double counterClockwiseDistance = 0;
+
         boolean angleTolerance = false;
 
         while(!angleTolerance)  {
-            angleTolerance = (imu.getAngularOrientation().firstAngle >= targetAngle-5 && imu.getAngularOrientation().firstAngle <= targetAngle+5);
+            try {
+                if(isStopRequested.call())
+                    return;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
 
-            if(imu.getAngularOrientation().firstAngle > 90 + targetAngle){
-                drive(0,0,1);
+            telemetry.addData("imu", imu.getAngularOrientation().firstAngle);
+
+            angleTolerance = (imu.getAngularOrientation().firstAngle >= convertAngle(targetAngle-5) && imu.getAngularOrientation().firstAngle <= convertAngle(targetAngle+5));
+
+            currentAngle = imu.getAngularOrientation().firstAngle;
+            while(currentAngle < targetAngle) {
+                currentAngle = convertAngle(currentAngle + 1);
+                counterClockwiseDistance = counterClockwiseDistance + 1;
             }
-            else if(imu.getAngularOrientation().firstAngle < -90 + targetAngle){
+            telemetry.addData("counterClockwiseDistance", counterClockwiseDistance);
+            currentAngle = imu.getAngularOrientation().firstAngle;
+            while(currentAngle > targetAngle) {
+                currentAngle = convertAngle(currentAngle - 1);
+                clockwiseDistance = clockwiseDistance + 1;
+            }
+            telemetry.addData("clockwiseDistance", clockwiseDistance);
+
+            if(clockwiseDistance > counterClockwiseDistance && counterClockwiseDistance > 90){
                 drive(0,0,-1);
+                telemetry.addLine("Turning Fast CounterClockwise");
             }
-            else if(imu.getAngularOrientation().firstAngle > targetAngle){
-                drive(0,0,0.5);
+            else if(clockwiseDistance < counterClockwiseDistance && clockwiseDistance > 90){
+                drive(0,0,1);
+                telemetry.addLine("Turning Fast Clockwise");
             }
-            else if(imu.getAngularOrientation().firstAngle < targetAngle) {
+            else if(clockwiseDistance > counterClockwiseDistance){
                 drive(0,0,-0.5);
+                telemetry.addLine("Turning Slow CounterClockwise");
             }
+            else if(clockwiseDistance < counterClockwiseDistance) {
+                drive(0,0,0.5);
+                telemetry.addLine("Turning Slow Clockwise");
+            }
+            telemetry.update();
         }
+        telemetry.addLine("turning done");
+        drive(0,0,0);
+        telemetry.update();
     }
 
 
