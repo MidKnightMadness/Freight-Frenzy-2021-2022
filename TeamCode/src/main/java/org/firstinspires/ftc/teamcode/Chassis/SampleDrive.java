@@ -133,6 +133,7 @@ public class SampleDrive extends Drive{
                 motorBL.setPower(power/2);
                 motorBR.setPower(power/2);
             }
+            telemetry.update();
         }
         motorFL.setPower(0);
         motorFR.setPower(0);
