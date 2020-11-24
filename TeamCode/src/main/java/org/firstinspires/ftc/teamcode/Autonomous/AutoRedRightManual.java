@@ -27,19 +27,22 @@ public class AutoRedRightManual extends LinearOpMode {
     @Override
     public void runOpMode() {
         //create stop requested callable
-        Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
+        //Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
 
         drive.init(hardwareMap, telemetry);
-        drive.isStopRequested = stopRequestedCall;
+        //drive.isStopRequested = stopRequestedCall;
         telemetry.addLine("Drive initialized!");
         telemetry.update();
         //intake.init(hardwareMap, telemetry);
-        outtake.init(hardwareMap, telemetry);
-        //wobbleGoal.init(hardwareMap, telemetry);
+        //outtake.init(hardwareMap, telemetry);
+        wobbleGoal.init(hardwareMap, telemetry);
         visual.init(hardwareMap, telemetry);
         //telemetry.addLine("Visual initialized!");
         telemetry.update();
 
+        waitForStart();
+
+        /*
         while (!isStarted() && !isStopRequested() && opModeIsActive()) {
             idle();
         }
@@ -48,9 +51,13 @@ public class AutoRedRightManual extends LinearOpMode {
         {
             return;
         }
+        */
 
-        //wobbleGoal.close();
-        //Do we lift it????
+        wobbleGoal.close();
+        wobbleGoal.slightLift();
+        while(!isStopRequested() && opModeIsActive()){
+            wobbleGoal.outputTelemetry();
+        }
 
         //move up to starting stack
         drive.move(-13, 12);
@@ -72,7 +79,8 @@ public class AutoRedRightManual extends LinearOpMode {
         }
 
         //release wobble goal
-        //wobbleGoal.open();
+        wobbleGoal.lower();
+        wobbleGoal.open();
         drive.alignForward();
 
         //move to shooting position 1
@@ -86,13 +94,13 @@ public class AutoRedRightManual extends LinearOpMode {
 
 
         //shoot power shots
-        outtake.start();
-        outtake.feed();
+        //outtake.start();
+        //outtake.feed();
         drive.move(-7.5, 0);
-        outtake.feed();
+        //outtake.feed();
         drive.move(-7.5, 0);
-        outtake.feed();
-        outtake.stop();
+        //outtake.feed();
+        //outtake.stop();
 
         visual.stop();
         telemetry.addLine("Program End :)");

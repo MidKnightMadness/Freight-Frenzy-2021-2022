@@ -27,6 +27,7 @@ public class SampleWobbleGoal extends WobbleGoal{
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
         motor = hardwareMap.dcMotor.get(Config.WOBBLEMOTOR);
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setTargetPosition(0);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -45,6 +46,22 @@ public class SampleWobbleGoal extends WobbleGoal{
     public void lower(){
         motor.setTargetPosition(0);
         motor.setPower(1);
+    }
+
+    //slightly lift the elevator
+    @Override
+    public void slightLift()
+    {
+        motor.setTargetPosition(-500);
+        motor.setPower(0.5);
+    }
+
+    @Override
+    public void outputTelemetry()
+    {
+        telemetry.addLine("Current Position: " + motor.getCurrentPosition());
+        telemetry.addLine("Target Position: " + motor.getTargetPosition());
+        telemetry.update();
     }
 
     //stop elevator motor

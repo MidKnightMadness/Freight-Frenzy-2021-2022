@@ -12,6 +12,8 @@ public abstract class WobbleGoal extends Assembly {
     public abstract void lift();
     public abstract void lower();
     public abstract void stop();
+    public abstract void slightLift();
     public abstract void open();
     public abstract void close();
+    public abstract void outputTelemetry();
 }
