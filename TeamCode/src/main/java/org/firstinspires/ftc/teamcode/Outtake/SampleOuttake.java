@@ -44,11 +44,13 @@ public class SampleOuttake extends Outtake {
         motor.setPower(speed);
     }
 
+    //open the ring-loader
     @Override
     public void feedRun() {
-        servo.setPosition(0.8); //open/feeding position
+        servo.setPosition(0.8); //open feeding position
     }
 
+    //close the ring-loader
     @Override
     public void resetFeed() {
         servo.setPosition(0.2); //closed position
@@ -87,6 +89,7 @@ public class SampleOuttake extends Outtake {
         return 0.; //REPORT ERROR HERE IF LINE IS REACHED
     }
 
+    //loads a ring into the launcher
     @Override
     public void feed() {
         feedRun();

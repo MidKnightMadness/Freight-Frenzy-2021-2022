@@ -34,9 +34,9 @@ public class AutoRedRightManual extends LinearOpMode {
         telemetry.addLine("Drive initialized!");
         telemetry.update();
         //intake.init(hardwareMap, telemetry);
-        //outtake.init(hardwareMap, telemetry);
+        outtake.init(hardwareMap, telemetry);
         //wobbleGoal.init(hardwareMap, telemetry);
-        //visual.init(hardwareMap, telemetry);
+        visual.init(hardwareMap, telemetry);
         //telemetry.addLine("Visual initialized!");
         telemetry.update();
 
@@ -56,17 +56,13 @@ public class AutoRedRightManual extends LinearOpMode {
         drive.move(-13, 12);
         sleep(10);
         //get starting stack
-        //visual.update();
-       // telemetry.addLine("Zone: " + visual.getStartStack());
-        //telemetry.update();
+        visual.update();
+        telemetry.addLine("Zone: " + visual.getStartStack());
+        telemetry.update();
         drive.move(13, 0);
 
-        drive.move(-5, 58);
-        drive.move(-38.25, 0);
-        drive.move(0,-5);
 
         //move to correct drop zone
-        /*
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
             drive.move(-5, 58);
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
@@ -77,8 +73,9 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //release wobble goal
         //wobbleGoal.open();
+        drive.alignForward();
 
-        //move to shooting positions
+        //move to shooting position 1
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
             drive.move(-40.25, -20);
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
@@ -86,20 +83,19 @@ public class AutoRedRightManual extends LinearOpMode {
         } else {
             drive.move(-40.25, -63);
         }
-         */
+
 
         //shoot power shots
-        //outtake.start();
-        //outtake.feed();
+        outtake.start();
+        outtake.feed();
         drive.move(-7.5, 0);
-        //outtake.feed();
+        outtake.feed();
         drive.move(-7.5, 0);
-        //outtake.feed();
-        //outtake.stop();
+        outtake.feed();
+        outtake.stop();
 
-
+        visual.stop();
         telemetry.addLine("Program End :)");
-
-        //visual.stop();
+        telemetry.update();
     }
 }

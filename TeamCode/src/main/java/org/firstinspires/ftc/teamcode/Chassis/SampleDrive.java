@@ -33,6 +33,7 @@ public class SampleDrive extends Drive{
 
     BNO055IMU imu;
 
+    //initializes motors and IMU
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
@@ -79,6 +80,7 @@ public class SampleDrive extends Drive{
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
     }
 
+    //moves a given distance in the x and y directions
     @Override
     public void move(double inchesX, double inchesY, double power) {
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
@@ -142,12 +144,13 @@ public class SampleDrive extends Drive{
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    //move but not set power given
     @Override
     public void move(double inchesX, double inchesY) {
         move(inchesX, inchesY, 1);
     }
 
-
+    //converts angles if it goes over 180 degrees or less than -180 degrees
     public double convertAngle(double degrees) {
         if(degrees > 180) {
             return degrees - 360;
@@ -160,6 +163,7 @@ public class SampleDrive extends Drive{
         }
     }
 
+    //turns a given amount of degrees
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
@@ -220,7 +224,7 @@ public class SampleDrive extends Drive{
         telemetry.update();
     }
 
-
+    //turns towards the tower goal wall
     @Override
     public void alignForward() {
         turn(-imu.getAngularOrientation().firstAngle);
@@ -269,6 +273,7 @@ public class SampleDrive extends Drive{
         telemetry.update();
     }
 
+    //moves to a certain position given the target location
     @Override
     public void moveToPosition(VectorF target) {
         double targetX = target.get(0);
@@ -277,6 +282,7 @@ public class SampleDrive extends Drive{
         moveToPosition(targetX, targetY);
     }
 
+    //moves to the tower shooting position
     @Override
     public void moveToTower() {
         //add code to change depending on which line we start on
@@ -288,6 +294,7 @@ public class SampleDrive extends Drive{
         }
     }
 
+    //moves to the power shot 1 shooting location
     @Override
     public void moveToPower1() {
         if(1 == 1) {
@@ -297,6 +304,8 @@ public class SampleDrive extends Drive{
             moveToPosition(-4.5,55.5);
         }
     }
+
+    //moves to the power shot 2 shooting location
     @Override
     public void moveToPower2() {
         if(1 == 1) {
@@ -306,6 +315,8 @@ public class SampleDrive extends Drive{
             moveToPosition(-12.5,55.5);
         }
     }
+
+    //moves to the power shot 3 shooting location
     @Override
     public void moveToPower3() {
         if(1 == 1) {
@@ -316,6 +327,7 @@ public class SampleDrive extends Drive{
         }
     }
 
+    //stops all motor movement
     @Override
     public void stop()
     {
@@ -326,6 +338,7 @@ public class SampleDrive extends Drive{
 
     }
 
+    //returns the angular orientation of the robot
     @Override
     public double getAngle() {
         return imu.getAngularOrientation().firstAngle;
