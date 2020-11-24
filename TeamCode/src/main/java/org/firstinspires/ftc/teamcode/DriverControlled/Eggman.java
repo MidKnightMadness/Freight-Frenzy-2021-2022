@@ -123,7 +123,7 @@ public class Eggman extends OpMode {
             wobbleGoal.stop();
         }
         if(lowerWobToggle == 1) {
-            wobbleGoal.drop();
+            wobbleGoal.lower();
         }
         lastAButton = gamepad1.a;
 

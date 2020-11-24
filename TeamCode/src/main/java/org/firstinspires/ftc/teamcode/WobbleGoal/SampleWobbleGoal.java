@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Common.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ImmersiveMode;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Common.Config;
 
@@ -17,25 +19,32 @@ public class SampleWobbleGoal extends WobbleGoal{
     private final double open = 1.00;
     //close value
     private final double closed = 0.10;
+    //lifted value (encoder ticks)
+    private final int liftedPos = -2000;
 
     //initialize motor
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
         motor = hardwareMap.dcMotor.get(Config.WOBBLEMOTOR);
+        motor.setTargetPosition(0);
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         servo1 = hardwareMap.servo.get(Config.WOBBLESERVO);
     }
 
     //move elevator up
     @Override
     public void lift() {
+        motor.setTargetPosition(liftedPos);
         motor.setPower(1);
     }
 
     //move elevator down
     @Override
-    public void drop(){
-        motor.setPower(-1);
+    public void lower(){
+        motor.setTargetPosition(0);
+        motor.setPower(1);
     }
 
     //stop elevator motor

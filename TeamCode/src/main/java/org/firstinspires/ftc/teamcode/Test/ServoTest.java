@@ -10,14 +10,20 @@ import org.firstinspires.ftc.teamcode.Common.Config;
 public class ServoTest extends OpMode {
     Servo servo;
 
+    double pos = 0;
+
     @Override
     public void init() {
-        servo = hardwareMap.servo.get(Config.OUTTAKESERVO);
+        servo = hardwareMap.servo.get(Config.WOBBLESERVO);
     }
 
     @Override
     public void loop() {
-        servo.setPosition(gamepad1.left_stick_y);
-        telemetry.addData("position", servo.getPosition());
+        pos += gamepad1.left_stick_y / 100;
+        if(gamepad1.a)
+            servo.setPosition(pos);
+
+        telemetry.addData("target position", pos);
+        telemetry.addData("servo position", servo.getPosition());
     }
 }

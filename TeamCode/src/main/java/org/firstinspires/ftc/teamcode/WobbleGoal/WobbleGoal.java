@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Common.Assembly;
 public abstract class WobbleGoal extends Assembly {
 
     public abstract void lift();
-    public abstract void drop();
+    public abstract void lower();
     public abstract void stop();
     public abstract void open();
     public abstract void close();
