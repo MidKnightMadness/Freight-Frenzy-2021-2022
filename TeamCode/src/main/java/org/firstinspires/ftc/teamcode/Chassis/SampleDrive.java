@@ -33,7 +33,6 @@ public class SampleDrive extends Drive{
 
     BNO055IMU imu;
 
-    //initializes motors and IMU
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
@@ -72,6 +71,9 @@ public class SampleDrive extends Drive{
         imu.startAccelerationIntegration(new Position(), new Velocity(), 10);
     }
 
+    //positive forwards value moves forwards, negative forwards value moves backwards
+    //positive sideways value moves right, negative sideways value moves left
+    //positive turn value moves clockwise, negative turn value moves counter-clockwise
     @Override
     public void drive(double forwards, double sideways, double turn) {
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
@@ -80,17 +82,19 @@ public class SampleDrive extends Drive{
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
     }
 
-    //moves a given distance in the x and y directions
     @Override
     public void move(double inchesX, double inchesY, double power) {
+        //update the position of the bot according to the move, where it's moving from, and the direction it's moving
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         double movingDirection = (-Math.asin(inchesX/hypotenuse)) + imu.getAngularOrientation().firstAngle;
         currentX += Math.sin(-movingDirection) * hypotenuse;
         currentY += Math.cos(-movingDirection) * hypotenuse;
 
+        //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
         inchesY *= encoderTicksPerInch;
 
+        //set where bot should end up according to encoders
         motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int)inchesY + (int)inchesX);
         motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int)inchesY + (int)inchesX);
         motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
@@ -116,11 +120,13 @@ public class SampleDrive extends Drive{
             }
             catch (Exception ignored) {}
 
+            //add tolerance of 0.1 inches over and under in case bot is not exact
             motorFLTolerance = (motorFL.getCurrentPosition() >= motorFL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorFL.getCurrentPosition() <= motorFL.getTargetPosition() + (encoderTicksPerInch * 0.1));
             motorFRTolerance = (motorFR.getCurrentPosition() >= motorFR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorFR.getCurrentPosition() <= motorFR.getTargetPosition() + (encoderTicksPerInch * 0.1));
             motorBLTolerance = (motorBL.getCurrentPosition() >= motorBL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBL.getCurrentPosition() <= motorBL.getTargetPosition() + (encoderTicksPerInch * 0.1));
             motorBRTolerance = (motorBR.getCurrentPosition() >= motorBR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBR.getCurrentPosition() <= motorBR.getTargetPosition() + (encoderTicksPerInch * 0.1));
 
+            //move different speeds depending on how far you're moving
             if(hypotenuse > 24) {
                 motorFL.setPower(power);
                 motorFR.setPower(power);
@@ -135,6 +141,7 @@ public class SampleDrive extends Drive{
             }
             telemetry.update();
         }
+        //stop everything
         motorFL.setPower(0);
         motorFR.setPower(0);
         motorBL.setPower(0);
@@ -145,13 +152,15 @@ public class SampleDrive extends Drive{
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    //move but not set power given
+    //just move without a power idk
     @Override
     public void move(double inchesX, double inchesY) {
         move(inchesX, inchesY, 1);
     }
 
-    //converts angles if it goes over 180 degrees or less than -180 degrees
+
+    //imu only accounts for angles from -180 to 180
+    //convert angles out of this range to usable angles in this range
     public double convertAngle(double degrees) {
         if(degrees > 180) {
             return degrees - 360;
@@ -164,7 +173,6 @@ public class SampleDrive extends Drive{
         }
     }
 
-    //turns a given amount of degrees
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
@@ -187,8 +195,10 @@ public class SampleDrive extends Drive{
 
             telemetry.addData("imu", imu.getAngularOrientation().firstAngle);
 
+            //add tolerance of 5 degrees over and under in case bot is not exact
             angleTolerance = (imu.getAngularOrientation().firstAngle >= convertAngle(targetAngle-5) && imu.getAngularOrientation().firstAngle <= convertAngle(targetAngle+5));
 
+            //calculate clockwise distance and counter-clockwise distance
             currentAngle = imu.getAngularOrientation().firstAngle;
             while(currentAngle < targetAngle) {
                 currentAngle = convertAngle(currentAngle + 1);
@@ -202,6 +212,8 @@ public class SampleDrive extends Drive{
             }
             telemetry.addData("clockwiseDistance", clockwiseDistance);
 
+            //turn clockwise or counter-clockwise depending on which turn will be shorter
+            //turn speed is also determined by how far away it is from its target angle
             if(clockwiseDistance > counterClockwiseDistance && counterClockwiseDistance > 90){
                 drive(0,0,-1);
                 telemetry.addLine("Turning Fast CounterClockwise");
@@ -220,19 +232,23 @@ public class SampleDrive extends Drive{
             }
             telemetry.update();
         }
+        //stop everything
         telemetry.addLine("turning done");
         drive(0,0,0);
         telemetry.update();
     }
 
-    //turns towards the tower goal wall
+    //turn until the bot is facing the front of the field
+    //technically just turns the bot whatever angle it faced when the round started
     @Override
     public void alignForward() {
         turn(-imu.getAngularOrientation().firstAngle);
     }
 
+    //move the bot to a position on the field using maths
     @Override
     public void moveToPosition(double x, double y) {
+        //determine how faw away the bot is from where you want it to go
         double distanceFromX = Math.abs(x);
         double distanceFromY = Math.abs(y);
 
@@ -252,7 +268,6 @@ public class SampleDrive extends Drive{
         //turn bot until facing field's positive y-axis
         alignForward();
 
-
         //drive to the target
         if(x > currentX && y > currentY) {
             move(distanceFromX, distanceFromY);
@@ -267,6 +282,7 @@ public class SampleDrive extends Drive{
             move(-distanceFromX, -distanceFromY);
         }
 
+        //turn bot facing forwards again
         alignForward();
 
         telemetry.addData("x position", currentX);
@@ -274,7 +290,7 @@ public class SampleDrive extends Drive{
         telemetry.update();
     }
 
-    //moves to a certain position given the target location
+    //same thing as moveToPosition(double x, double y) but extracts target position from a vector
     @Override
     public void moveToPosition(VectorF target) {
         double targetX = target.get(0);
@@ -283,10 +299,11 @@ public class SampleDrive extends Drive{
         moveToPosition(targetX, targetY);
     }
 
-    //moves to the tower shooting position
+    //move the bot to the shooting position in front of the tower
     @Override
     public void moveToTower() {
-        //add code to change depending on which line we start on
+        //the shooting position is different depending on where the bot starts in the round
+        //use distance sensors to determine where we are starting from to determine the shooting position
         if(1 == 1) {
             moveToPosition(-12.5, 55.5);
         }
@@ -295,9 +312,11 @@ public class SampleDrive extends Drive{
         }
     }
 
-    //moves to the power shot 1 shooting location
+    //move the bot to the shooting position in front of the rightmost powershot target
     @Override
     public void moveToPower1() {
+        //the shooting position is different depending on where the bot starts in the round
+        //use distance sensors to determine where we are starting from to determine the shooting position
         if(1 == 1) {
             moveToPosition(-29.5,55.5);
         }
@@ -306,9 +325,11 @@ public class SampleDrive extends Drive{
         }
     }
 
-    //moves to the power shot 2 shooting location
+    //move the bot to the shooting position in front of the center powershot target
     @Override
     public void moveToPower2() {
+        //the shooting position is different depending on where the bot starts in the round
+        //use distance sensors to determine where we are starting from to determine the shooting position
         if(1 == 1) {
             moveToPosition(-37.5,55.5);
         }
@@ -317,9 +338,11 @@ public class SampleDrive extends Drive{
         }
     }
 
-    //moves to the power shot 3 shooting location
+    //move the bot to the shooting position in front of the leftmost powershot target
     @Override
     public void moveToPower3() {
+        //the shooting position is different depending on where the bot starts in the round
+        //use distance sensors to determine where we are starting from to determine the shooting position
         if(1 == 1) {
             moveToPosition(-45.5,55.5);
         }
@@ -328,7 +351,7 @@ public class SampleDrive extends Drive{
         }
     }
 
-    //stops all motor movement
+    //stop everything
     @Override
     public void stop()
     {
@@ -339,7 +362,7 @@ public class SampleDrive extends Drive{
 
     }
 
-    //returns the angular orientation of the robot
+    //get the angle
     @Override
     public double getAngle() {
         return imu.getAngularOrientation().firstAngle;
