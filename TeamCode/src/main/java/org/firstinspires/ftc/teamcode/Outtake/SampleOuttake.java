@@ -56,30 +56,35 @@ public class SampleOuttake extends Outtake {
         servo.setPosition(0.2); //closed position
     }
 
+    double[] highGoalPos  = new double[]{0.,0.,0.}; //Location of high goal  relative to launch point, when bot is at (0,0,0)
+    double[] powerShotPos = new double[]{0.,0.,0.}; //Location of power shot relative to launch point, when bot is at (0,0,0)
+
+    rpmScale = 38.19718634; //RPM per ft/sec of flywheel. This is the value I calculated, but it may need adjustment.
+
     //Calculate launch velocity, in feet per second
     public static double getLaunchVelocity(double x, double y, double z) {
         double a = 30.; //Launch angle (from ground)
         double bMin = 15.; //minimum velocity (ft/s)
         double bMax = 50.; //maximum velocity (ft/s)
 
-        for (int i = 0; i < 10000; i++) { //Maximum 10000 iters
+        for (int i = 0; i < 1000; i++) { //Maximum 1000 iters, should never reach that high iter count
             double g = 32.2; //gravity, feet/sec^2
-            double v0 = (bMin + bMax) * .5; //velocity at mean
-            double tx = Math.sqrt(x * x + y * y); //dist to goal along XY plane
-            double vx = Math.cos((a * Math.PI) / 180.) * v0; //x velocity
-            double vt = Math.tan((a * Math.PI) / 180.); //tangent slope
-            double xvx = tx / vx; //split to optimize computation time
-            double ty = -.5 * g * xvx * xvx + vt * tx; //vertical hit point
-            double dev = ty - z; //how far off we are
-            double mx = (vx * vx * vt) / g; //peak distance
+            double v0 = (bMin+bMax)*.5; //velocity at mean
+            double tx = Math.sqrt(x*x+y*y); //dist to goal along XY plane
+            double vx = Math.cos((a*Math.PI)/180.)*v0; //x velocity
+            double vt = Math.tan((a*Math.PI)/180.); //tangent slope
+            double xvx = tx/vx; //split to optimize computation time
+            double ty = -.5*g*xvx*xvx+vt*tx; //vertical hit point
+            double dev = ty-z; //how far off we are
+            double mx = (vx*vx*vt)/g; //peak distance
             if (mx < tx) { //parabola peak occurs before hit
                 bMin = v0;
             } else {
-                if (dev / Math.abs(dev) > 0.) {
+                if (dev/Math.abs(dev) > 0.) {
                     bMax = v0;
                 } else {
                     if (Math.abs(dev) < .0000001) { //precision threshold
-                        return v0; //Multiply by some constant to instead output RPM
+                        return v0;
                     } else {
                         bMin = v0;
                     }
@@ -88,6 +93,9 @@ public class SampleOuttake extends Outtake {
         }
         return 0.; //REPORT ERROR HERE IF LINE IS REACHED
     }
+
+    //Motor RPM, in this case shooting for high goal, can be done like as follows:
+    //setMotorRPM(getLaunchVelocity(botLocation - highGoalPos)*rpmScale);
 
     //loads a ring into the launcher
     @Override
