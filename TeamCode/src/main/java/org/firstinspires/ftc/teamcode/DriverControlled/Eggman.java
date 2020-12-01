@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.Outtake.SampleOuttake;
 import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 
+import java.util.Scanner;
+import java.io.File;
 import java.util.concurrent.Callable;
 
 @TeleOp
@@ -34,6 +36,16 @@ public class Eggman extends OpMode {
         intake.init(hardwareMap, telemetry);
         outtake.init(hardwareMap, telemetry);
         wobbleGoal.init(hardwareMap, telemetry);
+
+        try {
+            File fileName = new File("Coordinates.txt");
+            Scanner inFile = new Scanner(fileName);
+            drive.setCurrentX(inFile.nextDouble());
+            drive.setCurrentY(inFile.nextDouble());
+            drive.setAngle(inFile.nextDouble());
+        }catch (Exception e){
+            telemetry.addLine(e.getMessage());
+        }
     }
 
     @Override

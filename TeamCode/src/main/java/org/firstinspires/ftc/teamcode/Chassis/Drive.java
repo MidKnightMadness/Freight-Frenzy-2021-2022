@@ -26,6 +26,12 @@ public abstract class Drive extends Assembly {
     public abstract void moveToPower3();
 
     public abstract double getAngle();
+    public abstract double getCurrentX();
+    public abstract double getCurrentY();
+
+    public abstract void setAngle(double angle);
+    public abstract void setCurrentX(double x);
+    public abstract void setCurrentY(double y);
 
     public Callable<Boolean> isStopRequested;  //you need to set this is
     public abstract void stop();

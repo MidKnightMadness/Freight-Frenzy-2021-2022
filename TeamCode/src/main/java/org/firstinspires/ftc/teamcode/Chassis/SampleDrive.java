@@ -30,6 +30,7 @@ public class SampleDrive extends Drive{
     private Visual visual;
     public double currentX = 0;
     public double currentY = 0;
+    public double currentAngle = 0;
 
     BNO055IMU imu;
 
@@ -100,8 +101,8 @@ public class SampleDrive extends Drive{
         double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
         double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
 
-        currentX = -distanceY * Math.sin(imu.getAngularOrientation().firstAngle) + distanceX * Math.cos(imu.getAngularOrientation().firstAngle);
-        currentY = distanceY * Math.cos(imu.getAngularOrientation().firstAngle) + distanceX * Math.sin(imu.getAngularOrientation().firstAngle);
+        currentX = -distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle);
+        currentY = distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle);
 
         telemetry.addData("Current X", currentX);
         telemetry.addData("Current Y", currentY);
@@ -111,7 +112,7 @@ public class SampleDrive extends Drive{
     public void move(double inchesX, double inchesY, double power) {
         //update the position of the bot according to the move, where it's moving from, and the direction it's moving
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        double movingDirection = (-Math.asin(inchesX/hypotenuse)) + imu.getAngularOrientation().firstAngle;
+        double movingDirection = (-Math.asin(inchesX/hypotenuse)) + currentAngle;
         currentX += Math.sin(-movingDirection) * hypotenuse;
         currentY += Math.cos(-movingDirection) * hypotenuse;
 
@@ -186,8 +187,9 @@ public class SampleDrive extends Drive{
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
-        double targetAngle = convertAngle(imu.getAngularOrientation().firstAngle + degrees);
-        double currentAngle;
+        double targetAngle = convertAngle(currentAngle + degrees);
+        double angleCounter;
+        double angleChange = imu.getAngularOrientation().firstAngle;
         double clockwiseDistance = 0;
         double counterClockwiseDistance = 0;
 
@@ -203,44 +205,39 @@ public class SampleDrive extends Drive{
             }
             catch (Exception ignored) {}
 
-            telemetry.addData("imu", imu.getAngularOrientation().firstAngle);
+            angleCounter = currentAngle;
 
             //add tolerance of 5 degrees over and under in case bot is not exact
-            angleTolerance = (imu.getAngularOrientation().firstAngle >= convertAngle(targetAngle-5) && imu.getAngularOrientation().firstAngle <= convertAngle(targetAngle+5));
+            angleTolerance = (currentAngle >= convertAngle(targetAngle-5) && currentAngle <= convertAngle(targetAngle+5));
 
             //calculate clockwise distance and counter-clockwise distance
-            currentAngle = imu.getAngularOrientation().firstAngle;
-            while(currentAngle < targetAngle) {
-                currentAngle = convertAngle(currentAngle + 1);
+            while(angleCounter < targetAngle) {
+                angleCounter = convertAngle(angleCounter + 1);
                 counterClockwiseDistance = counterClockwiseDistance + 1;
             }
-            telemetry.addData("counterClockwiseDistance", counterClockwiseDistance);
-            currentAngle = imu.getAngularOrientation().firstAngle;
-            while(currentAngle > targetAngle) {
-                currentAngle = convertAngle(currentAngle - 1);
+
+            angleCounter = currentAngle;
+            while(angleCounter > targetAngle) {
+                angleCounter = convertAngle(angleCounter - 1);
                 clockwiseDistance = clockwiseDistance + 1;
             }
-            telemetry.addData("clockwiseDistance", clockwiseDistance);
 
             //turn clockwise or counter-clockwise depending on which turn will be shorter
             //turn speed is also determined by how far away it is from its target angle
             if(clockwiseDistance > counterClockwiseDistance && counterClockwiseDistance > 90){
                 drive(0,0,-1);
-                telemetry.addLine("Turning Fast CounterClockwise");
             }
             else if(clockwiseDistance < counterClockwiseDistance && clockwiseDistance > 90){
                 drive(0,0,1);
-                telemetry.addLine("Turning Fast Clockwise");
             }
             else if(clockwiseDistance > counterClockwiseDistance){
                 drive(0,0,-0.5);
-                telemetry.addLine("Turning Slow CounterClockwise");
             }
             else if(clockwiseDistance < counterClockwiseDistance) {
                 drive(0,0,0.5);
-                telemetry.addLine("Turning Slow Clockwise");
             }
-            telemetry.update();
+            angleChange = imu.getAngularOrientation().firstAngle - angleChange;
+            currentAngle += angleChange;
         }
         //stop everything
         telemetry.addLine("turning done");
@@ -252,7 +249,7 @@ public class SampleDrive extends Drive{
     //technically just turns the bot whatever angle it faced when the round started
     @Override
     public void alignForward() {
-        turn(-imu.getAngularOrientation().firstAngle);
+        turn(-currentAngle);
     }
 
     //move the bot to a position on the field using maths
@@ -375,7 +372,37 @@ public class SampleDrive extends Drive{
     //get the angle
     @Override
     public double getAngle() {
-        return imu.getAngularOrientation().firstAngle;
+        return currentAngle;
+    }
+
+    //get x-position
+    @Override
+    public double getCurrentX() {
+        return currentX;
+    }
+
+    //get y-position
+    @Override
+    public double getCurrentY() {
+        return currentY;
+    }
+
+    //set the angle
+    @Override
+    public void setAngle(double angle) {
+        currentAngle = angle;
+    }
+
+    //set x-position
+    @Override
+    public void setCurrentX(double x) {
+        currentX = x;
+    }
+
+    //set y-position
+    @Override
+    public void setCurrentY(double y) {
+        currentY = y;
     }
 
 

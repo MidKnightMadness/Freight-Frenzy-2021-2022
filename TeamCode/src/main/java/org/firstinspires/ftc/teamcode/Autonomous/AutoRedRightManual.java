@@ -16,6 +16,9 @@ import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 
 import java.util.concurrent.Callable;
 
+import java.io.PrintWriter;
+import java.io.File;
+
 @Autonomous
 public class AutoRedRightManual extends LinearOpMode {
     private Drive drive = new SampleDrive();
@@ -28,7 +31,6 @@ public class AutoRedRightManual extends LinearOpMode {
     public void runOpMode() {
         //create stop requested callable
         //Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
-
         drive.init(hardwareMap, telemetry);
         //drive.isStopRequested = stopRequestedCall;
         telemetry.addLine("Drive initialized!");
@@ -105,5 +107,15 @@ public class AutoRedRightManual extends LinearOpMode {
         visual.stop();
         telemetry.addLine("Program End :)");
         telemetry.update();
+
+        try {
+            PrintWriter outFile = new PrintWriter(new File("Coordinates.txt"));
+            outFile.println(drive.getCurrentX());
+            outFile.println(drive.getCurrentY());
+            outFile.println(drive.getAngle());
+            outFile.close();
+        }catch (Exception e){
+            telemetry.addLine(e.getMessage());
+        }
     }
 }
