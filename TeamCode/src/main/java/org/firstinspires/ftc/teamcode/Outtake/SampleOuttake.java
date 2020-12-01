@@ -18,6 +18,8 @@ public class SampleOuttake extends Outtake {
     //declare feed servo
     Servo servo;
 
+    private static final int ftPerSecToTicksPerSec = 10000;
+
     //initialize motor
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -79,7 +81,7 @@ public class SampleOuttake extends Outtake {
                     bMax = v0;
                 } else {
                     if (Math.abs(dev) < .0000001) { //precision threshold
-                        return v0; //Multiply by some constant to instead output RPM
+                        return v0 * ftPerSecToTicksPerSec; //Multiply by some constant to instead output RPM
                     } else {
                         bMin = v0;
                     }
