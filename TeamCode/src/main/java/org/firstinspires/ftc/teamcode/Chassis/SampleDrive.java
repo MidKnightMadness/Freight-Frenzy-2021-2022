@@ -81,6 +81,7 @@ public class SampleDrive extends Drive{
         double changeFR = motorFR.getCurrentPosition();
         double changeBL = motorBL.getCurrentPosition();
         double changeBR = motorBR.getCurrentPosition();
+        double angleChange = imu.getAngularOrientation().firstAngle;
 
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
         motorFR.setVelocity((forwards + sideways + turn) * maxVel);
@@ -91,6 +92,7 @@ public class SampleDrive extends Drive{
         changeFR = motorFR.getCurrentPosition() - changeFR;
         changeBL = motorBL.getCurrentPosition() - changeBL;
         changeBR = motorBR.getCurrentPosition() - changeBR;
+        angleChange = imu.getAngularOrientation().firstAngle - angleChange;
 
         double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
         changeFL -= rotation;
@@ -101,11 +103,14 @@ public class SampleDrive extends Drive{
         double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
         double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
 
+        currentAngle = convertAngle(angleChange + currentAngle);
         currentX = -distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle);
         currentY = distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle);
 
         telemetry.addData("Current X", currentX);
         telemetry.addData("Current Y", currentY);
+        telemetry.addData("Current Angle", currentAngle);
+        telemetry.update();
     }
 
     @Override
@@ -237,7 +242,7 @@ public class SampleDrive extends Drive{
                 drive(0,0,0.5);
             }
             angleChange = imu.getAngularOrientation().firstAngle - angleChange;
-            currentAngle += angleChange;
+            currentAngle = convertAngle(currentAngle + angleChange);
         }
         //stop everything
         telemetry.addLine("turning done");
@@ -366,7 +371,6 @@ public class SampleDrive extends Drive{
         motorFR.setPower(0);
         motorBL.setPower(0);
         motorFL.setPower(0);
-
     }
 
     //get the angle
