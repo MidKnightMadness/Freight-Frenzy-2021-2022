@@ -76,10 +76,35 @@ public class SampleDrive extends Drive{
     //positive turn value moves clockwise, negative turn value moves counter-clockwise
     @Override
     public void drive(double forwards, double sideways, double turn) {
+        double changeFL = motorFL.getCurrentPosition();
+        double changeFR = motorFR.getCurrentPosition();
+        double changeBL = motorBL.getCurrentPosition();
+        double changeBR = motorBR.getCurrentPosition();
+
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
         motorFR.setVelocity((forwards + sideways + turn) * maxVel);
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
+
+        changeFL = motorFL.getCurrentPosition() - changeFL;
+        changeFR = motorFR.getCurrentPosition() - changeFR;
+        changeBL = motorBL.getCurrentPosition() - changeBL;
+        changeBR = motorBR.getCurrentPosition() - changeBR;
+
+        double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
+        changeFL -= rotation;
+        changeFR -= rotation;
+        changeBL -= rotation;
+        changeBR -= rotation;
+
+        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
+        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
+
+        currentX = -distanceY * Math.sin(imu.getAngularOrientation().firstAngle) + distanceX * Math.cos(imu.getAngularOrientation().firstAngle);
+        currentY = distanceY * Math.cos(imu.getAngularOrientation().firstAngle) + distanceX * Math.sin(imu.getAngularOrientation().firstAngle);
+
+        telemetry.addData("Current X", currentX);
+        telemetry.addData("Current Y", currentY);
     }
 
     @Override
@@ -100,47 +125,32 @@ public class SampleDrive extends Drive{
         motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
         motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
 
+        //add tolerance of 0.1 inches in case bot is not exact
+        motorFL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.1));
+        motorFR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.1));
+        motorBL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.1));
+        motorBR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.1));
+
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        boolean motorFLTolerance = false;
-        boolean motorFRTolerance = false;
-        boolean motorBLTolerance = false;
-        boolean motorBRTolerance = false;
-
-        while((!motorFLTolerance || !motorFRTolerance || !motorBLTolerance || !motorBRTolerance)) {
-            try {
-                if(isStopRequested.call())
-                    return;
-            }
-            catch (NullPointerException exception){
-                telemetry.addLine("You need to set isStopRequested when using move");
-            }
-            catch (Exception ignored) {}
-
-            //add tolerance of 0.1 inches over and under in case bot is not exact
-            motorFLTolerance = (motorFL.getCurrentPosition() >= motorFL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorFL.getCurrentPosition() <= motorFL.getTargetPosition() + (encoderTicksPerInch * 0.1));
-            motorFRTolerance = (motorFR.getCurrentPosition() >= motorFR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorFR.getCurrentPosition() <= motorFR.getTargetPosition() + (encoderTicksPerInch * 0.1));
-            motorBLTolerance = (motorBL.getCurrentPosition() >= motorBL.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBL.getCurrentPosition() <= motorBL.getTargetPosition() + (encoderTicksPerInch * 0.1));
-            motorBRTolerance = (motorBR.getCurrentPosition() >= motorBR.getTargetPosition() - (encoderTicksPerInch * 0.1) && motorBR.getCurrentPosition() <= motorBR.getTargetPosition() + (encoderTicksPerInch * 0.1));
-
+        while(motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) {
             //move different speeds depending on how far you're moving
-            if(hypotenuse > 24) {
+            if (hypotenuse > 24) {
                 motorFL.setPower(power);
                 motorFR.setPower(power);
                 motorBL.setPower(power);
                 motorBR.setPower(power);
+            } else if (hypotenuse <= 24) {
+                motorFL.setPower(power / 2);
+                motorFR.setPower(power / 2);
+                motorBL.setPower(power / 2);
+                motorBR.setPower(power / 2);
             }
-            else if(hypotenuse <= 24) {
-                motorFL.setPower(power/2);
-                motorFR.setPower(power/2);
-                motorBL.setPower(power/2);
-                motorBR.setPower(power/2);
-            }
-            telemetry.update();
         }
+
         //stop everything
         motorFL.setPower(0);
         motorFR.setPower(0);
