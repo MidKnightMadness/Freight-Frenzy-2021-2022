@@ -139,7 +139,10 @@ public class Eggman extends OpMode {
         }
         lastAButton = gamepad1.a;
 
-
+        telemetry.addData("Current X", drive.getCurrentX());
+        telemetry.addData("Current Y", drive.getCurrentY());
+        telemetry.addData("Current Angle", drive.getAngle());
+        telemetry.update();
     }
 
 }
