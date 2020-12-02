@@ -103,9 +103,9 @@ public class SampleDrive extends Drive{
         double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
         double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
 
-        currentAngle = convertAngle(angleChange + currentAngle);
-        currentX = -distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle);
-        currentY = distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle);
+        setAngle(convertAngle(angleChange + currentAngle));
+        setCurrentX(-distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle));
+        setCurrentY(distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle));
 
         telemetry.addData("Current X", currentX);
         telemetry.addData("Current Y", currentY);
@@ -118,8 +118,8 @@ public class SampleDrive extends Drive{
         //update the position of the bot according to the move, where it's moving from, and the direction it's moving
         double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         double movingDirection = (-Math.asin(inchesX/hypotenuse)) + currentAngle;
-        currentX += Math.sin(-movingDirection) * hypotenuse;
-        currentY += Math.cos(-movingDirection) * hypotenuse;
+        setCurrentX(currentX + Math.sin(-movingDirection) * hypotenuse);
+        setCurrentY(currentY + Math.cos(-movingDirection) * hypotenuse);
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -230,10 +230,10 @@ public class SampleDrive extends Drive{
             //turn clockwise or counter-clockwise depending on which turn will be shorter
             //turn speed is also determined by how far away it is from its target angle
             if(clockwiseDistance > counterClockwiseDistance && counterClockwiseDistance > 90){
-                drive(0,0,-1);
+                drive(0,0,-0.75);
             }
             else if(clockwiseDistance < counterClockwiseDistance && clockwiseDistance > 90){
-                drive(0,0,1);
+                drive(0,0,0.75);
             }
             else if(clockwiseDistance > counterClockwiseDistance){
                 drive(0,0,-0.5);
@@ -242,7 +242,7 @@ public class SampleDrive extends Drive{
                 drive(0,0,0.5);
             }
             angleChange = imu.getAngularOrientation().firstAngle - angleChange;
-            currentAngle = convertAngle(currentAngle + angleChange);
+            setAngle(convertAngle(currentAngle + angleChange));
         }
         //stop everything
         telemetry.addLine("turning done");
