@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Common.Assembly;
 
 public abstract class Intake extends Assembly{
 
+    public abstract void release();
     public abstract void start();
     public abstract void stop();
     public abstract void setSpeed(double speed);

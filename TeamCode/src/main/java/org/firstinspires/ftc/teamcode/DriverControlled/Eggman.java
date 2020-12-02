@@ -27,8 +27,8 @@ public class Eggman extends OpMode {
     private Intake intake = new SampleIntake();
     private Outtake outtake = new SampleOuttake();
     private WobbleGoal wobbleGoal = new SampleWobbleGoal();
-    private int intToggle, outToggle, openWobToggle, liftWobToggle, lowerWobToggle = 0;
-    private boolean lastLeftBumper, lastRightBumper, lastBButton, lastYButton, lastAButton = false;
+    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, lowerWobToggle = 0;
+    private boolean lastLeftBumper, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton = false;
 
     @Override
     public void init() {
@@ -89,6 +89,22 @@ public class Eggman extends OpMode {
             outtake.start();
         }
         lastRightBumper = gamepad1.right_bumper;
+        //outtake servo is a toggle controlled by right trigger
+        if(!lastRightTrigger && gamepad1.right_trigger == 1) {
+            if(outFeedToggle == 1) {
+                outFeedToggle = 0;
+            }
+            else if(outFeedToggle == 0) {
+                outFeedToggle = 1;
+            }
+        }
+        if(outFeedToggle == 0) {
+            outtake.resetFeed();
+        }
+        if(outFeedToggle == 1) {
+            outtake.feedRun();
+        }
+        lastRightTrigger = gamepad1.right_trigger == 1;
 
         //wobble goal toggles between open and close using a button
         if(!lastBButton && gamepad1.b) {

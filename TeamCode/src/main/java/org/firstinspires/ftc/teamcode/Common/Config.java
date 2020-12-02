@@ -15,6 +15,7 @@ public class Config {
     public static final String WOBBLEMOTOR= "WobbleM";
 
     //Subassembly servos
+    public static final String INTAKERELEASE = "IntakeRelease";
     public static final String OUTTAKESERVO = "Outtake S";
     public static final String WOBBLESERVO = "WobbleS";
 

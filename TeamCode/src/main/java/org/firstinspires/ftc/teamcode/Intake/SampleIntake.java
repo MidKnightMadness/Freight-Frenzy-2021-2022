@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Intake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Common.Config;
@@ -11,12 +12,27 @@ public class SampleIntake extends Intake{
     //declare intake motor
     private DcMotor intakeMotorL;
     private DcMotor intakeMotorR;
+    private Servo releaseServo;
+
+    @Override
+    public void init(HardwareMap hardwareMap, Telemetry telemetry){
+        super.init(hardwareMap, telemetry);
+
+        intakeMotorL = hardwareMap.dcMotor.get(Config.INTAKEL);
+        intakeMotorR = hardwareMap.dcMotor.get(Config.INTAKER);
+        releaseServo = hardwareMap.servo.get(Config.INTAKERELEASE);
+    }
+
+    @Override
+    public void release() {
+        releaseServo.setPosition(0);
+    }
 
     //start motor
     @Override
     public void start() {
-        intakeMotorL.setPower(1);
-        intakeMotorR.setPower(-1);
+        intakeMotorL.setPower(0.8);
+        intakeMotorR.setPower(-0.8);
     }
 
     //stop motor

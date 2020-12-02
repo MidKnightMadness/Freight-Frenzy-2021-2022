@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Outtake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Common.Config;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -14,7 +16,7 @@ import java.util.concurrent.Callable;
 public class SampleOuttake extends Outtake {
 
     //declare intake motor
-    DcMotor motor;
+    DcMotorEx motor;
     //declare feed servo
     Servo servo;
 
@@ -24,20 +26,21 @@ public class SampleOuttake extends Outtake {
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry) {
         super.init(hardwareMap, telemetry);
-        motor = hardwareMap.dcMotor.get(Config.OUTTAKEMOTOR);
+        motor = hardwareMap.get(DcMotorEx.class, Config.OUTTAKEMOTOR);
         servo = hardwareMap.servo.get(Config.OUTTAKESERVO);
     }
 
     //start motor
     @Override
     public void start() {
-        motor.setPower(0.5);
+        motor.setVelocity(950);
+        telemetry.addData("outtake velocity", motor.getVelocity());
     }
 
     //stop motor
     @Override
     public void stop() {
-        motor.setPower(0);
+        motor.setVelocity(0);
     }
 
     //manually set motor speed
@@ -49,7 +52,7 @@ public class SampleOuttake extends Outtake {
     //open the ring-loader
     @Override
     public void feedRun() {
-        servo.setPosition(0.8); //open feeding position
+        servo.setPosition(0.55); //open feeding position
     }
 
     //close the ring-loader
