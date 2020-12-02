@@ -230,10 +230,10 @@ public class SampleDrive extends Drive{
             //turn clockwise or counter-clockwise depending on which turn will be shorter
             //turn speed is also determined by how far away it is from its target angle
             if(clockwiseDistance > counterClockwiseDistance && counterClockwiseDistance > 90){
-                drive(0,0,-1);
+                drive(0,0,-0.75);
             }
             else if(clockwiseDistance < counterClockwiseDistance && clockwiseDistance > 90){
-                drive(0,0,1);
+                drive(0,0,0.75);
             }
             else if(clockwiseDistance > counterClockwiseDistance){
                 drive(0,0,-0.5);
