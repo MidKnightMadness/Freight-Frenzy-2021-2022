@@ -17,6 +17,8 @@ public class SampleOuttake extends Outtake {
 
     //declare intake motor
     DcMotorEx motor;
+    private final int targetVel = 950;
+
     //declare feed servo
     Servo servo;
 
@@ -33,7 +35,7 @@ public class SampleOuttake extends Outtake {
     //start motor
     @Override
     public void start() {
-        motor.setVelocity(950);
+        motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
 
@@ -47,6 +49,11 @@ public class SampleOuttake extends Outtake {
     @Override
     public void setSpeed(double speed) {
         motor.setPower(speed);
+    }
+
+    @Override
+    public boolean isReady() {
+        return Math.abs(motor.getVelocity() - targetVel) < 10;
     }
 
     //open the ring-loader
@@ -99,9 +106,9 @@ public class SampleOuttake extends Outtake {
     public void feed() {
         feedRun();
         try { wait(2000); } //Try-catch exception may not work -- Test
-        catch (InterruptedException exception) { }
+        catch (InterruptedException ignored) { }
         resetFeed();
         try { wait(2000); }
-        catch (InterruptedException exception) { }
+        catch (InterruptedException ignored) { }
     }
 }
