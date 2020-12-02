@@ -317,10 +317,10 @@ public class SampleDrive extends Drive{
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
         if(1 == 1) {
-            moveToPosition(-12.5, 55.5);
+            moveToPosition(-28.75, 50);
         }
         else if(0 == 1) {
-            moveToPosition(12.5,55.5);
+            moveToPosition(-3.75,50);
         }
     }
 
@@ -330,10 +330,10 @@ public class SampleDrive extends Drive{
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
         if(1 == 1) {
-            moveToPosition(-29.5,55.5);
+            moveToPosition(-45.25,50);
         }
         else if(0 == 1) {
-            moveToPosition(-4.5,55.5);
+            moveToPosition(-20.25,50);
         }
     }
 
@@ -343,10 +343,10 @@ public class SampleDrive extends Drive{
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
         if(1 == 1) {
-            moveToPosition(-37.5,55.5);
+            moveToPosition(-52.75,50);
         }
         else if(0 == 1) {
-            moveToPosition(-12.5,55.5);
+            moveToPosition(-27.75,50);
         }
     }
 
@@ -356,10 +356,10 @@ public class SampleDrive extends Drive{
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
         if(1 == 1) {
-            moveToPosition(-45.5,55.5);
+            moveToPosition(-60.25,50);
         }
         else if(0 == 1) {
-            moveToPosition(-20.5,55.5);
+            moveToPosition(-35.25,50);
         }
     }
 

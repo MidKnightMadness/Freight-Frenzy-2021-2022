@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 
 @Autonomous
-public class AutonomousRedRight extends LinearOpMode{
+public class AutonomousRedRightUseThis extends LinearOpMode{
 
     private Drive drive = new SampleDrive();
     private Intake intake = new SampleIntake();
@@ -36,43 +36,36 @@ public class AutonomousRedRight extends LinearOpMode{
         waitForStart();
 
         wobbleGoal.close();
-        //Do we lift it????
+        wobbleGoal.slightLift();
 
+        drive.moveToPosition(-13,12);
         visual.update();
+        drive.moveToPosition(0,12);
+
         if(visual.getStartStack() == Visual.STARTERSTACK.A)
         {
-            /*
-            insert zone A position here
-            drive.moveToPosition();
-             */
+            drive.moveToPosition(-5,70);
+            wobbleGoal.open();
         }
         else if (visual.getStartStack() == Visual.STARTERSTACK.B)
         {
-            /*
-            insert position to side here
-            drive.moveToPosition();
-            insert zone B position here
-            drive.moveToPosition();
-             */
+            drive.moveToPosition(-15,90);
+            wobbleGoal.open();
         }
         else
         {
-            /*
-            insert position to side here
-            drive.moveToPosition();
-            insert zone c position here
-            drive.moveToPosition();
-             */
+            drive.moveToPosition(-5, 112);
+            wobbleGoal.open();
         }
 
-        wobbleGoal.open();
 
-        //drive.moveToPosition();              insert aiming position 1
+
+        drive.moveToPower1();              //insert aiming position 1
         outtake.start();
         outtake.feed();
-        //drive.moveToPosition();              insert aiming position 2
+        drive.moveToPower2();              //insert aiming position 2
         outtake.feed();
-        //drive.moveToPosition();              insert aiming position 3
+        drive.moveToPower3();            //insert aiming position 3
         outtake.feed();
         outtake.stop();
     }
