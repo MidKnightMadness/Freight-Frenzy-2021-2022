@@ -27,11 +27,11 @@ public class AutonomousRedRightUseThis extends LinearOpMode{
     @Override
     public void runOpMode()
     {
-        drive.init(hardwareMap, telemetry);
-        intake.init(hardwareMap, telemetry);
-        outtake.init(hardwareMap, telemetry);
-        wobbleGoal.init(hardwareMap, telemetry);
-        visual.init(hardwareMap, telemetry);
+        drive.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        intake.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        outtake.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        visual.init(hardwareMap, telemetry, gamepad1, gamepad2);
 
         waitForStart();
 

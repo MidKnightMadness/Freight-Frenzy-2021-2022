@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Outtake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -26,8 +27,8 @@ public class SampleOuttake extends Outtake {
 
     //initialize motor
     @Override
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        super.init(hardwareMap, telemetry);
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
+        super.init(hardwareMap, telemetry, gamepad1, gamepad2);
         motor = hardwareMap.get(DcMotorEx.class, Config.OUTTAKEMOTOR);
         servo = hardwareMap.servo.get(Config.OUTTAKESERVO);
     }

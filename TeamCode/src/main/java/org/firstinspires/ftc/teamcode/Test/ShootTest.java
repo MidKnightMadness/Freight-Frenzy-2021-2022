@@ -17,7 +17,7 @@ public class ShootTest extends LinearOpMode{
     @Override
     public void runOpMode()
     {
-        out.init(hardwareMap, telemetry);
+        out.init(hardwareMap, telemetry, gamepad1, gamepad2);
 
         waitForStart();
 

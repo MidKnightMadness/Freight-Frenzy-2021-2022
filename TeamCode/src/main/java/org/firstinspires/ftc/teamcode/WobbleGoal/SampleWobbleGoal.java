@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.WobbleGoal;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Common.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -17,20 +18,21 @@ public class SampleWobbleGoal extends WobbleGoal{
     //declare servo
     private Servo servo1;
     //open value
-    private final double open = 1.00;
+    private final double open = 0.60;
     //close value
-    private final double closed = 0.10;
+    private final double closed = 0.20;
     //lifted value (encoder ticks)
-    private final int liftedPos = -2000;
+//    private final int liftedPos = -2000;
 
     //initialize motor
     @Override
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        super.init(hardwareMap, telemetry);
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
+        super.init(hardwareMap, telemetry, gamepad1, gamepad2);
         motor = hardwareMap.dcMotor.get(Config.WOBBLEMOTOR);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setTargetPosition(0);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        motor.setTargetPosition(0);
+//        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         servo1 = hardwareMap.servo.get(Config.WOBBLESERVO);
     }
@@ -38,15 +40,18 @@ public class SampleWobbleGoal extends WobbleGoal{
     //move elevator up
     @Override
     public void lift() {
-        motor.setTargetPosition(liftedPos);
+//        motor.setTargetPosition(liftedPos);
         motor.setPower(1);
+        telemetry.addLine("lifting wobble goal");
     }
 
     //move elevator down
     @Override
     public void lower(){
-        motor.setTargetPosition(0);
-        motor.setPower(1);
+//        motor.setTargetPosition(0);
+//        motor.setPower(1);
+        motor.setPower(0);
+        telemetry.addLine("lowering wobble goal");
     }
 
     //slightly lift the elevator
@@ -55,6 +60,7 @@ public class SampleWobbleGoal extends WobbleGoal{
     {
         motor.setTargetPosition(-500);
         motor.setPower(0.5);
+        telemetry.addLine("slight lifting wobble goal");
     }
 
     @Override
@@ -69,6 +75,7 @@ public class SampleWobbleGoal extends WobbleGoal{
     @Override
     public void stop() {
         motor.setPower(0);
+        telemetry.addLine("stopping wobble goal motor");
     }
 
     //Open claw

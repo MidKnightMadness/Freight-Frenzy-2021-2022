@@ -14,7 +14,9 @@ public class MeasureEncoderTicks extends OpMode {
     @Override
     public void init() {
         motor = hardwareMap.dcMotor.get(Config.WOBBLEMOTOR);
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override

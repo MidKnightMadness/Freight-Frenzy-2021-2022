@@ -32,10 +32,10 @@ public class Eggman extends OpMode {
 
     @Override
     public void init() {
-        drive.init(hardwareMap, telemetry);
-        intake.init(hardwareMap, telemetry);
-        outtake.init(hardwareMap, telemetry);
-        wobbleGoal.init(hardwareMap, telemetry);
+        drive.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        intake.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        outtake.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
 
         try {
             File fileName = new File("Coordinates.txt");
@@ -106,7 +106,7 @@ public class Eggman extends OpMode {
         }
         lastRightTrigger = gamepad1.right_trigger == 1;
 
-        //wobble goal toggles between open and close using a button
+        //wobble goal toggles between open and close using b button
         if(!lastBButton && gamepad1.b) {
             if(openWobToggle == 1) {
                 openWobToggle = 0;
@@ -123,6 +123,7 @@ public class Eggman extends OpMode {
         }
         lastBButton = gamepad1.b;
 
+        //lifting with y button
         if(!lastYButton && gamepad1.y) {
             if(liftWobToggle == 1) {
                 liftWobToggle = 0;
@@ -139,6 +140,7 @@ public class Eggman extends OpMode {
         }
         lastYButton = gamepad1.y;
 
+        //lower with a button
         if(!lastAButton && gamepad1.a) {
             if(lowerWobToggle == 1) {
                 lowerWobToggle = 0;
