@@ -4,8 +4,11 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -26,6 +29,12 @@ public class SampleDrive extends Drive{
     private DcMotorEx motorFR;
     private DcMotorEx motorBL;
     private DcMotorEx motorBR;
+    Rev2mDistanceSensor distL;
+    Rev2mDistanceSensor distR;
+    Rev2mDistanceSensor distF;
+
+    private double startDistL;
+    private double startDistR;
     private final double maxVel = 2500;
     private Visual visual;
     public double currentX = 0;
@@ -35,8 +44,15 @@ public class SampleDrive extends Drive{
     BNO055IMU imu;
 
     @Override
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
-        super.init(hardwareMap, telemetry);
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
+        super.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        distL = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORLEFT);
+        distR = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORRIGHT);
+        distF = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORFRONT);
+
+        startDistL = distL.getDistance(DistanceUnit.INCH);
+        startDistR = distR.getDistance(DistanceUnit.INCH);
+
         motorFL = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFL);
         motorFR = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFR);
         motorBL = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEBL);
@@ -327,11 +343,13 @@ public class SampleDrive extends Drive{
     public void moveToTower() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
-        if(1 == 1) {
-            moveToPosition(-28.75, 50);
-        }
-        else if(0 == 1) {
+        if(startDistL < 48 && startDistR > 24) {
+            //left line
             moveToPosition(-3.75,50);
+        }
+        else {
+            //right line
+            moveToPosition(-28.75, 50);
         }
     }
 
@@ -340,11 +358,13 @@ public class SampleDrive extends Drive{
     public void moveToPower1() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
-        if(1 == 1) {
-            moveToPosition(-45.25,50);
-        }
-        else if(0 == 1) {
+        if(startDistL < 48 && startDistR > 24) {
+            //left line
             moveToPosition(-20.25,50);
+        }
+        else {
+            //right line
+            moveToPosition(-45.25,50);
         }
     }
 
@@ -353,11 +373,13 @@ public class SampleDrive extends Drive{
     public void moveToPower2() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
-        if(1 == 1) {
-            moveToPosition(-52.75,50);
-        }
-        else if(0 == 1) {
+        if(startDistL < 48 && startDistR > 24) {
+            //left line
             moveToPosition(-27.75,50);
+        }
+        else {
+            //right line
+            moveToPosition(-52.75,50);
         }
     }
 
@@ -366,10 +388,10 @@ public class SampleDrive extends Drive{
     public void moveToPower3() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
-        if(1 == 1) {
+        if(startDistL < 48 && startDistR > 24) {
             moveToPosition(-60.25,50);
         }
-        else if(0 == 1) {
+        else {
             moveToPosition(-35.25,50);
         }
     }

@@ -14,7 +14,7 @@ public class WobbleGoalTest extends OpMode {
 
     @Override
     public void init() {
-        wobbleGoal.init(hardwareMap, telemetry);
+        wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
     }
 
     @Override

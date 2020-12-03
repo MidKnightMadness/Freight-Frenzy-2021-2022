@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Intake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -15,8 +16,8 @@ public class SampleIntake extends Intake{
     private Servo releaseServo;
 
     @Override
-    public void init(HardwareMap hardwareMap, Telemetry telemetry){
-        super.init(hardwareMap, telemetry);
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2){
+        super.init(hardwareMap, telemetry, gamepad1, gamepad2);
 
         intakeMotorL = hardwareMap.dcMotor.get(Config.INTAKEL);
         intakeMotorR = hardwareMap.dcMotor.get(Config.INTAKER);

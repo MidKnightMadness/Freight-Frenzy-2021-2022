@@ -16,7 +16,7 @@ public class MrBonesWildRide extends LinearOpMode {
         Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
         drive.isStopRequested = stopRequestedCall;
 
-        drive.init(hardwareMap, telemetry);
+        drive.init(hardwareMap, telemetry, gamepad1, gamepad2);
         waitForStart();
 
         drive.turn(20);
