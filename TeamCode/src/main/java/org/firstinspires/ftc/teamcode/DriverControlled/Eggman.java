@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.DriverControlled;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.Chassis.Drive;
@@ -27,8 +30,11 @@ public class Eggman extends OpMode {
     private Intake intake = new SampleIntake();
     private Outtake outtake = new SampleOuttake();
     private WobbleGoal wobbleGoal = new SampleWobbleGoal();
-    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, lowerWobToggle = 0;
-    private boolean lastLeftBumper, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton = false;
+    Rev2mDistanceSensor distL;
+    Rev2mDistanceSensor distR;
+    Rev2mDistanceSensor distF;
+    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, towerAdjustToggle = 0;
+    private boolean lastLeftBumper, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton2 = false;
 
     @Override
     public void init() {
@@ -36,6 +42,9 @@ public class Eggman extends OpMode {
         intake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         outtake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        distL = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORLEFT);
+        distR = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORRIGHT);
+        distF = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORFRONT);
 
         try {
             File fileName = new File("Coordinates.txt");
@@ -89,6 +98,7 @@ public class Eggman extends OpMode {
             outtake.start();
         }
         lastRightBumper = gamepad1.right_bumper;
+
         //outtake servo is a toggle controlled by right trigger
         if(!lastRightTrigger && gamepad1.right_trigger == 1) {
             if(outFeedToggle == 1) {
@@ -133,7 +143,7 @@ public class Eggman extends OpMode {
             }
         }
         if(liftWobToggle == 0) {
-            wobbleGoal.stop();
+            wobbleGoal.lower();
         }
         if(liftWobToggle == 1) {
             wobbleGoal.lift();
@@ -144,18 +154,32 @@ public class Eggman extends OpMode {
         if(!lastAButton && gamepad1.a) {
             if(lowerWobToggle == 1) {
                 lowerWobToggle = 0;
+        if(!lastAButton2 && gamepad2.a) {
+            if(towerAdjustToggle == 1) {
+                towerAdjustToggle = 0;
             }
-            else if(lowerWobToggle == 0) {
-                lowerWobToggle = 1;
+            else if(towerAdjustToggle == 0) {
+                towerAdjustToggle = 1;
             }
         }
-        if(lowerWobToggle == 0) {
-            wobbleGoal.stop();
+        if(towerAdjustToggle == 1) {
+            //adjust using distance sensors
+            double distOffX = (distR.getDistance(DistanceUnit.INCH) - 17.5);
+            double distOffY = -(distF.getDistance(DistanceUnit.INCH) - 65);
+            double turn = drive.getAngle();
+
+            if(distOffX < 1) {
+                distOffX = 0;
+            }
+            if(distOffY > 1) {
+                distOffY = 0;
+            }
+            if(turn > 5 || turn < -5) {
+                turn = 0;
+            }
         }
-        if(lowerWobToggle == 1) {
-            wobbleGoal.lower();
-        }
-        lastAButton = gamepad1.a;
+        lastAButton2 = gamepad2.a;
+
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());

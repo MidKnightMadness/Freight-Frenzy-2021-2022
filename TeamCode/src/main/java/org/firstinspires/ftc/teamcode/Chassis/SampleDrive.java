@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -27,6 +29,12 @@ public class SampleDrive extends Drive{
     private DcMotorEx motorFR;
     private DcMotorEx motorBL;
     private DcMotorEx motorBR;
+    Rev2mDistanceSensor distL;
+    Rev2mDistanceSensor distR;
+    Rev2mDistanceSensor distF;
+
+    private double startDistL;
+    private double startDistR;
     private final double maxVel = 2500;
     private Visual visual;
     public double currentX = 0;
@@ -38,6 +46,13 @@ public class SampleDrive extends Drive{
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super.init(hardwareMap, telemetry, gamepad1, gamepad2);
+        distL = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORLEFT);
+        distR = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORRIGHT);
+        distF = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORFRONT);
+
+        startDistL = distL.getDistance(DistanceUnit.INCH);
+        startDistR = distR.getDistance(DistanceUnit.INCH);
+
         motorFL = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFL);
         motorFR = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFR);
         motorBL = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEBL);
@@ -89,24 +104,30 @@ public class SampleDrive extends Drive{
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
 
-        changeFL = motorFL.getCurrentPosition() - changeFL;
-        changeFR = motorFR.getCurrentPosition() - changeFR;
-        changeBL = motorBL.getCurrentPosition() - changeBL;
-        changeBR = motorBR.getCurrentPosition() - changeBR;
-        angleChange = imu.getAngularOrientation().firstAngle - angleChange;
+        if(turn != 0) {
+            angleChange = imu.getAngularOrientation().firstAngle - angleChange;
+            setAngle(convertAngle(angleChange + currentAngle));
+        }
 
-        double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
-        changeFL -= rotation;
-        changeFR -= rotation;
-        changeBL -= rotation;
-        changeBR -= rotation;
+        if(forwards != 0 || sideways != 0) {
+            changeFL = motorFL.getCurrentPosition() - changeFL;
+            changeFR = motorFR.getCurrentPosition() - changeFR;
+            changeBL = motorBL.getCurrentPosition() - changeBL;
+            changeBR = motorBR.getCurrentPosition() - changeBR;
 
-        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
-        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
 
-        setAngle(convertAngle(angleChange + currentAngle));
-        setCurrentX(-distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle));
-        setCurrentY(distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle));
+            double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
+            changeFL -= rotation;
+            changeFR -= rotation;
+            changeBL -= rotation;
+            changeBR -= rotation;
+
+            double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
+            double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
+
+            setCurrentX(currentX + (-distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle)));
+            setCurrentY(currentY + (distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle)));
+        }
 
         telemetry.addData("Current X", currentX);
         telemetry.addData("Current Y", currentY);
@@ -260,7 +281,7 @@ public class SampleDrive extends Drive{
 
     //move the bot to a position on the field using maths
     @Override
-    public void moveToPosition(double x, double y) {
+    public void moveToPosition(double x, double y, double power) {
         //determine how faw away the bot is from where you want it to go
         double distanceFromX = Math.abs(x);
         double distanceFromY = Math.abs(y);
@@ -283,16 +304,16 @@ public class SampleDrive extends Drive{
 
         //drive to the target
         if(x > currentX && y > currentY) {
-            move(distanceFromX, distanceFromY);
+            move(distanceFromX, distanceFromY, power);
         }
         else if(x > currentX && y < currentY) {
-            move(distanceFromX, -distanceFromY);
+            move(distanceFromX, -distanceFromY, power);
         }
         else if(x < currentX && y > currentY) {
-            move(-distanceFromX, distanceFromY);
+            move(-distanceFromX, distanceFromY, power);
         }
         else if(x < currentX && y < currentY) {
-            move(-distanceFromX, -distanceFromY);
+            move(-distanceFromX, -distanceFromY, power);
         }
 
         //turn bot facing forwards again
@@ -301,6 +322,11 @@ public class SampleDrive extends Drive{
         telemetry.addData("x position", currentX);
         telemetry.addData("y position", currentY);
         telemetry.update();
+    }
+
+    @Override
+    public void moveToPosition(double x, double y) {
+        moveToPosition(x, y,1);
     }
 
     //same thing as moveToPosition(double x, double y) but extracts target position from a vector
@@ -317,11 +343,13 @@ public class SampleDrive extends Drive{
     public void moveToTower() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
-        if(1 == 1) {
-            moveToPosition(-28.75, 50);
-        }
-        else if(0 == 1) {
+        if(startDistL < 48 && startDistR > 24) {
+            //left line
             moveToPosition(-3.75,50);
+        }
+        else {
+            //right line
+            moveToPosition(-28.75, 50);
         }
     }
 
@@ -330,11 +358,13 @@ public class SampleDrive extends Drive{
     public void moveToPower1() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
-        if(1 == 1) {
-            moveToPosition(-45.25,50);
-        }
-        else if(0 == 1) {
+        if(startDistL < 48 && startDistR > 24) {
+            //left line
             moveToPosition(-20.25,50);
+        }
+        else {
+            //right line
+            moveToPosition(-45.25,50);
         }
     }
 
@@ -343,11 +373,13 @@ public class SampleDrive extends Drive{
     public void moveToPower2() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
-        if(1 == 1) {
-            moveToPosition(-52.75,50);
-        }
-        else if(0 == 1) {
+        if(startDistL < 48 && startDistR > 24) {
+            //left line
             moveToPosition(-27.75,50);
+        }
+        else {
+            //right line
+            moveToPosition(-52.75,50);
         }
     }
 
@@ -356,10 +388,10 @@ public class SampleDrive extends Drive{
     public void moveToPower3() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
-        if(1 == 1) {
+        if(startDistL < 48 && startDistR > 24) {
             moveToPosition(-60.25,50);
         }
-        else if(0 == 1) {
+        else {
             moveToPosition(-35.25,50);
         }
     }

@@ -16,7 +16,7 @@ public class SampleIntake extends Intake{
     private Servo releaseServo;
 
     @Override
-    public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2){
         super.init(hardwareMap, telemetry, gamepad1, gamepad2);
 
         intakeMotorL = hardwareMap.dcMotor.get(Config.INTAKEL);
