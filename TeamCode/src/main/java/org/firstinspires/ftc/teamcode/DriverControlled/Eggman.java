@@ -33,8 +33,8 @@ public class Eggman extends OpMode {
     Rev2mDistanceSensor distL;
     Rev2mDistanceSensor distR;
     Rev2mDistanceSensor distF;
-    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, towerAdjustToggle = 0;
-    private boolean lastLeftBumper, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton2 = false;
+    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, lowerWobToggle, towerAdjustToggle = 0;
+    private boolean lastLeftBumper, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton, lastAButton2 = false;
 
     @Override
     public void init() {
@@ -152,8 +152,10 @@ public class Eggman extends OpMode {
 
         //lower with a button
         if(!lastAButton && gamepad1.a) {
-            if(lowerWobToggle == 1) {
+            if (lowerWobToggle == 1) {
                 lowerWobToggle = 0;
+            }
+        }
         if(!lastAButton2 && gamepad2.a) {
             if(towerAdjustToggle == 1) {
                 towerAdjustToggle = 0;
