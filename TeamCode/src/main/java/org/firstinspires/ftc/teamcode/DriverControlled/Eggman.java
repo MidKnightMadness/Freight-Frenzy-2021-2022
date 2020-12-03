@@ -27,8 +27,8 @@ public class Eggman extends OpMode {
     private Intake intake = new SampleIntake();
     private Outtake outtake = new SampleOuttake();
     private WobbleGoal wobbleGoal = new SampleWobbleGoal();
-    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, lowerWobToggle = 0;
-    private boolean lastLeftBumper, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton = false;
+    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle = 0;
+    private boolean lastLeftBumper, lastRightBumper, lastRightTrigger, lastBButton, lastYButton = false;
 
     @Override
     public void init() {
@@ -89,6 +89,7 @@ public class Eggman extends OpMode {
             outtake.start();
         }
         lastRightBumper = gamepad1.right_bumper;
+
         //outtake servo is a toggle controlled by right trigger
         if(!lastRightTrigger && gamepad1.right_trigger == 1) {
             if(outFeedToggle == 1) {
@@ -132,28 +133,12 @@ public class Eggman extends OpMode {
             }
         }
         if(liftWobToggle == 0) {
-            wobbleGoal.stop();
+            wobbleGoal.lower();
         }
         if(liftWobToggle == 1) {
             wobbleGoal.lift();
         }
         lastYButton = gamepad1.y;
-
-        if(!lastAButton && gamepad1.a) {
-            if(lowerWobToggle == 1) {
-                lowerWobToggle = 0;
-            }
-            else if(lowerWobToggle == 0) {
-                lowerWobToggle = 1;
-            }
-        }
-        if(lowerWobToggle == 0) {
-            wobbleGoal.stop();
-        }
-        if(lowerWobToggle == 1) {
-            wobbleGoal.lower();
-        }
-        lastAButton = gamepad1.a;
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());

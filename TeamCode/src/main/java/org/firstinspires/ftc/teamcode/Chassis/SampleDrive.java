@@ -88,24 +88,30 @@ public class SampleDrive extends Drive{
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
 
-        changeFL = motorFL.getCurrentPosition() - changeFL;
-        changeFR = motorFR.getCurrentPosition() - changeFR;
-        changeBL = motorBL.getCurrentPosition() - changeBL;
-        changeBR = motorBR.getCurrentPosition() - changeBR;
-        angleChange = imu.getAngularOrientation().firstAngle - angleChange;
+        if(turn != 0) {
+            angleChange = imu.getAngularOrientation().firstAngle - angleChange;
+            setAngle(convertAngle(angleChange + currentAngle));
+        }
 
-        double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
-        changeFL -= rotation;
-        changeFR -= rotation;
-        changeBL -= rotation;
-        changeBR -= rotation;
+        if(forwards != 0 || sideways != 0) {
+            changeFL = motorFL.getCurrentPosition() - changeFL;
+            changeFR = motorFR.getCurrentPosition() - changeFR;
+            changeBL = motorBL.getCurrentPosition() - changeBL;
+            changeBR = motorBR.getCurrentPosition() - changeBR;
 
-        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
-        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
 
-        setAngle(convertAngle(angleChange + currentAngle));
-        setCurrentX(-distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle));
-        setCurrentY(distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle));
+            double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
+            changeFL -= rotation;
+            changeFR -= rotation;
+            changeBL -= rotation;
+            changeBR -= rotation;
+
+            double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
+            double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
+
+            setCurrentX(currentX + (-distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle)));
+            setCurrentY(currentY + (distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle)));
+        }
 
         telemetry.addData("Current X", currentX);
         telemetry.addData("Current Y", currentY);
