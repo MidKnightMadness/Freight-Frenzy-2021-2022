@@ -265,7 +265,7 @@ public class SampleDrive extends Drive{
 
     //move the bot to a position on the field using maths
     @Override
-    public void moveToPosition(double x, double y) {
+    public void moveToPosition(double x, double y, double power) {
         //determine how faw away the bot is from where you want it to go
         double distanceFromX = Math.abs(x);
         double distanceFromY = Math.abs(y);
@@ -288,16 +288,16 @@ public class SampleDrive extends Drive{
 
         //drive to the target
         if(x > currentX && y > currentY) {
-            move(distanceFromX, distanceFromY);
+            move(distanceFromX, distanceFromY, power);
         }
         else if(x > currentX && y < currentY) {
-            move(distanceFromX, -distanceFromY);
+            move(distanceFromX, -distanceFromY, power);
         }
         else if(x < currentX && y > currentY) {
-            move(-distanceFromX, distanceFromY);
+            move(-distanceFromX, distanceFromY, power);
         }
         else if(x < currentX && y < currentY) {
-            move(-distanceFromX, -distanceFromY);
+            move(-distanceFromX, -distanceFromY, power);
         }
 
         //turn bot facing forwards again
@@ -306,6 +306,11 @@ public class SampleDrive extends Drive{
         telemetry.addData("x position", currentX);
         telemetry.addData("y position", currentY);
         telemetry.update();
+    }
+
+    @Override
+    public void moveToPosition(double x, double y) {
+        moveToPosition(x, y,1);
     }
 
     //same thing as moveToPosition(double x, double y) but extracts target position from a vector
