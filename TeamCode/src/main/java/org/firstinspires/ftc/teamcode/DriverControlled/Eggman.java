@@ -60,13 +60,11 @@ public class Eggman extends OpMode {
 
     @Override
     public void loop() {
-        //drive controlled by left stick and right stick
+        //drive controlled by left stick used to move forwards and sideways, right stick used to turn (gamepad 1)
         drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-        if(gamepad1.x) {
-            drive.moveToTower();
-        }
 
-        //intake is a toggle controlled by left bumper
+        //when left bumper is pressed, start intake unless it was previously on in which intake stops (gamepad 1)
+        //when left trigger is pressed, reverse intake unless it was previously on in which intake stops (gamepad 1)
         if(!lastLeftBumper && gamepad1.left_bumper) {
             if(intToggle == 1) {
                 intToggle = 0;
@@ -95,7 +93,7 @@ public class Eggman extends OpMode {
         lastLeftBumper = gamepad1.left_bumper;
         lastLeftTrigger = gamepad1.left_trigger == 1;
 
-        //outtake is a toggle controlled by right bumper
+        //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 1)
         if(!lastRightBumper && gamepad1.right_bumper) {
             if(outToggle == 1) {
                 outToggle = 0;
@@ -112,7 +110,8 @@ public class Eggman extends OpMode {
         }
         lastRightBumper = gamepad1.right_bumper;
 
-        //outtake servo is a toggle controlled by right trigger
+        //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
+        //it is already in that position in which it moves back to its starting position (gamepad 1)
         if(!lastRightTrigger && gamepad1.right_trigger == 1) {
             if(outFeedToggle == 1) {
                 outFeedToggle = 0;
@@ -129,7 +128,7 @@ public class Eggman extends OpMode {
         }
         lastRightTrigger = gamepad1.right_trigger == 1;
 
-        //wobble goal toggles between open and close using b button
+        //when b button is pressed, wobble goal is opened unless it is already opened in which it closes (gamepad 1)
         if(!lastBButton && gamepad1.b) {
             if(openWobToggle == 1) {
                 openWobToggle = 0;
@@ -146,7 +145,7 @@ public class Eggman extends OpMode {
         }
         lastBButton = gamepad1.b;
 
-        //lifting with y button
+        //when y button is pressed, wobble goal is lifted unless it is already lifted in which it lowers (gamepad 1)
         if(!lastYButton && gamepad1.y) {
             if(liftWobToggle == 1) {
                 liftWobToggle = 0;
@@ -164,6 +163,7 @@ public class Eggman extends OpMode {
         wobbleGoal.outputTelemetry();
         lastYButton = gamepad1.y;
 
+        //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
         if(!lastAButton2 && gamepad2.a) {
             if(towerAdjust == 0) {
                 towerAdjust = 1;
@@ -196,6 +196,7 @@ public class Eggman extends OpMode {
         }
         lastAButton2 = gamepad2.a;
 
+        //when x button is pressed, start adjusting bot to shooting position in front of leftmost power shot unless it already is in which it stops (gamepad 2)
         if(!lastXButton2 && gamepad2.x) {
             if(powerAdjust1 == 0) {
                 powerAdjust1 = 1;
@@ -208,7 +209,7 @@ public class Eggman extends OpMode {
             double distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
-                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
+                distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 21.5);
                 distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
 
                 if (distOffX < 1 && distOffX > -1) {
@@ -228,6 +229,7 @@ public class Eggman extends OpMode {
         }
         lastAButton2 = gamepad2.a;
 
+        //when y button is pressed, start adjusting bot to shooting position in front of center power shot unless it already is in which it stops (gamepad 2)
         if(!lastYButton2 && gamepad2.y) {
             if(powerAdjust2 == 0) {
                 powerAdjust2 = 1;
@@ -240,7 +242,7 @@ public class Eggman extends OpMode {
             double distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
-                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
+                distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 29.5);
                 distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
 
                 if (distOffX < 1 && distOffX > -1) {
@@ -260,6 +262,7 @@ public class Eggman extends OpMode {
         }
         lastYButton2 = gamepad2.y;
 
+        //when b button is pressed, start adjusting bot to shooting position in front of rightmost power shot unless it already is in which it stops (gamepad 2)
         if(!lastBButton2 && gamepad2.b) {
             if(powerAdjust3 == 0) {
                 powerAdjust3 = 1;
@@ -272,7 +275,7 @@ public class Eggman extends OpMode {
             double distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
-                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
+                distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 36.5);
                 distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
 
                 if (distOffX < 1 && distOffX > -1) {
