@@ -166,6 +166,7 @@ public class Eggman extends OpMode {
         if(liftWobToggle == 1) {
             wobbleGoal.lift();
         }
+        wobbleGoal.outputTelemetry();
         lastYButton = gamepad1.y;
 
         if(!lastAButton2 && gamepad2.a) {

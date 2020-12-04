@@ -33,6 +33,7 @@ public class SampleWobbleGoal extends WobbleGoal{
 //        motor.setTargetPosition(0);
 //        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         servo1 = hardwareMap.servo.get(Config.WOBBLESERVO);
     }
@@ -41,8 +42,9 @@ public class SampleWobbleGoal extends WobbleGoal{
     @Override
     public void lift() {
 //        motor.setTargetPosition(liftedPos);
-        motor.setPower(1);
+        motor.setPower(0.2);
         telemetry.addLine("lifting wobble goal");
+        telemetry.addData("wobble motor position", motor.getCurrentPosition());
     }
 
     //move elevator down
@@ -66,9 +68,8 @@ public class SampleWobbleGoal extends WobbleGoal{
     @Override
     public void outputTelemetry()
     {
-        telemetry.addLine("Current Position: " + motor.getCurrentPosition());
-        telemetry.addLine("Target Position: " + motor.getTargetPosition());
-        telemetry.update();
+        telemetry.addLine("Current Wobble Position: " + motor.getCurrentPosition());
+        telemetry.addLine("Target Wobble Position: " + motor.getTargetPosition());
     }
 
     //stop elevator motor

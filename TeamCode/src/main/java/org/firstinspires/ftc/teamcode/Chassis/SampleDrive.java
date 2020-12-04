@@ -46,12 +46,12 @@ public class SampleDrive extends Drive{
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super.init(hardwareMap, telemetry, gamepad1, gamepad2);
-        distL = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORLEFT);
-        distR = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORRIGHT);
-        distF = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORFRONT);
+//        distL = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORLEFT);
+//        distR = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORRIGHT);
+//        distF = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORFRONT);
 
-        startDistL = distL.getDistance(DistanceUnit.INCH);
-        startDistR = distR.getDistance(DistanceUnit.INCH);
+//        startDistL = distL.getDistance(DistanceUnit.INCH);
+//        startDistR = distR.getDistance(DistanceUnit.INCH);
 
         motorFL = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFL);
         motorFR = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFR);
@@ -132,7 +132,6 @@ public class SampleDrive extends Drive{
         telemetry.addData("Current X", currentX);
         telemetry.addData("Current Y", currentY);
         telemetry.addData("Current Angle", currentAngle);
-        telemetry.update();
     }
 
     @Override
