@@ -228,12 +228,12 @@ public class Eggman extends OpMode {
         }
         lastAButton2 = gamepad2.a;
 
-        if(!lastAButton2 && gamepad2.a) {
-            if(towerAdjust == 0) {
-                towerAdjust = 1;
+        if(!lastYButton2 && gamepad2.y) {
+            if(powerAdjust2 == 0) {
+                powerAdjust2 = 1;
             }
         }
-        if(towerAdjust == 1) {
+        if(powerAdjust2 == 1) {
             drive.alignForward();
 
             double distOffX = 1;
@@ -252,20 +252,20 @@ public class Eggman extends OpMode {
 
                 drive.drive(distOffX / 10, distOffY / 10, 0);
 
-                if(gamepad2.a) {
+                if(gamepad2.y) {
                     distOffX = 0;
                 }
             }
             towerAdjust = 0;
         }
-        lastAButton2 = gamepad2.a;
+        lastYButton2 = gamepad2.y;
 
-        if(!lastAButton2 && gamepad2.a) {
-            if(towerAdjust == 0) {
-                towerAdjust = 1;
+        if(!lastBButton2 && gamepad2.b) {
+            if(powerAdjust3 == 0) {
+                powerAdjust3 = 1;
             }
         }
-        if(towerAdjust == 1) {
+        if(powerAdjust3 == 1) {
             drive.alignForward();
 
             double distOffX = 1;
@@ -284,13 +284,13 @@ public class Eggman extends OpMode {
 
                 drive.drive(distOffX / 10, distOffY / 10, 0);
 
-                if(gamepad2.a) {
+                if(gamepad2.b) {
                     distOffX = 0;
                 }
             }
-            towerAdjust = 0;
+            powerAdjust3 = 0;
         }
-        lastAButton2 = gamepad2.a;
+        lastBButton2 = gamepad2.b;
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());
