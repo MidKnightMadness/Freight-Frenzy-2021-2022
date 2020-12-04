@@ -164,6 +164,15 @@ public class SampleDrive extends Drive{
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         while(motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) {
+            try {
+                if(isStopRequested.call())
+                    return;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
+
             //move different speeds depending on how far you're moving
             if (hypotenuse > 24) {
                 motorFL.setPower(power);

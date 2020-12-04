@@ -170,10 +170,7 @@ public class Eggman extends OpMode {
         lastYButton = gamepad1.y;
 
         if(!lastAButton2 && gamepad2.a) {
-            if(towerAdjustToggle == 1) {
-                towerAdjustToggle = 0;
-            }
-            else if(towerAdjustToggle == 0) {
+            if(towerAdjustToggle == 0) {
                 towerAdjustToggle = 1;
             }
         }
@@ -198,7 +195,14 @@ public class Eggman extends OpMode {
                 }
 
                 drive.drive(distOffX / 10, distOffY / 10, turn / 100);
+
+                if(gamepad2.a) {
+                    distOffX = 0;
+                    distOffY = 0;
+                    turn = 0;
+                }
             }
+            towerAdjustToggle = 0;
         }
         lastAButton2 = gamepad2.a;
 
