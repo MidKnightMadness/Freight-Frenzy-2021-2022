@@ -361,18 +361,16 @@ public class SampleDrive extends Drive{
         }
     }
 
-    //move the bot to the shooting position in front of the rightmost powershot target
+    //move the bot to the shooting position in front of the leftmost powershot target
     @Override
     public void moveToPower1() {
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
         if(startDistL < 48 && startDistR > 24) {
-            //left line
-            moveToPosition(-20.25,50);
+            moveToPosition(-60.25,50);
         }
         else {
-            //right line
-            moveToPosition(-45.25,50);
+            moveToPosition(-35.25,50);
         }
     }
 
@@ -391,16 +389,19 @@ public class SampleDrive extends Drive{
         }
     }
 
-    //move the bot to the shooting position in front of the leftmost powershot target
+    //move the bot to the shooting position in front of the rightmost powershot target
     @Override
     public void moveToPower3() {
+
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
         if(startDistL < 48 && startDistR > 24) {
-            moveToPosition(-60.25,50);
+            //left line
+            moveToPosition(-20.25,50);
         }
         else {
-            moveToPosition(-35.25,50);
+            //right line
+            moveToPosition(-45.25,50);
         }
     }
 

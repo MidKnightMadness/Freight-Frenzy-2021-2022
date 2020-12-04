@@ -34,8 +34,8 @@ public class Eggman extends OpMode {
     ModernRoboticsI2cRangeSensor sensorL;
     ModernRoboticsI2cRangeSensor sensorR;
     ModernRoboticsI2cRangeSensor sensorF;
-    private int intToggle, intEjectToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, towerAdjustToggle = 0;
-    private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton2 = false;
+    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, towerAdjust, powerAdjust1, powerAdjust2, powerAdjust3 = 0;
+    private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton2, lastXButton2, lastYButton2, lastBButton2 = false;
 
     @Override
     public void init() {
@@ -71,8 +71,16 @@ public class Eggman extends OpMode {
             if(intToggle == 1) {
                 intToggle = 0;
             }
-            else if(intToggle == 0) {
+            else if(intToggle == 0 || intToggle == 2) {
                 intToggle = 1;
+            }
+        }
+        if(!lastLeftTrigger &&  gamepad1.left_trigger == 1) {
+            if(intToggle == 2) {
+                intToggle = 0;
+            }
+            else if(intToggle == 0 || intToggle == 1) {
+                intToggle = 2;
             }
         }
         if(intToggle == 0) {
@@ -81,23 +89,10 @@ public class Eggman extends OpMode {
         if(intToggle == 1) {
             intake.start();
         }
-        lastLeftBumper = gamepad1.left_bumper;
-
-        //intake is a toggle controlled by left bumper
-        if(!lastLeftTrigger && gamepad1.left_trigger == 1) {
-            if(intEjectToggle == 1) {
-                intEjectToggle = 0;
-            }
-            else if(intEjectToggle == 0) {
-                intEjectToggle = 1;
-            }
-        }
-        if(intEjectToggle == 0) {
-            intake.stop();
-        }
-        if(intEjectToggle == 1) {
+        if(intToggle == 2) {
             intake.eject();
         }
+        lastLeftBumper = gamepad1.left_bumper;
         lastLeftTrigger = gamepad1.left_trigger == 1;
 
         //outtake is a toggle controlled by right bumper
@@ -170,19 +165,19 @@ public class Eggman extends OpMode {
         lastYButton = gamepad1.y;
 
         if(!lastAButton2 && gamepad2.a) {
-            if(towerAdjustToggle == 0) {
-                towerAdjustToggle = 1;
+            if(towerAdjust == 0) {
+                towerAdjust = 1;
             }
         }
-        if(towerAdjustToggle == 1) {
+        if(towerAdjust == 1) {
+            drive.alignForward();
+
             double distOffX = 1;
             double distOffY = 1;
-            double turn = 1;
-            while(distOffX != 0 ||  distOffY != 0  || turn != 0) {
+            while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
                 distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
                 distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
-                turn = drive.getAngle();
 
                 if (distOffX < 1 && distOffX > -1) {
                     distOffX = 0;
@@ -190,22 +185,112 @@ public class Eggman extends OpMode {
                 if (distOffY < 1 && distOffY > -1) {
                     distOffY = 0;
                 }
-                if (turn > 5 || turn < -5) {
-                    turn = 0;
-                }
 
-                drive.drive(distOffX / 10, distOffY / 10, turn / 100);
+                drive.drive(distOffX / 10, distOffY / 10, 0);
 
                 if(gamepad2.a) {
                     distOffX = 0;
-                    distOffY = 0;
-                    turn = 0;
                 }
             }
-            towerAdjustToggle = 0;
+            towerAdjust = 0;
         }
         lastAButton2 = gamepad2.a;
 
+        if(!lastXButton2 && gamepad2.x) {
+            if(powerAdjust1 == 0) {
+                powerAdjust1 = 1;
+            }
+        }
+        if(powerAdjust1 == 1) {
+            drive.alignForward();
+
+            double distOffX = 1;
+            double distOffY = 1;
+            while(distOffX != 0 ||  distOffY != 0) {
+                //adjust using distance sensors
+                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
+                distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
+
+                if (distOffX < 1 && distOffX > -1) {
+                    distOffX = 0;
+                }
+                if (distOffY < 1 && distOffY > -1) {
+                    distOffY = 0;
+                }
+
+                drive.drive(distOffX / 10, distOffY / 10, 0);
+
+                if(gamepad2.x) {
+                    distOffX = 0;
+                }
+            }
+            powerAdjust1 = 0;
+        }
+        lastAButton2 = gamepad2.a;
+
+        if(!lastAButton2 && gamepad2.a) {
+            if(towerAdjust == 0) {
+                towerAdjust = 1;
+            }
+        }
+        if(towerAdjust == 1) {
+            drive.alignForward();
+
+            double distOffX = 1;
+            double distOffY = 1;
+            while(distOffX != 0 ||  distOffY != 0) {
+                //adjust using distance sensors
+                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
+                distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
+
+                if (distOffX < 1 && distOffX > -1) {
+                    distOffX = 0;
+                }
+                if (distOffY < 1 && distOffY > -1) {
+                    distOffY = 0;
+                }
+
+                drive.drive(distOffX / 10, distOffY / 10, 0);
+
+                if(gamepad2.a) {
+                    distOffX = 0;
+                }
+            }
+            towerAdjust = 0;
+        }
+        lastAButton2 = gamepad2.a;
+
+        if(!lastAButton2 && gamepad2.a) {
+            if(towerAdjust == 0) {
+                towerAdjust = 1;
+            }
+        }
+        if(towerAdjust == 1) {
+            drive.alignForward();
+
+            double distOffX = 1;
+            double distOffY = 1;
+            while(distOffX != 0 ||  distOffY != 0) {
+                //adjust using distance sensors
+                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
+                distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
+
+                if (distOffX < 1 && distOffX > -1) {
+                    distOffX = 0;
+                }
+                if (distOffY < 1 && distOffY > -1) {
+                    distOffY = 0;
+                }
+
+                drive.drive(distOffX / 10, distOffY / 10, 0);
+
+                if(gamepad2.a) {
+                    distOffX = 0;
+                }
+            }
+            towerAdjust = 0;
+        }
+        lastAButton2 = gamepad2.a;
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());
