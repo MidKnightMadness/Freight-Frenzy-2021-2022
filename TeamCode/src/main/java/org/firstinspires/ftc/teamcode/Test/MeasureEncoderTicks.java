@@ -9,20 +9,24 @@ import org.firstinspires.ftc.teamcode.Common.Config;
 
 @TeleOp
 public class MeasureEncoderTicks extends OpMode {
-    DcMotor motor;
+    DcMotor motorWobble;
+    DcMotor motorOuttake;
+    DcMotor motorIntakeL;
+    DcMotor motorIntakeR;
 
     @Override
     public void init() {
-        motor = hardwareMap.dcMotor.get(Config.WOBBLEMOTOR);
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorWobble = hardwareMap.dcMotor.get(Config.WOBBLEMOTOR);
+        motorOuttake = hardwareMap.dcMotor.get(Config.OUTTAKEMOTOR);
+        motorIntakeL = hardwareMap.dcMotor.get(Config.INTAKEL);
+        motorIntakeR = hardwareMap.dcMotor.get(Config.INTAKER);
     }
 
     @Override
     public void loop() {
-        motor.setPower(gamepad1.left_stick_y);
-        telemetry.addData("power", motor.getPower());
-        telemetry.addData("position", motor.getCurrentPosition());
+        telemetry.addData("wobble pos", motorWobble.getCurrentPosition());
+        telemetry.addData("outtake pos", motorOuttake.getCurrentPosition());
+        telemetry.addData("inttakeL pos", motorIntakeL.getCurrentPosition());
+        telemetry.addData("inttakeR pos", motorIntakeR.getCurrentPosition());
     }
 }

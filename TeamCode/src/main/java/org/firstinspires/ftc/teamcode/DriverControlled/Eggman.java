@@ -68,6 +68,7 @@ public class Eggman extends OpMode {
         if(!lastLeftBumper && gamepad1.left_bumper) {
             if(intToggle == 1) {
                 intToggle = 0;
+
             }
             else if(intToggle == 0 || intToggle == 2) {
                 intToggle = 1;

@@ -22,7 +22,7 @@ public class SampleWobbleGoal extends WobbleGoal{
     //close value
     private final double closed = 0.20;
     //lifted value (encoder ticks)
-//    private final int liftedPos = -2000;
+    private final int liftedPos = 350;
 
     //initialize motor
     @Override
@@ -30,9 +30,8 @@ public class SampleWobbleGoal extends WobbleGoal{
         super.init(hardwareMap, telemetry, gamepad1, gamepad2);
         motor = hardwareMap.dcMotor.get(Config.WOBBLEMOTOR);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        motor.setTargetPosition(0);
-//        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        motor.setTargetPosition(0);
+        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         servo1 = hardwareMap.servo.get(Config.WOBBLESERVO);
@@ -41,8 +40,8 @@ public class SampleWobbleGoal extends WobbleGoal{
     //move elevator up
     @Override
     public void lift() {
-//        motor.setTargetPosition(liftedPos);
-        motor.setPower(0.2);
+        motor.setTargetPosition(liftedPos);
+        motor.setPower(1);
         telemetry.addLine("lifting wobble goal");
         telemetry.addData("wobble motor position", motor.getCurrentPosition());
     }
@@ -50,8 +49,7 @@ public class SampleWobbleGoal extends WobbleGoal{
     //move elevator down
     @Override
     public void lower(){
-//        motor.setTargetPosition(0);
-//        motor.setPower(1);
+        motor.setTargetPosition(0);
         motor.setPower(0);
         telemetry.addLine("lowering wobble goal");
     }
@@ -60,7 +58,7 @@ public class SampleWobbleGoal extends WobbleGoal{
     @Override
     public void slightLift()
     {
-        motor.setTargetPosition(-500);
+        motor.setTargetPosition(100);
         motor.setPower(0.5);
         telemetry.addLine("slight lifting wobble goal");
     }
