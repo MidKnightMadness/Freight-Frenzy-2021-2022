@@ -36,6 +36,13 @@ public class SampleIntake extends Intake{
         intakeMotorR.setPower(-0.95);
     }
 
+    //reverse motors to eject stuck rings
+    @Override
+    public void eject() {
+        intakeMotorL.setPower(-0.95);
+        intakeMotorR.setPower(0.95);
+    }
+
     //stop motor
     @Override
     public void stop() {

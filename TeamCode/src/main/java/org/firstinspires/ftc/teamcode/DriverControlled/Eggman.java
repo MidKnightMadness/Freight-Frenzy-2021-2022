@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DriverControlled;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -30,11 +31,11 @@ public class Eggman extends OpMode {
     private Intake intake = new SampleIntake();
     private Outtake outtake = new SampleOuttake();
     private WobbleGoal wobbleGoal = new SampleWobbleGoal();
-    Rev2mDistanceSensor distL;
-    Rev2mDistanceSensor distR;
-    Rev2mDistanceSensor distF;
-    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, lowerWobToggle, towerAdjustToggle = 0;
-    private boolean lastLeftBumper, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton, lastAButton2 = false;
+    ModernRoboticsI2cRangeSensor sensorL;
+    ModernRoboticsI2cRangeSensor sensorR;
+    ModernRoboticsI2cRangeSensor sensorF;
+    private int intToggle, intEjectToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, towerAdjustToggle = 0;
+    private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton2 = false;
 
     @Override
     public void init() {
@@ -42,9 +43,9 @@ public class Eggman extends OpMode {
         intake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         outtake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
-        distL = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORLEFT);
-        distR = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORRIGHT);
-        distF = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORFRONT);
+        sensorL = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, Config.RANGESENSORLEFT);
+        sensorR = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, Config.RANGESENSORRIGHT);
+        sensorF = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, Config.RANGESENSORFRONT);
 
         try {
             File fileName = new File("Coordinates.txt");
@@ -81,6 +82,23 @@ public class Eggman extends OpMode {
             intake.start();
         }
         lastLeftBumper = gamepad1.left_bumper;
+
+        //intake is a toggle controlled by left bumper
+        if(!lastLeftTrigger && gamepad1.left_trigger == 1) {
+            if(intEjectToggle == 1) {
+                intEjectToggle = 0;
+            }
+            else if(intEjectToggle == 0) {
+                intEjectToggle = 1;
+            }
+        }
+        if(intEjectToggle == 0) {
+            intake.stop();
+        }
+        if(intEjectToggle == 1) {
+            intake.eject();
+        }
+        lastLeftTrigger = gamepad1.left_trigger == 1;
 
         //outtake is a toggle controlled by right bumper
         if(!lastRightBumper && gamepad1.right_bumper) {
@@ -150,12 +168,6 @@ public class Eggman extends OpMode {
         }
         lastYButton = gamepad1.y;
 
-        //lower with a button
-        if(!lastAButton && gamepad1.a) {
-            if (lowerWobToggle == 1) {
-                lowerWobToggle = 0;
-            }
-        }
         if(!lastAButton2 && gamepad2.a) {
             if(towerAdjustToggle == 1) {
                 towerAdjustToggle = 0;
@@ -165,19 +177,26 @@ public class Eggman extends OpMode {
             }
         }
         if(towerAdjustToggle == 1) {
-            //adjust using distance sensors
-            double distOffX = (distR.getDistance(DistanceUnit.INCH) - 17.5);
-            double distOffY = -(distF.getDistance(DistanceUnit.INCH) - 65);
-            double turn = drive.getAngle();
+            double distOffX = 1;
+            double distOffY = 1;
+            double turn = 1;
+            while(distOffX != 0 ||  distOffY != 0  || turn != 0) {
+                //adjust using distance sensors
+                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
+                distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
+                turn = drive.getAngle();
 
-            if(distOffX < 1) {
-                distOffX = 0;
-            }
-            if(distOffY > 1) {
-                distOffY = 0;
-            }
-            if(turn > 5 || turn < -5) {
-                turn = 0;
+                if (distOffX < 1 && distOffX > -1) {
+                    distOffX = 0;
+                }
+                if (distOffY < 1 && distOffY > -1) {
+                    distOffY = 0;
+                }
+                if (turn > 5 || turn < -5) {
+                    turn = 0;
+                }
+
+                drive.drive(distOffX / 10, distOffY / 10, turn / 100);
             }
         }
         lastAButton2 = gamepad2.a;
