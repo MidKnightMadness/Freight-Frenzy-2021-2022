@@ -84,7 +84,7 @@ public class AutoRedRightManual extends LinearOpMode {
         drive.alignForward();
         drive.move(-10, 0);
 
-        //move to shooting position 1
+        //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
             drive.move(-30.25, -20);
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
