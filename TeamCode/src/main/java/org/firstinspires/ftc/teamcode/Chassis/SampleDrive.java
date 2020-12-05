@@ -129,9 +129,9 @@ public class SampleDrive extends Drive{
             setCurrentY(currentY + (distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle)));
         }
 
-        telemetry.addData("Current X", currentX);
-        telemetry.addData("Current Y", currentY);
-        telemetry.addData("Current Angle", currentAngle);
+//        telemetry.addData("Current X", currentX);
+//        telemetry.addData("Current Y", currentY);
+//        telemetry.addData("Current Angle", currentAngle);
     }
 
     @Override

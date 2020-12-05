@@ -197,7 +197,7 @@ public class Eggman extends OpMode {
         if(liftWobToggle == 1) {
             wobbleGoal.lift();
         }
-        wobbleGoal.outputTelemetry();
+//        wobbleGoal.outputTelemetry();
         lastYButton = gamepad1.y;
 
         //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
