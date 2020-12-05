@@ -136,11 +136,9 @@ public class SampleDrive extends Drive{
 
     @Override
     public void move(double inchesX, double inchesY, double power) {
-        //update the position of the bot according to the move, where it's moving from, and the direction it's moving
-        double hypotenuse = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        double movingDirection = (-Math.asin(inchesX/hypotenuse)) + currentAngle;
-        setCurrentX(currentX + Math.sin(-movingDirection) * hypotenuse);
-        setCurrentY(currentY + Math.cos(-movingDirection) * hypotenuse);
+        double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
+        setCurrentX(currentX + (-inchesX * Math.sin(currentAngle) + inchesX * Math.cos(currentAngle)));
+        setCurrentY(currentY + (inchesY * Math.cos(currentAngle) + inchesY * Math.sin(currentAngle)));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -174,12 +172,12 @@ public class SampleDrive extends Drive{
             catch (Exception ignored) {}
 
             //move different speeds depending on how far you're moving
-            if (hypotenuse > 24) {
+            if (distance > 24) {
                 motorFL.setPower(power);
                 motorFR.setPower(power);
                 motorBL.setPower(power);
                 motorBR.setPower(power);
-            } else if (hypotenuse <= 24) {
+            } else if (distance <= 24) {
                 motorFL.setPower(power / 2);
                 motorFR.setPower(power / 2);
                 motorBL.setPower(power / 2);

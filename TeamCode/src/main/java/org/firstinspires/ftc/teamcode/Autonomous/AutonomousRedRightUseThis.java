@@ -16,6 +16,9 @@ import org.firstinspires.ftc.teamcode.Visual.Visual;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 
+import java.io.File;
+import java.io.PrintWriter;
+
 @Autonomous
 @Disabled
 public class AutonomousRedRightUseThis extends LinearOpMode{
@@ -38,27 +41,36 @@ public class AutonomousRedRightUseThis extends LinearOpMode{
         waitForStart();
 
         wobbleGoal.close();
+        sleep(1000);
         wobbleGoal.slightLift();
 
         drive.moveToPosition(-13,12);
+        sleep(10);
         visual.update();
         drive.moveToPosition(0,12);
 
         if(visual.getStartStack() == Visual.STARTERSTACK.A)
         {
             drive.moveToPosition(-5,70);
+            wobbleGoal.lower();
             wobbleGoal.open();
+            drive.moveToPosition(-15,70);
         }
         else if (visual.getStartStack() == Visual.STARTERSTACK.B)
         {
             drive.moveToPosition(-15,90);
+            wobbleGoal.lower();
             wobbleGoal.open();
+            drive.moveToPosition(-25,90);
         }
         else
         {
             drive.moveToPosition(-5, 112);
+            wobbleGoal.lower();
             wobbleGoal.open();
+            drive.moveToPosition(-15,112);
         }
+
 
 //        outtake.start();
         drive.moveToPower3();              //insert aiming position 3
@@ -70,6 +82,17 @@ public class AutonomousRedRightUseThis extends LinearOpMode{
 //        outtake.stop();
 
         drive.move(0, 12);
+
+        visual.stop();
+        try {
+            PrintWriter outFile = new PrintWriter(new File("Coordinates.txt"));
+            outFile.println(drive.getCurrentX());
+            outFile.println(drive.getCurrentY());
+            outFile.println(drive.getAngle());
+            outFile.close();
+        }catch (Exception e){
+            telemetry.addLine(e.getMessage());
+        }
     }
 
 }
