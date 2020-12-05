@@ -1,15 +1,10 @@
 package org.firstinspires.ftc.teamcode.DriverControlled;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.Chassis.Drive;
 import org.firstinspires.ftc.teamcode.Chassis.SampleDrive;
 import org.firstinspires.ftc.teamcode.Common.Config;
@@ -22,7 +17,6 @@ import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 
 import java.util.Scanner;
 import java.io.File;
-import java.util.concurrent.Callable;
 
 @TeleOp
 public class Eggman extends OpMode {
@@ -34,8 +28,30 @@ public class Eggman extends OpMode {
     ModernRoboticsI2cRangeSensor sensorL;
     ModernRoboticsI2cRangeSensor sensorR;
     ModernRoboticsI2cRangeSensor sensorF;
-    private int intToggle, outToggle, outFeedToggle, openWobToggle, liftWobToggle, towerAdjust, powerAdjust1, powerAdjust2, powerAdjust3 = 0;
-    private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastRightTrigger, lastBButton, lastYButton, lastAButton2, lastXButton2, lastYButton2, lastBButton2 = false;
+    private int intToggle, outToggle, outFeedToggle, openWobToggle = 1, liftWobToggle, towerAdjust, powerAdjust1, powerAdjust2, powerAdjust3 = 0;
+    private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastRightTrigger, lastBButton, lastXButton, lastYButton, lastAButton2, lastXButton2, lastYButton2, lastBButton2 = false, slowMode;
+    private double lastTime;
+
+    /*
+    gamepad1: manual
+    LBumper - intake
+    LTrigger - intake reverse
+    RBumper - outtake start
+    RTrigger - outtake shoot
+    LStick - directional drive
+    RStickX - turn
+    A - deploy intake
+    B - open wobble claw
+    X - slow drive
+    Y - lift wobble goal
+
+    gamepad2: driver assist
+    move to:
+    A - tower
+    X - left power shot
+    Y - middle power shot
+    B - right power shot
+     */
 
     @Override
     public void init() {
@@ -60,8 +76,27 @@ public class Eggman extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("loop time", time - lastTime);
+        lastTime = time;
+
         //drive controlled by left stick used to move forwards and sideways, right stick used to turn (gamepad 1)
-        drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        if(slowMode) {
+            drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 5);
+            telemetry.addLine("slow mode enabled");
+        } else {
+            drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        }
+
+        //x toggle button to enable slow mode
+        if(!lastXButton && gamepad1.x) {
+            slowMode = !slowMode;
+        }
+        lastXButton = gamepad1.x;
+
+        //a button to deploy intake (gamepad 1)
+        if(gamepad1.a){
+            intake.deploy();
+        }
 
         //when left bumper is pressed, start intake unless it was previously on in which intake stops (gamepad 1)
         //when left trigger is pressed, reverse intake unless it was previously on in which intake stops (gamepad 1)
@@ -117,7 +152,7 @@ public class Eggman extends OpMode {
             if(outFeedToggle == 1) {
                 outFeedToggle = 0;
             }
-            else if(outFeedToggle == 0) {
+            else if(outFeedToggle == 0 && outtake.isReady()) {
                 outFeedToggle = 1;
             }
         }
@@ -127,6 +162,7 @@ public class Eggman extends OpMode {
         if(outFeedToggle == 1) {
             outtake.feedRun();
         }
+
         lastRightTrigger = gamepad1.right_trigger == 1;
 
         //when b button is pressed, wobble goal is opened unless it is already opened in which it closes (gamepad 1)

@@ -14,12 +14,17 @@ public class ServoTest extends OpMode {
 
     @Override
     public void init() {
-        servo = hardwareMap.servo.get(Config.WOBBLESERVO);
+        servo = hardwareMap.servo.get(Config.INTAKERELEASE);
     }
 
     @Override
     public void loop() {
         pos += gamepad1.left_stick_y / 100;
+        if(pos < 0)
+            pos = 0;
+        else if(pos > 1)
+            pos = 1;
+
         if(gamepad1.a)
             servo.setPosition(pos);
 

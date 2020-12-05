@@ -18,10 +18,16 @@ public class SampleOuttake extends Outtake {
 
     //declare intake motor
     DcMotorEx motor;
-    private final int targetVel = 950;
+    private int targetVel;
+    private double lastVel;
 
     //declare feed servo
     Servo servo;
+
+    //tower goal position
+    private double towerX = 0;
+    private double towerY = 0;
+    private double towerZ = 0;
 
     private static final int ftPerSecToTicksPerSec = 10000;
 
@@ -36,6 +42,14 @@ public class SampleOuttake extends Outtake {
     //start motor
     @Override
     public void start() {
+        targetVel = 950;
+        motor.setVelocity(targetVel);
+        telemetry.addData("outtake velocity", motor.getVelocity());
+    }
+
+    @Override
+    public void startFromPos(double x, double y, double z) {
+        targetVel = (int)getLaunchVelocity(x - towerX, y - towerY, z - towerZ);
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
@@ -43,6 +57,7 @@ public class SampleOuttake extends Outtake {
     //stop motor
     @Override
     public void stop() {
+        targetVel = 0;
         motor.setVelocity(0);
     }
 
@@ -53,8 +68,11 @@ public class SampleOuttake extends Outtake {
     }
 
     @Override
+    //checks if outtake is the right speed for shooting
     public boolean isReady() {
-        return Math.abs(motor.getVelocity() - targetVel) < 10;
+        boolean ready = Math.abs((motor.getVelocity() + lastVel)/2 - targetVel) <= 10;
+        lastVel = motor.getVelocity();
+        return ready;
     }
 
     //open the ring-loader

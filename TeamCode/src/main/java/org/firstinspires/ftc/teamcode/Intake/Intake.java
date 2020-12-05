@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Common.Assembly;
 
 public abstract class Intake extends Assembly{
 
-    public abstract void release();
+    public abstract void deploy();
     public abstract void start();
     public abstract void eject();
     public abstract void stop();

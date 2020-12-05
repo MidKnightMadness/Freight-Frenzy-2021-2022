@@ -25,8 +25,9 @@ public class SampleIntake extends Intake{
     }
 
     @Override
-    public void release() {
-        releaseServo.setPosition(0);
+    public void deploy() {
+        //set position to 0.35 to lock (storing number in case if it's needed)
+        releaseServo.setPosition(1);
     }
 
     //start motor
