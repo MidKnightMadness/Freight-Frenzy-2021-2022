@@ -73,7 +73,7 @@ public class AutoRedRightManual extends LinearOpMode {
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
             drive.move(-5, 58);
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-15, 78);
+            drive.move(-10, 80);
         } else {
             drive.move(-5, 100);
         }
