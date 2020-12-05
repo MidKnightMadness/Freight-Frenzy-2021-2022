@@ -367,10 +367,10 @@ public class SampleDrive extends Drive{
         //the shooting position is different depending on where the bot starts in the round
         //use distance sensors to determine where we are starting from to determine the shooting position
         if(startDistL < 48 && startDistR > 24) {
-            moveToPosition(-60.25,50);
+            moveToPosition(-35.25,50);
         }
         else {
-            moveToPosition(-35.25,50);
+            moveToPosition(-60.25,50);
         }
     }
 

@@ -58,14 +58,12 @@ public class AutonomousRedRightUseThis extends LinearOpMode{
             wobbleGoal.open();
         }
 
-
-
-        drive.moveToPower1();              //insert aiming position 1
         outtake.start();
+        drive.moveToPower3();              //insert aiming position 3
         outtake.feed();
         drive.moveToPower2();              //insert aiming position 2
         outtake.feed();
-        drive.moveToPower3();            //insert aiming position 3
+        drive.moveToPower1();            //insert aiming position 1
         outtake.feed();
         outtake.stop();
     }
