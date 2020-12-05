@@ -75,7 +75,7 @@ public class AutoRedRightManual extends LinearOpMode {
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
             drive.move(-10, 80);
         } else {
-            drive.move(-5, 100);
+            drive.move(-0, 105);
         }
 
         //release wobble goal
