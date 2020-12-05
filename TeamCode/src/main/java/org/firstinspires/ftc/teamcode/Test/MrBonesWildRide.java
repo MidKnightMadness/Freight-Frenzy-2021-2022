@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Chassis.Drive;
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Chassis.SampleDrive;
 import java.util.concurrent.Callable;
 
 @Autonomous
+@Disabled
 public class MrBonesWildRide extends LinearOpMode {
     private Drive drive = new SampleDrive();
 

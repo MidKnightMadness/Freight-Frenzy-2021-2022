@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -16,6 +17,7 @@ import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 
 @Autonomous
+@Disabled
 public class AutonomousRedRightUseThis extends LinearOpMode{
 
     private Drive drive = new SampleDrive();
@@ -58,14 +60,16 @@ public class AutonomousRedRightUseThis extends LinearOpMode{
             wobbleGoal.open();
         }
 
-        outtake.start();
+//        outtake.start();
         drive.moveToPower3();              //insert aiming position 3
-        outtake.feed();
+//        outtake.feed();
         drive.moveToPower2();              //insert aiming position 2
-        outtake.feed();
+//        outtake.feed();
         drive.moveToPower1();            //insert aiming position 1
-        outtake.feed();
-        outtake.stop();
+//        outtake.feed();
+//        outtake.stop();
+
+        drive.move(0, 12);
     }
 
 }

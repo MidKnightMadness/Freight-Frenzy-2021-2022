@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,6 +8,7 @@ import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 
 @TeleOp
+@Disabled
 public class WobbleGoalTest extends OpMode {
     private WobbleGoal wobbleGoal = new SampleWobbleGoal();
     private int openWobToggle, liftWobToggle  = 0;
