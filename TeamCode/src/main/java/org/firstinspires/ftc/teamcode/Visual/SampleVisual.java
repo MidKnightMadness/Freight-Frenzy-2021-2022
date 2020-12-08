@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Visual;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -48,9 +49,8 @@ public class SampleVisual extends Visual{
     private static final float mmTargetHeight = 6 * mmPerInch;
 
     @Override
-    public void init(HardwareMap hardwareMap, Telemetry telemetry)
-    {
-        super.init(hardwareMap, telemetry);
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
+        super.init(hardwareMap, telemetry, gamepad1, gamepad2);
 
         //  Instantiate the Vuforia engine
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();

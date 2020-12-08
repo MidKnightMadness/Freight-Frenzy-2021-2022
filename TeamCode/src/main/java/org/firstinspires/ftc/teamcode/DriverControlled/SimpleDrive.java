@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.DriverControlled;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Common.Config;
 
 @TeleOp
+@Disabled
 public class SimpleDrive extends OpMode {
 
     private DcMotor FL;

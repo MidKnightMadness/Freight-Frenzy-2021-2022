@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Chassis.Drive;
 import org.firstinspires.ftc.teamcode.Chassis.SampleDrive;
@@ -14,13 +16,13 @@ import org.firstinspires.ftc.teamcode.Visual.Visual;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 
-import java.util.concurrent.Callable;
-
-import java.io.PrintWriter;
 import java.io.File;
+import java.io.PrintWriter;
 
 @Autonomous
-public class AutoRedRightManual extends LinearOpMode {
+@Disabled
+public class AutonomousRedRightUseThis extends LinearOpMode{
+
     private Drive drive = new SampleDrive();
     private Intake intake = new SampleIntake();
     private Outtake outtake = new SampleOuttake();
@@ -28,89 +30,60 @@ public class AutoRedRightManual extends LinearOpMode {
     private SampleVisual visual = new SampleVisual();
 
     @Override
-    public void runOpMode() {
-        //create stop requested callable
-        //Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
+    public void runOpMode()
+    {
         drive.init(hardwareMap, telemetry, gamepad1, gamepad2);
-//        drive.isStopRequested = stopRequestedCall;
-        telemetry.addLine("Drive initialized!");
-        telemetry.update();
         intake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         outtake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
         visual.init(hardwareMap, telemetry, gamepad1, gamepad2);
-        //telemetry.addLine("Visual initialized!");
-        telemetry.update();
 
         waitForStart();
-
-        /*
-        while (!isStarted() && !isStopRequested() && opModeIsActive()) {
-            idle();
-        }
-
-        if(isStopRequested())
-        {
-            return;
-        }
-        */
 
         wobbleGoal.close();
         sleep(1000);
         wobbleGoal.slightLift();
 
-        //move up to starting stack
-        drive.move(-13, 12);
+        drive.moveToPosition(-13,12);
         sleep(10);
-        //get starting stack
         visual.update();
-        telemetry.addLine("Zone: " + visual.getStartStack());
-        telemetry.update();
-        drive.move(13, 0);
+        drive.moveToPosition(0,12);
 
-
-        //move to correct drop zone
-        if (visual.getStartStack() == Visual.STARTERSTACK .A) {
-            drive.move(-5, 58);
-        } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-10, 80);
-        } else {
-            drive.move(-0, 105);
+        if(visual.getStartStack() == Visual.STARTERSTACK.A)
+        {
+            drive.moveToPosition(-5,70);
+            wobbleGoal.lower();
+            wobbleGoal.open();
+            drive.moveToPosition(-15,70);
         }
-
-        //release wobble goal
-        wobbleGoal.lower();
-        wobbleGoal.open();
-        drive.alignForward();
-        drive.move(-10, 0);
-
-        //move to shooting position 3
-        if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-30.25, -20);
-        } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-20.25, -40);
-        } else {
-            drive.move(-30.25, -63);
+        else if (visual.getStartStack() == Visual.STARTERSTACK.B)
+        {
+            drive.moveToPosition(-15,90);
+            wobbleGoal.lower();
+            wobbleGoal.open();
+            drive.moveToPosition(-25,90);
+        }
+        else
+        {
+            drive.moveToPosition(-5, 112);
+            wobbleGoal.lower();
+            wobbleGoal.open();
+            drive.moveToPosition(-15,112);
         }
 
 
-        //shoot power shots
 //        outtake.start();
-//        for(int i = 0; i < 10; i++)  //make sure outtake is really ready
-//            while(!outtake.isReady())
-//                idle();
+        drive.moveToPower3();              //insert aiming position 3
 //        outtake.feed();
-//        drive.move(-7.5, 0);
+        drive.moveToPower2();              //insert aiming position 2
 //        outtake.feed();
-//        drive.move(-7.5, 0);
+        drive.moveToPower1();            //insert aiming position 1
 //        outtake.feed();
 //        outtake.stop();
+
         drive.move(0, 12);
 
         visual.stop();
-        telemetry.addLine("Program End :)");
-        telemetry.update();
-
         try {
             PrintWriter outFile = new PrintWriter(new File("Coordinates.txt"));
             outFile.println(drive.getCurrentX());
@@ -121,4 +94,5 @@ public class AutoRedRightManual extends LinearOpMode {
             telemetry.addLine(e.getMessage());
         }
     }
+
 }
