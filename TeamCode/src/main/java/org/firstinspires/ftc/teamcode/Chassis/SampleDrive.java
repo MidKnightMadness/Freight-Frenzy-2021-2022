@@ -161,7 +161,7 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while(motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) {
+        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0) {
             try {
                 if(isStopRequested.call())
                     return;
@@ -228,7 +228,7 @@ public class SampleDrive extends Drive{
 
         boolean angleTolerance = false;
 
-        while(!angleTolerance)  {
+        while(!angleTolerance && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0)  {
             try {
                 if(isStopRequested.call())
                     return;
