@@ -278,6 +278,12 @@ public class SampleDrive extends Drive{
         telemetry.update();
     }
 
+    @Override
+    public void turnToPoint(double x, double y) {
+        double targetAngle = Math.toDegrees(Math.atan2(y - currentY, x - currentX));  //get the angle that we want to turn to
+        turn(targetAngle - currentAngle);  //turn the amount of offset
+    }
+
     //turn until the bot is facing the front of the field
     //technically just turns the bot whatever angle it faced when the round started
     @Override

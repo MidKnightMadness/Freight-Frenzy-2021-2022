@@ -46,11 +46,14 @@ public class Eggman extends OpMode {
     Y - lift wobble goal
 
     gamepad2: driver assist
+    either trigger - cancel action
     move to:
     A - tower
     X - left power shot
     Y - middle power shot
     B - right power shot
+    auto shoot:
+    DPadUp - aim and shoot
      */
 
     @Override
@@ -331,6 +334,15 @@ public class Eggman extends OpMode {
             powerAdjust3 = 0;
         }
         lastBButton2 = gamepad2.b;
+
+        if(gamepad2.dpad_up)
+        {
+            //start up outtake
+            outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 15);  //TODO: correct shooting height
+
+            //turn to towergoal
+            drive.turnToPoint(-28.75, 80);  //TODO: correct towergoal position
+        }
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());

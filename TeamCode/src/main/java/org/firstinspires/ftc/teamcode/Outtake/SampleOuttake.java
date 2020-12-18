@@ -25,11 +25,11 @@ public class SampleOuttake extends Outtake {
     Servo servo;
 
     //tower goal position
-    private double towerX = 0;
-    private double towerY = 0;
-    private double towerZ = 0;
+    private double towerX = -28.75;  //TODO: correct tower position
+    private double towerY = 80;
+    private double towerZ = 35.5;
 
-    private static final int ftPerSecToTicksPerSec = 10000;
+    private static final int ftPerSecToTicksPerSec = 10000;  //TODO: correct ft/s to t/s constant
 
     //initialize motor
     @Override
@@ -88,7 +88,7 @@ public class SampleOuttake extends Outtake {
     }
 
     //Calculate launch velocity, in feet per second
-    public static double getLaunchVelocity(double x, double y, double z) {
+    private static double getLaunchVelocity(double x, double y, double z) {
         double a = 30.; //Launch angle (from ground)
         double bMin = 15.; //minimum velocity (ft/s)
         double bMax = 50.; //maximum velocity (ft/s)
