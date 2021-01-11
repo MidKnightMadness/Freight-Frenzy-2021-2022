@@ -29,7 +29,7 @@ public class SampleOuttake extends Outtake {
     private double towerY = 80;
     private double towerZ = 35.5;
 
-    private static final int ftPerSecToTicksPerSec = 10000;  //TODO: correct ft/s to t/s constant
+    private static final int ftPerSecToTicksPerSec = 10000;  //TODO: get correct ft/s to t/s constant
 
     //initialize motor
     @Override
@@ -113,6 +113,40 @@ public class SampleOuttake extends Outtake {
                         return v0 * ftPerSecToTicksPerSec; //Multiply by some constant to instead output RPM
                     } else {
                         bMin = v0;
+                    }
+                }
+            }
+        }
+        return 0.; //REPORT ERROR HERE IF LINE IS REACHED
+    }
+
+    //TODO: verify getLaunchAngle function works
+    //Calculate launch angle, in degrees
+    private static double getLaunchAngle(double x, double y, double z) {
+        double v = 2000.0 / ftPerSecToTicksPerSec;
+        double bMin = 15.; //minimum angle (deg)
+        double bMax = 50.; //maximum angle (deg)
+
+        for (int i = 0; i < 10000; i++) { //Maximum 10000 iters
+            double g = 32.2; //gravity, feet/sec^2
+            double a0 = (bMin + bMax) * .5; //angle at mean
+            double tx = Math.sqrt(x * x + y * y); //dist to goal along XY plane
+            double vx = Math.cos((a0 * Math.PI) / 180.) * v; //x velocity
+            double vt = Math.tan((a0 * Math.PI) / 180.); //tangent slope
+            double xvx = tx / vx; //split to optimize computation time
+            double ty = -.5 * g * xvx * xvx + vt * tx; //vertical hit point
+            double dev = ty - z; //how far off we are
+            double mx = (vx * vx * vt) / g; //peak distance
+            if (mx < tx) { //parabola peak occurs before hit
+                bMin = a0;
+            } else {
+                if (dev / Math.abs(dev) > 0.) {
+                    bMax = a0;
+                } else {
+                    if (Math.abs(dev) < .0000001) { //precision threshold
+                        return a0 ;
+                    } else {
+                        bMin = a0;
                     }
                 }
             }
