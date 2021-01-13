@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.Chassis;
 
+import android.view.Display;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -29,9 +32,9 @@ public class SampleDrive extends Drive{
     private DcMotorEx motorFR;
     private DcMotorEx motorBL;
     private DcMotorEx motorBR;
-    Rev2mDistanceSensor distL;
-    Rev2mDistanceSensor distR;
-    Rev2mDistanceSensor distF;
+    ModernRoboticsI2cRangeSensor distL;
+    ModernRoboticsI2cRangeSensor distR;
+    ModernRoboticsI2cRangeSensor distF;
 
     private double startDistL;
     private double startDistR;
@@ -46,12 +49,12 @@ public class SampleDrive extends Drive{
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super.init(hardwareMap, telemetry, gamepad1, gamepad2);
-//        distL = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORLEFT);
-//        distR = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORRIGHT);
-//        distF = hardwareMap.get(Rev2mDistanceSensor.class, Config.DISTANCESENSORFRONT);
+        distL = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, Config.RANGESENSORLEFT);
+        distR = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, Config.RANGESENSORRIGHT);
+        distF = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, Config.RANGESENSORFRONT);
 
-//        startDistL = distL.getDistance(DistanceUnit.INCH);
-//        startDistR = distR.getDistance(DistanceUnit.INCH);
+        startDistL = distL.getDistance(DistanceUnit.INCH);
+        startDistR = distR.getDistance(DistanceUnit.INCH);
 
         motorFL = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFL);
         motorFR = (DcMotorEx)hardwareMap.dcMotor.get(Config.DRIVEFR);
@@ -104,41 +107,38 @@ public class SampleDrive extends Drive{
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
 
-        if(turn != 0) {
-            angleChange = imu.getAngularOrientation().firstAngle - angleChange;
-            setAngle(convertAngle(angleChange + currentAngle));
-        }
 
-        if(forwards != 0 || sideways != 0) {
-            changeFL = motorFL.getCurrentPosition() - changeFL;
-            changeFR = motorFR.getCurrentPosition() - changeFR;
-            changeBL = motorBL.getCurrentPosition() - changeBL;
-            changeBR = motorBR.getCurrentPosition() - changeBR;
+        angleChange = imu.getAngularOrientation().firstAngle - angleChange;
+        setAngle(convertAngle(angleChange + currentAngle));
+
+        changeFL = motorFL.getCurrentPosition() - changeFL;
+        changeFR = motorFR.getCurrentPosition() - changeFR;
+        changeBL = motorBL.getCurrentPosition() - changeBL;
+        changeBR = motorBR.getCurrentPosition() - changeBR;
 
 
-            double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
-            changeFL -= rotation;
-            changeFR -= rotation;
-            changeBL -= rotation;
-            changeBR -= rotation;
+        double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
+        changeFL -= rotation;
+        changeFR -= rotation;
+        changeBL -= rotation;
+        changeBR -= rotation;
 
-            double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
-            double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
+        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
+        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
 
-            setCurrentX(currentX + (-distanceY * Math.sin(currentAngle) + distanceX * Math.cos(currentAngle)));
-            setCurrentY(currentY + (distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle)));
-        }
+        setCurrentX(currentX + (-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle))));
+        setCurrentY(currentY + (distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle))));
 
-//        telemetry.addData("Current X", currentX);
-//        telemetry.addData("Current Y", currentY);
-//        telemetry.addData("Current Angle", currentAngle);
+//      telemetry.addData("Current X", currentX);
+//      telemetry.addData("Current Y", currentY);
+//      telemetry.addData("Current Angle", currentAngle);
     }
 
     @Override
     public void move(double inchesX, double inchesY, double power) {
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        setCurrentX(currentX + (-inchesX * Math.sin(currentAngle) + inchesX * Math.cos(currentAngle)));
-        setCurrentY(currentY + (inchesY * Math.cos(currentAngle) + inchesY * Math.sin(currentAngle)));
+        setCurrentX(currentX + (-inchesX * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle))));
+        setCurrentY(currentY + (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesY * Math.sin(Math.toRadians(currentAngle))));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
