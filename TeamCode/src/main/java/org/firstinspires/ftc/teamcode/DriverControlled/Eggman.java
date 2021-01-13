@@ -30,7 +30,7 @@ public class Eggman extends OpMode {
     ModernRoboticsI2cRangeSensor sensorF;
     private int intToggle, outToggle, outFeedToggle, openWobToggle = 1, liftWobToggle, towerAdjust, powerAdjust1, powerAdjust2, powerAdjust3 = 0;
     private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastRightTrigger, lastBButton, lastXButton, lastYButton, lastAButton2, lastXButton2, lastYButton2, lastBButton2 = false, slowMode;
-    private double lastTime;
+    private double lastTime, distOffX, distOffY;
 
     /*
     gamepad1: manual
@@ -212,8 +212,8 @@ public class Eggman extends OpMode {
         if(towerAdjust == 1) {
             drive.alignForward();
 
-            double distOffX = 1;
-            double distOffY = 1;
+            distOffX = 1;
+            distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
                 distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
@@ -245,8 +245,8 @@ public class Eggman extends OpMode {
         if(powerAdjust1 == 1) {
             drive.alignForward();
 
-            double distOffX = 1;
-            double distOffY = 1;
+            distOffX = 1;
+            distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
                 distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 21.5);
@@ -278,8 +278,8 @@ public class Eggman extends OpMode {
         if(powerAdjust2 == 1) {
             drive.alignForward();
 
-            double distOffX = 1;
-            double distOffY = 1;
+            distOffX = 1;
+            distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
                 distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 29.5);
@@ -311,8 +311,8 @@ public class Eggman extends OpMode {
         if(powerAdjust3 == 1) {
             drive.alignForward();
 
-            double distOffX = 1;
-            double distOffY = 1;
+            distOffX = 1;
+            distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
                 distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 36.5);
