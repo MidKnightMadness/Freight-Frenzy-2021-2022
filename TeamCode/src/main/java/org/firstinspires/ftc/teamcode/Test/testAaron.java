@@ -8,10 +8,11 @@ public class testAaron extends OpMode {
     @Override
     public void init() {
         telemetry.addLine("Hello World! 2: Electric Boogaloo.");
+        telemetry.update();
     }
 
     @Override
     public void loop() {
-
+        telemetry.addLine("hi");
     }
 }
