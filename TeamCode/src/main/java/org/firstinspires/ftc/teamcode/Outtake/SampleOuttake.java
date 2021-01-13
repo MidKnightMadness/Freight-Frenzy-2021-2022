@@ -145,15 +145,15 @@ public class SampleOuttake extends Outtake {
             double dev = ty - z; //how far off we are
             double mx = (vx * vx * vt) / g; //peak distance
             if (mx < tx) { //parabola peak occurs before hit
-                bMin = a0;
+                bMax = a0; //Angle shot too high, refine maximum
             } else {
                 if (dev / Math.abs(dev) > 0.) {
-                    bMax = a0;
+                    bMax = a0; //Hit was too high, refine maximum
                 } else {
                     if (Math.abs(dev) < .0000001) { //precision threshold
                         return a0 ;
                     } else {
-                        bMin = a0;
+                        bMin = a0; //Hit was too low, refine minnimum
                     }
                 }
             }
