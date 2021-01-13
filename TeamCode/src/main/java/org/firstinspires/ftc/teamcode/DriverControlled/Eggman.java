@@ -226,10 +226,11 @@ public class Eggman extends OpMode {
                     distOffY = 0;
                 }
 
-                drive.drive(distOffX / 10, distOffY / 10, 0);
+                drive.drive(distOffY / 10, distOffX / 10, 0);
 
                 if(gamepad2.a) {
                     distOffX = 0;
+                    distOffY = 0;
                 }
             }
             towerAdjust = 0;
