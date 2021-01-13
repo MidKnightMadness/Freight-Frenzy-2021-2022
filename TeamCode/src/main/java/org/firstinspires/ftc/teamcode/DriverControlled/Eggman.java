@@ -236,6 +236,7 @@ public class Eggman extends OpMode {
         }
         lastAButton2 = gamepad2.a;
 
+        /*
         //when x button is pressed, start adjusting bot to shooting position in front of leftmost power shot unless it already is in which it stops (gamepad 2)
         if(!lastXButton2 && gamepad2.x) {
             if(powerAdjust1 == 0) {
@@ -302,6 +303,7 @@ public class Eggman extends OpMode {
         }
         lastYButton2 = gamepad2.y;
 
+
         //when b button is pressed, start adjusting bot to shooting position in front of rightmost power shot unless it already is in which it stops (gamepad 2)
         if(!lastBButton2 && gamepad2.b) {
             if(powerAdjust3 == 0) {
@@ -334,6 +336,7 @@ public class Eggman extends OpMode {
             powerAdjust3 = 0;
         }
         lastBButton2 = gamepad2.b;
+         */
 
         if(gamepad2.dpad_up)
         {
