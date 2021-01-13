@@ -338,7 +338,7 @@ public class Eggman extends OpMode {
         if(gamepad2.dpad_up)
         {
             //start up outtake
-            outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 9);  //TODO: correct shooting height –– FINISHED
+            outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 9);
 
             //turn to towergoal
             drive.turnToPoint(-28.75, 80);  //TODO: correct towergoal position –– (check tower position in SampleOuttake)

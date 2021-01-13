@@ -25,7 +25,7 @@ public class SampleOuttake extends Outtake {
     Servo servo;
 
     //tower goal position
-    private double towerX = -28.75;  //TODO: correct tower position –– FINISHED, double check
+    private double towerX = -28.75;  //TODO: correct tower position –– FINISHED, see below and double check
     private double towerY = 80;
     private double towerZ = 35.5;
 
