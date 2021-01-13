@@ -14,5 +14,6 @@ public class testAaron extends OpMode {
     @Override
     public void loop() {
         telemetry.addLine("hi");
+        telemetry.update();
     }
 }
