@@ -33,7 +33,7 @@ public class DistanceSensorDriveTest extends OpMode {
         distR = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, Config.RANGESENSORRIGHT);
         distF = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, Config.RANGESENSORFRONT);
     }
-    //bingas
+
     @Override
     public void loop() {
         double powX = (distR.getDistance(DistanceUnit.INCH) - 24) / 10;
