@@ -46,11 +46,14 @@ public class Eggman extends OpMode {
     Y - lift wobble goal
 
     gamepad2: driver assist
+    either trigger - cancel action
     move to:
     A - tower
     X - left power shot
     Y - middle power shot
     B - right power shot
+    auto shoot:
+    DPadUp - aim and shoot
      */
 
     @Override
@@ -197,7 +200,7 @@ public class Eggman extends OpMode {
         if(liftWobToggle == 1) {
             wobbleGoal.lift();
         }
-        wobbleGoal.outputTelemetry();
+//        wobbleGoal.outputTelemetry();
         lastYButton = gamepad1.y;
 
         //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
@@ -331,6 +334,15 @@ public class Eggman extends OpMode {
             powerAdjust3 = 0;
         }
         lastBButton2 = gamepad2.b;
+
+        if(gamepad2.dpad_up)
+        {
+            //start up outtake
+            outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 9);
+
+            //turn to towergoal
+            drive.turnToPoint(-28.75, 80);  //TODO: correct towergoal position –– (check tower position in SampleOuttake)
+        }
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());

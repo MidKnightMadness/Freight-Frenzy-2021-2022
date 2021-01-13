@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Intake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,16 +12,16 @@ import org.firstinspires.ftc.teamcode.Common.Config;
 public class SampleIntake extends Intake{
 
     //declare intake motor
-    private DcMotor intakeMotorL;
-    private DcMotor intakeMotorR;
+    private DcMotorEx intakeMotorL;
+    private DcMotorEx intakeMotorR;
     private Servo releaseServo;
 
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2){
         super.init(hardwareMap, telemetry, gamepad1, gamepad2);
 
-        intakeMotorL = hardwareMap.dcMotor.get(Config.INTAKEL);
-        intakeMotorR = hardwareMap.dcMotor.get(Config.INTAKER);
+        intakeMotorL = (DcMotorEx) hardwareMap.dcMotor.get(Config.INTAKEL);
+        intakeMotorR = (DcMotorEx) hardwareMap.dcMotor.get(Config.INTAKER);
         releaseServo = hardwareMap.servo.get(Config.INTAKERELEASE);
     }
 
@@ -33,15 +34,18 @@ public class SampleIntake extends Intake{
     //start motor
     @Override
     public void start() {
-        intakeMotorL.setPower(0.95);
-        intakeMotorR.setPower(-0.95);
+        intakeMotorL.setVelocity(2500);
+        intakeMotorR.setVelocity(-2500);
+
+        telemetry.addData("intake L", intakeMotorL.getVelocity());
+        telemetry.addData("intake R", intakeMotorR.getVelocity());
     }
 
     //reverse motors to eject stuck rings
     @Override
     public void eject() {
-        intakeMotorL.setPower(-0.95);
-        intakeMotorR.setPower(0.95);
+        intakeMotorL.setVelocity(-2500);
+        intakeMotorR.setVelocity(2500);
     }
 
     //stop motor

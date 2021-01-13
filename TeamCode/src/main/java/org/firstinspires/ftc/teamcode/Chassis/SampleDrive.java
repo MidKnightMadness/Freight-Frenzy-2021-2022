@@ -129,9 +129,9 @@ public class SampleDrive extends Drive{
             setCurrentY(currentY + (distanceY * Math.cos(currentAngle) + distanceX * Math.sin(currentAngle)));
         }
 
-        telemetry.addData("Current X", currentX);
-        telemetry.addData("Current Y", currentY);
-        telemetry.addData("Current Angle", currentAngle);
+//        telemetry.addData("Current X", currentX);
+//        telemetry.addData("Current Y", currentY);
+//        telemetry.addData("Current Angle", currentAngle);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while(motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) {
+        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0) {
             try {
                 if(isStopRequested.call())
                     return;
@@ -228,7 +228,7 @@ public class SampleDrive extends Drive{
 
         boolean angleTolerance = false;
 
-        while(!angleTolerance)  {
+        while(!angleTolerance && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0)  {
             try {
                 if(isStopRequested.call())
                     return;
@@ -276,6 +276,12 @@ public class SampleDrive extends Drive{
         telemetry.addLine("turning done");
         drive(0,0,0);
         telemetry.update();
+    }
+
+    @Override
+    public void turnToPoint(double x, double y) {
+        double targetAngle = Math.toDegrees(Math.atan2(y - currentY, x - currentX));  //get the angle that we want to turn to
+        turn(targetAngle - currentAngle);  //turn the amount of offset
     }
 
     //turn until the bot is facing the front of the field
