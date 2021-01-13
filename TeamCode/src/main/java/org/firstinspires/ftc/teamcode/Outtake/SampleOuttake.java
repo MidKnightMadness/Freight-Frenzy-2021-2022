@@ -25,9 +25,16 @@ public class SampleOuttake extends Outtake {
     Servo servo;
 
     //tower goal position
-    private double towerX = -28.75;  //TODO: correct tower position
+    private double towerX = -28.75;  //TODO: correct tower position –– FINISHED, double check
     private double towerY = 80;
     private double towerZ = 35.5;
+
+    /*
+    Phys. tower goal position (idk about actual translation over)
+     x = -12.5 in
+     y = the whole field minus 18 in
+     z = 35.5 in
+     */
 
     private static final int ftPerSecToTicksPerSec = 10000;  //TODO: get correct ft/s to t/s constant
 
