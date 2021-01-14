@@ -122,6 +122,8 @@ public class SampleOuttake extends Outtake {
         return 0.; //REPORT ERROR HERE IF LINE IS REACHED
     }
 
+    //Reference for checking the following function
+    //https://www.desmos.com/calculator/kszz4yrkd4
     //Calculate launch angle, in degrees
     private static double getLaunchAngle(double x, double y, double z) {
         double v = 10000. / (float)ticksPerSecPerFeetPerSec;
