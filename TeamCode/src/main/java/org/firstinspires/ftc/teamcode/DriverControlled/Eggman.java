@@ -30,7 +30,7 @@ public class Eggman extends OpMode {
     ModernRoboticsI2cRangeSensor sensorF;
     private int intToggle, outToggle, outFeedToggle, openWobToggle = 1, liftWobToggle, towerAdjust, powerAdjust1, powerAdjust2, powerAdjust3 = 0;
     private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastRightTrigger, lastBButton, lastXButton, lastYButton, lastAButton2, lastXButton2, lastYButton2, lastBButton2 = false, slowMode;
-    private double lastTime, distOffX, distOffY;
+    private double lastTime, distOffX, distOffY, turn;
 
     /*
     gamepad1: manual
@@ -210,14 +210,13 @@ public class Eggman extends OpMode {
             }
         }
         if(towerAdjust == 1) {
-            drive.alignForward();
-
             distOffX = 1;
             distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
                 distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
                 distOffY = (sensorF.getDistance(DistanceUnit.INCH) - 63);
+                turn = drive.getAngle() / 100;
 
                 if (distOffX < 1 && distOffX > -1) {
                     distOffX = 0;
@@ -226,7 +225,7 @@ public class Eggman extends OpMode {
                     distOffY = 0;
                 }
 
-                drive.drive(distOffY / 10, distOffX / 10, 0);
+                drive.drive(distOffY / 10, distOffX / 10, turn);
 
                 if(gamepad2.a) {
                     distOffX = 0;
