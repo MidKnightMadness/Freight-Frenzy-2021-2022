@@ -217,7 +217,7 @@ public class Eggman extends OpMode {
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
                 distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
-                distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
+                distOffY = (sensorF.getDistance(DistanceUnit.INCH) - 63);
 
                 if (distOffX < 1 && distOffX > -1) {
                     distOffX = 0;
