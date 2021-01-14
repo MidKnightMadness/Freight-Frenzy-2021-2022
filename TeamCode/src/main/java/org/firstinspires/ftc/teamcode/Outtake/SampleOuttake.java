@@ -1,18 +1,13 @@
 package org.firstinspires.ftc.teamcode.Outtake;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Common.Config;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Outtake.Outtake;
-
-import java.util.concurrent.Callable;
 
 public class SampleOuttake extends Outtake {
 
@@ -36,7 +31,7 @@ public class SampleOuttake extends Outtake {
      z = 35.5 in
      */
 
-    private static final int ftPerSecToTicksPerSec = 10000;  //TODO: get correct ft/s to t/s constant
+    private static final int ticksPerSecPerFeetPerSec = 1000;  //TODO: get correct ft/s to t/s constant
 
     //initialize motor
     @Override
@@ -77,7 +72,7 @@ public class SampleOuttake extends Outtake {
     @Override
     //checks if outtake is the right speed for shooting
     public boolean isReady() {
-        boolean ready = Math.abs((motor.getVelocity() + lastVel)/2 - targetVel) <= 10;
+        boolean ready = Math.abs((motor.getVelocity() + lastVel)*.5 - targetVel) <= 10;
         lastVel = motor.getVelocity();
         return ready;
     }
@@ -117,7 +112,7 @@ public class SampleOuttake extends Outtake {
                     bMax = v0;
                 } else {
                     if (Math.abs(dev) < .0000001) { //precision threshold
-                        return v0 * ftPerSecToTicksPerSec; //Multiply by some constant to instead output RPM
+                        return v0 * ticksPerSecPerFeetPerSec; //Multiply by some constant to instead output RPM
                     } else {
                         bMin = v0;
                     }
@@ -127,38 +122,35 @@ public class SampleOuttake extends Outtake {
         return 0.; //REPORT ERROR HERE IF LINE IS REACHED
     }
 
-    //TODO: verify getLaunchAngle function works
+    //Reference for checking the following function
+    //https://www.desmos.com/calculator/kszz4yrkd4
     //Calculate launch angle, in degrees
     private static double getLaunchAngle(double x, double y, double z) {
-        double v = 2000.0 / ftPerSecToTicksPerSec;
+        double v = 10000. / (float)ticksPerSecPerFeetPerSec;
         double bMin = 15.; //minimum angle (deg)
-        double bMax = 50.; //maximum angle (deg)
+        double bMax = 45.; //maximum angle (deg) //Above 45 gets hairy
 
-        for (int i = 0; i < 10000; i++) { //Maximum 10000 iters
+        for (int i = 0; i < 1000; i++) { //Maximum 1000 iters
             double g = 32.2; //gravity, feet/sec^2
-            double a0 = (bMin + bMax) * .5; //angle at mean
-            double tx = Math.sqrt(x * x + y * y); //dist to goal along XY plane
-            double vx = Math.cos((a0 * Math.PI) / 180.) * v; //x velocity
-            double vt = Math.tan((a0 * Math.PI) / 180.); //tangent slope
+            double a0 = (bMin+bMax) * .5; //angle at mean
+            double tx = Math.sqrt(x*x + y*y); //dist to goal along XY plane
+            double vx = Math.cos((a0*Math.PI)/180.)*v; //x velocity
+            double vt = Math.tan((a0*Math.PI)/180.); //tangent slope
             double xvx = tx / vx; //split to optimize computation time
-            double ty = -.5 * g * xvx * xvx + vt * tx; //vertical hit point
+            double ty = -.5*g*xvx*xvx+vt*tx; //vertical hit point
             double dev = ty - z; //how far off we are
-            double mx = (vx * vx * vt) / g; //peak distance
-            if (mx < tx) { //parabola peak occurs before hit
-                bMax = a0; //Angle shot too high, refine maximum
+            double mx = (vx*vx*vt)/g; //peak distance
+            if (dev / Math.abs(dev) > 0.) {
+                bMax = a0; //Hit was too high, refine maximum
             } else {
-                if (dev / Math.abs(dev) > 0.) {
-                    bMax = a0; //Hit was too high, refine maximum
+                if (Math.abs(dev) < .00001) { //precision threshold
+                    return a0; //Calculated angle
                 } else {
-                    if (Math.abs(dev) < .0000001) { //precision threshold
-                        return a0 ;
-                    } else {
-                        bMin = a0; //Hit was too low, refine minnimum
-                    }
+                    bMin = a0; //Hit was too low, refine minimum
                 }
             }
         }
-        return 0.; //REPORT ERROR HERE IF LINE IS REACHED
+        return(45.); //Target is too far for chosen velocity to hit
     }
 
     //loads a ring into the launcher
