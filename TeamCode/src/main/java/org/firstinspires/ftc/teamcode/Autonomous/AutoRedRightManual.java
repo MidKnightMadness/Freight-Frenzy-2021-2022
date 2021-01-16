@@ -57,7 +57,7 @@ public class AutoRedRightManual extends LinearOpMode {
         */
 
         wobbleGoal.close();
-        sleep(1000); //Can someone explain this?
+        sleep(1000);
         wobbleGoal.slightLift();
 
         //move up to starting stack
