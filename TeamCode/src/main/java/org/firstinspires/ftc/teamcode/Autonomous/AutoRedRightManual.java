@@ -72,15 +72,15 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to correct drop zone
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
-            drive.move(-5, 58);
+            drive.move(5, 58);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-20, 80);
+            drive.move(-30, 80);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-5, 105);
+            drive.move(5, 105);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
