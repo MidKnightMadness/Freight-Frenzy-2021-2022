@@ -42,7 +42,8 @@ public class AutoRedRightManual extends LinearOpMode {
         //telemetry.addLine("Visual initialized!");
         telemetry.update();
 
-        waitForStart();
+        while(!isStopRequested() && !isStarted())
+            idle();
 
         /*
         while (!isStarted() && !isStopRequested() && opModeIsActive()) {
