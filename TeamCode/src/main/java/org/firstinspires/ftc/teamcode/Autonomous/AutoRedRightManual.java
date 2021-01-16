@@ -39,7 +39,7 @@ public class AutoRedRightManual extends LinearOpMode {
         outtake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
         visual.init(hardwareMap, telemetry, gamepad1, gamepad2);
-        //telemetry.addLine("Visual initialized!");
+        telemetry.addLine("Visual initialized!");
         telemetry.update();
 
         while(!isStopRequested() && !isStarted())
@@ -55,6 +55,7 @@ public class AutoRedRightManual extends LinearOpMode {
             return;
         }
         */
+        outtake.start();
 
         wobbleGoal.close();
         sleep(1000);
@@ -108,16 +109,15 @@ public class AutoRedRightManual extends LinearOpMode {
 
 
         //shoot power shots
-//        outtake.start();
-//        for(int i = 0; i < 10; i++)  //make sure outtake is really ready
-//            while(!outtake.isReady())
-//                idle();
-//        outtake.feed();
-//        drive.move(-7.5, 0);
-//        outtake.feed();
-//        drive.move(-7.5, 0);
-//        outtake.feed();
-//        outtake.stop();
+        for(int i = 0; i < 10; i++)  //make sure outtake is really ready
+            while(!outtake.isReady())
+                idle();
+        outtake.feed();
+        drive.move(-7.5, 0);
+        outtake.feed();
+        drive.move(-7.5, 0);
+        outtake.feed();
+        outtake.stop();
         drive.move(0, 12);
 
         visual.stop();
