@@ -56,12 +56,12 @@ public class AutoRedRightManual extends LinearOpMode {
         */
 
         wobbleGoal.close();
-        sleep(1000);
+        sleep(1000); //Can someone explain this?
         wobbleGoal.slightLift();
 
         //move up to starting stack
         drive.move(-13, 12);
-        sleep(10);
+        sleep(10); //Reason?
         //get starting stack
         visual.update();
         telemetry.addLine("Zone: " + visual.getStartStack());
