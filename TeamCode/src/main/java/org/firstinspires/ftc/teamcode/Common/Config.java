@@ -18,6 +18,7 @@ public class Config {
     public static final String INTAKERELEASE = "IntakeRelease";
     public static final String OUTTAKESERVO = "OuttakeS";
     public static final String WOBBLESERVO = "WobbleS";
+    public static final String INTAKEROLLER = "IntakeRoller";
 
     //Webcam
     public static final String WEBCAM = "Webcam 1";

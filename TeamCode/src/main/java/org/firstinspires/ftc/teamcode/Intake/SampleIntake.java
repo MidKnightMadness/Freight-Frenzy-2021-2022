@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Intake;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -15,6 +16,7 @@ public class SampleIntake extends Intake{
     private DcMotorEx intakeMotorL;
     private DcMotorEx intakeMotorR;
     private Servo releaseServo;
+    private CRServo roller;
 
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2){
@@ -22,6 +24,7 @@ public class SampleIntake extends Intake{
 
         intakeMotorL = (DcMotorEx) hardwareMap.dcMotor.get(Config.INTAKEL);
         intakeMotorR = (DcMotorEx) hardwareMap.dcMotor.get(Config.INTAKER);
+        roller = (CRServo) hardwareMap.crservo.get(Config.INTAKEROLLER);
         releaseServo = hardwareMap.servo.get(Config.INTAKERELEASE);
     }
 
@@ -36,6 +39,7 @@ public class SampleIntake extends Intake{
     public void start() {
         intakeMotorL.setVelocity(2500);
         intakeMotorR.setVelocity(-2500);
+        roller.setPower(1);
 
         telemetry.addData("intake L", intakeMotorL.getVelocity());
         telemetry.addData("intake R", intakeMotorR.getVelocity());
@@ -46,6 +50,7 @@ public class SampleIntake extends Intake{
     public void eject() {
         intakeMotorL.setVelocity(-2500);
         intakeMotorR.setVelocity(2500);
+        roller.setPower(-1);
     }
 
     //stop motor
@@ -53,6 +58,7 @@ public class SampleIntake extends Intake{
     public void stop() {
         intakeMotorL.setPower(0);
         intakeMotorR.setPower(0);
+        roller.setPower(0);
     }
 
     //manually set motor speed
