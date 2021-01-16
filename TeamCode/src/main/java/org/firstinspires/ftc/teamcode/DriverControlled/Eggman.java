@@ -344,7 +344,7 @@ public class Eggman extends OpMode {
             outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 9);
 
             //turn to towergoal
-            drive.turnToPoint(-28.75, 80);  //TODO: correct towergoal position –– (check tower position in SampleOuttake)
+            drive.turnToPoint(-28.75, 80);  //TODO: correct towergoal position –– (check tower position in SampleOuttake) –– FINISHED?
         }
 
         telemetry.addData("Current X", drive.getCurrentX());
