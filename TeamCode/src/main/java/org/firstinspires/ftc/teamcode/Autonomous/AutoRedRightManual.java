@@ -73,10 +73,16 @@ public class AutoRedRightManual extends LinearOpMode {
         //move to correct drop zone
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
             drive.move(-5, 58);
+            telemetry.addLine("Zone: " + visual.getStartStack());
+            telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
             drive.move(-20, 80);
+            telemetry.addLine("Zone: " + visual.getStartStack());
+            telemetry.update();
         } else {
             drive.move(-5, 105);
+            telemetry.addLine("Zone: " + visual.getStartStack());
+            telemetry.update();
         }
 
         //release wobble goal
@@ -88,10 +94,16 @@ public class AutoRedRightManual extends LinearOpMode {
         //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
             drive.move(-30.25, -20);
+            telemetry.addLine("Zone: " + visual.getStartStack());
+            telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
             drive.move(-20.25, -40);
+            telemetry.addLine("Zone: " + visual.getStartStack());
+            telemetry.update();
         } else {
             drive.move(-30.25, -63);
+            telemetry.addLine("Zone: " + visual.getStartStack());
+            telemetry.update();
         }
 
 
