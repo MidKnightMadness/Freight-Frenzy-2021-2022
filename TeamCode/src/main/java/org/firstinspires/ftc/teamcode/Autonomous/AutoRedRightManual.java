@@ -39,7 +39,7 @@ public class AutoRedRightManual extends LinearOpMode {
         outtake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
         visual.init(hardwareMap, telemetry, gamepad1, gamepad2);
-        //telemetry.addLine("Visual initialized!");
+        telemetry.addLine("Visual initialized!");
         telemetry.update();
 
         while(!isStopRequested() && !isStarted())
@@ -55,6 +55,7 @@ public class AutoRedRightManual extends LinearOpMode {
             return;
         }
         */
+        outtake.start();
 
         wobbleGoal.close();
         sleep(1000);
@@ -62,7 +63,7 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move up to starting stack
         drive.move(-13, 12);
-        sleep(10);
+        sleep(10); //Reason?
         //get starting stack
         visual.update();
         telemetry.addLine("Zone: " + visual.getStartStack());
@@ -72,15 +73,15 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to correct drop zone
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
-            drive.move(5, 58);
+            drive.move(-5, 58);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-30, 80);
+            drive.move(-40, 80);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(5, 105);
+            drive.move(-5, 105);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
@@ -108,16 +109,15 @@ public class AutoRedRightManual extends LinearOpMode {
 
 
         //shoot power shots
-//        outtake.start();
-//        for(int i = 0; i < 10; i++)  //make sure outtake is really ready
-//            while(!outtake.isReady())
-//                idle();
-//        outtake.feed();
-//        drive.move(-7.5, 0);
-//        outtake.feed();
-//        drive.move(-7.5, 0);
-//        outtake.feed();
-//        outtake.stop();
+        for(int i = 0; i < 10; i++)  //make sure outtake is really ready
+            while(!outtake.isReady())
+                idle();
+        outtake.feed();
+        drive.move(-7.5, 0);
+        outtake.feed();
+        drive.move(-7.5, 0);
+        outtake.feed();
+        outtake.stop();
         drive.move(0, 12);
 
         visual.stop();
