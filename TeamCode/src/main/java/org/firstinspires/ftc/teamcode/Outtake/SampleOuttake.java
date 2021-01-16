@@ -92,7 +92,7 @@ public class SampleOuttake extends Outtake {
     //open the ring-loader
     @Override
     public void feedRun() {
-        servo.setPosition(0.55); //open feeding position
+        servo.setPosition(0.65); //open feeding position
     }
 
     //close the ring-loader

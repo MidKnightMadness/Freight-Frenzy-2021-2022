@@ -39,7 +39,7 @@ public class AutoRedRightManual extends LinearOpMode {
         outtake.init(hardwareMap, telemetry, gamepad1, gamepad2);
         wobbleGoal.init(hardwareMap, telemetry, gamepad1, gamepad2);
         visual.init(hardwareMap, telemetry, gamepad1, gamepad2);
-        //telemetry.addLine("Visual initialized!");
+        telemetry.addLine("Visual initialized!");
         telemetry.update();
 
         while(!isStopRequested() && !isStarted())
@@ -55,6 +55,7 @@ public class AutoRedRightManual extends LinearOpMode {
             return;
         }
         */
+        outtake.start();
 
         wobbleGoal.close();
         sleep(1000);
@@ -72,15 +73,15 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to correct drop zone
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
-            drive.move(5, 58);
+            drive.move(-5, 58);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-30, 80);
+            drive.move(-40, 80);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(5, 105);
+            drive.move(-5, 105);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
@@ -93,31 +94,43 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-30.25, -20);
+            drive.move(-30.25, -25);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-20.25, -40);
+            drive.move(-20.25, -45);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-30.25, -63);
+            drive.move(-30.25, -68);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
 
 
         //shoot power shots
-//        outtake.start();
-//        for(int i = 0; i < 10; i++)  //make sure outtake is really ready
-//            while(!outtake.isReady())
-//                idle();
-//        outtake.feed();
-//        drive.move(-7.5, 0);
-//        outtake.feed();
-//        drive.move(-7.5, 0);
-//        outtake.feed();
-//        outtake.stop();
+        for(int i = 0; i < 10; i++)  //make sure outtake is really ready
+            while(!outtake.isReady())
+                idle();
+        outtake.feedRun();
+        sleep(2000);
+        outtake.resetFeed();
+        sleep(2000);
+
+        drive.move(-5, 0);
+
+        outtake.feedRun();
+        sleep(2000);
+        outtake.resetFeed();
+        sleep(2000);
+
+        drive.move(-5, 0);
+
+        outtake.feedRun();
+        sleep(2000);
+        outtake.resetFeed();
+        sleep(2000);
+        outtake.stop();
         drive.move(0, 12);
 
         visual.stop();
