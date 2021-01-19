@@ -49,6 +49,18 @@ public class SampleOuttake extends Outtake {
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
 
+    public void startPowerShot(){
+        targetVel = 850; //TBD
+        motor.setVelocity(targetVel);
+        telemetry.addData("outtake velocity", motor.getVelocity());
+    }
+
+    public void startHighGoal(){
+        targetVel = 950; //TBD
+        motor.setVelocity(targetVel);
+        telemetry.addData("outtake velocity", motor.getVelocity());
+    }
+
     @Override
     public void startFromPos(double x, double y, double z) {
         targetVel = (int)getLaunchVelocity(x - towerX, y - towerY, z - towerZ);
@@ -80,7 +92,7 @@ public class SampleOuttake extends Outtake {
     //open the ring-loader
     @Override
     public void feedRun() {
-        servo.setPosition(0.55); //open feeding position
+        servo.setPosition(0.65); //open feeding position
     }
 
     //close the ring-loader
