@@ -53,7 +53,7 @@ public class Eggman extends OpMode {
     Y - middle power shot
     B - right power shot
     auto shoot:
-    DPadUp - aim and shoot
+    DPadUp - aim at high tower goal
      */
 
     @Override
