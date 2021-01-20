@@ -94,19 +94,20 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-30.25, -25);
+            drive.move(-18.25, -25);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-4.75, -47);
+            drive.move(7.25, -47);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-30.25, -72);
+            drive.move(-18.25, -72);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
 
+        drive.alignForward();
 
         //shoot power shots
         for(int i = 0; i < 10; i++)  //make sure outtake is really ready
