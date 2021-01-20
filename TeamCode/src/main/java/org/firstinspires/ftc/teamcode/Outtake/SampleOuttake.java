@@ -31,7 +31,7 @@ public class SampleOuttake extends Outtake {
      z = 35.5 in
      */
 
-    private static final int ticksPerSecPerFeetPerSec = 1000;  //TODO: get correct ft/s to t/s constant
+    private static final double ticksPerSecPerFeetPerSec = 950/106.44;  //TODO: get correct ft/s to t/s constant
 
     //initialize motor
     @Override
@@ -138,7 +138,7 @@ public class SampleOuttake extends Outtake {
     //https://www.desmos.com/calculator/kszz4yrkd4
     //Calculate launch angle, in degrees
     private static double getLaunchAngle(double x, double y, double z) {
-        double v = 10000. / (float)ticksPerSecPerFeetPerSec;
+        double v = 10000. / ticksPerSecPerFeetPerSec;
         double bMin = 15.; //minimum angle (deg)
         double bMax = 45.; //maximum angle (deg) //Above 45 gets hairy
 
