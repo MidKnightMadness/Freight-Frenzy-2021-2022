@@ -31,7 +31,7 @@ public class SampleOuttake extends Outtake {
      z = 35.5 in
      */
 
-    private static final double ticksPerSecPerFeetPerSec = 950/106.44;  //TODO: get correct ft/s to t/s constant
+    private static final double ticksPerSecPerFeetPerSec = 950/53.22;
 
     //initialize motor
     @Override
