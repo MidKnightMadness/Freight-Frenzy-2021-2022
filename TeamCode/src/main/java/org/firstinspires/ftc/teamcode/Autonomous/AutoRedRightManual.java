@@ -55,7 +55,7 @@ public class AutoRedRightManual extends LinearOpMode {
             return;
         }
         */
-        outtake.start();
+        outtake.startPowerShot();
 
         wobbleGoal.close();
         sleep(1000);
@@ -94,42 +94,43 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-30.25, -25);
+            drive.move(-11.25, -25);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-4.75, -47);
+            drive.move(14.25, -47);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-30.25, -72);
+            drive.move(-11.25, -72);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
 
+        drive.alignForward();
 
         //shoot power shots
         for(int i = 0; i < 10; i++)  //make sure outtake is really ready
             while(!outtake.isReady())
                 idle();
         outtake.feedRun();
-        sleep(2000);
+        sleep(1000);
         outtake.resetFeed();
-        sleep(2000);
+        sleep(1000);
 
         drive.move(-5, 0);
 
         outtake.feedRun();
-        sleep(2000);
+        sleep(1000);
         outtake.resetFeed();
-        sleep(2000);
+        sleep(1000);
 
         drive.move(-5, 0);
 
         outtake.feedRun();
-        sleep(2000);
+        sleep(1000);
         outtake.resetFeed();
-        sleep(2000);
+            sleep(1000);
         outtake.stop();
         drive.move(0, 12);
 

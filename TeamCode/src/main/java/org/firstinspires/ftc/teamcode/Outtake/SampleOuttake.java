@@ -92,13 +92,13 @@ public class SampleOuttake extends Outtake {
     //open the ring-loader
     @Override
     public void feedRun() {
-        servo.setPosition(0.65); //open feeding position
+        servo.setPosition(0.6); //open feeding position
     }
 
     //close the ring-loader
     @Override
     public void resetFeed() {
-        servo.setPosition(0.2); //closed position
+        servo.setPosition(0.4); //closed position
     }
 
     //Calculate launch velocity, in feet per second
