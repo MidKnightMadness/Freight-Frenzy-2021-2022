@@ -50,7 +50,7 @@ public class SampleOuttake extends Outtake {
     }
 
     public void startPowerShot(){
-        targetVel = 850; //TBD
+        targetVel = 875; //TBD
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
