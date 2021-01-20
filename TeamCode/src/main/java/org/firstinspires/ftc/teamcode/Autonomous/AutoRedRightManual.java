@@ -114,23 +114,23 @@ public class AutoRedRightManual extends LinearOpMode {
             while(!outtake.isReady())
                 idle();
         outtake.feedRun();
-        sleep(2000);
+        sleep(1000);
         outtake.resetFeed();
-        sleep(2000);
+        sleep(1000);
 
         drive.move(-5, 0);
 
         outtake.feedRun();
-        sleep(2000);
+        sleep(1000);
         outtake.resetFeed();
-        sleep(2000);
+        sleep(1000);
 
         drive.move(-5, 0);
 
         outtake.feedRun();
-        sleep(2000);
+        sleep(1000);
         outtake.resetFeed();
-        sleep(2000);
+        sleep(1000);
         outtake.stop();
         drive.move(0, 12);
 
