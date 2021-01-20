@@ -50,7 +50,7 @@ public class SampleOuttake extends Outtake {
     }
 
     public void startPowerShot(){
-        targetVel = 850; //TBD
+        targetVel = 875; //TBD
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
@@ -92,13 +92,13 @@ public class SampleOuttake extends Outtake {
     //open the ring-loader
     @Override
     public void feedRun() {
-        servo.setPosition(0.65); //open feeding position
+        servo.setPosition(0.6); //open feeding position
     }
 
     //close the ring-loader
     @Override
     public void resetFeed() {
-        servo.setPosition(0.2); //closed position
+        servo.setPosition(0.35); //closed position
     }
 
     //Calculate launch velocity, in feet per second
