@@ -94,15 +94,15 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-11.25, -25);
+            drive.move(-14.25, -25);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(14.25, -47);
+            drive.move(11.25, -47);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-11.25, -72);
+            drive.move(-14.25, -72);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
