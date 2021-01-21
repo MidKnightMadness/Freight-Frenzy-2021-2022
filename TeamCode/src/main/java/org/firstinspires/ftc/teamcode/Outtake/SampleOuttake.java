@@ -56,14 +56,14 @@ public class SampleOuttake extends Outtake {
     }
 
     public void startHighGoal(){
-        targetVel = 475; //TBD
+        targetVel = -475; //TBD
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
 
     @Override
     public void startFromPos(double x, double y, double z) {
-        targetVel = (int)getLaunchVelocity(x - towerX, y - towerY, z - towerZ);
+        targetVel = -(int)getLaunchVelocity(x - towerX, y - towerY, z - towerZ);
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
