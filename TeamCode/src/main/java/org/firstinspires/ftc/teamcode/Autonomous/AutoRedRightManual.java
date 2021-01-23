@@ -30,9 +30,9 @@ public class AutoRedRightManual extends LinearOpMode {
     @Override
     public void runOpMode() {
         //create stop requested callable
-        //Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
+        Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
         drive.init(hardwareMap, telemetry, gamepad1, gamepad2);
-//        drive.isStopRequested = stopRequestedCall;
+        drive.isStopRequested = stopRequestedCall;
         telemetry.addLine("Drive initialized!");
         telemetry.update();
         intake.init(hardwareMap, telemetry, gamepad1, gamepad2);
