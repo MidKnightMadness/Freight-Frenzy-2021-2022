@@ -89,7 +89,7 @@ public class SampleVisual extends Visual{
 
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.5f;
+        tfodParameters.minResultConfidence = 0.4f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset("UltimateGoal.tflite", "Quad", "Single");
         tfod.activate();
@@ -121,7 +121,7 @@ public class SampleVisual extends Visual{
             else{
                 for (Recognition recognition : updatedRecognitions) {
                     String label = recognition.getLabel();
-                    if(label.equals("Single"))  //single ring detected, B
+                    if(label.equals("Single") && starterstack != STARTERSTACK.C)  //single ring detected, B  (quad has precendence)
                         starterstack = STARTERSTACK.B;
                     else if(label.equals("Quad"))  //4 rings detected, C
                         starterstack = STARTERSTACK.C;
