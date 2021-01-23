@@ -28,8 +28,8 @@ public class Eggman extends OpMode {
     ModernRoboticsI2cRangeSensor sensorL;
     ModernRoboticsI2cRangeSensor sensorR;
     ModernRoboticsI2cRangeSensor sensorF;
-    private int intToggle, outToggle, outFeedToggle, openWobToggle = 1, liftWobToggle, towerAdjust, powerAdjust1, powerAdjust2, powerAdjust3 = 0;
-    private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastRightTrigger, lastBButton, lastXButton, lastYButton, lastAButton2, lastXButton2, lastYButton2, lastBButton2 = false, slowMode;
+    private int intToggle, outToggle, openWobToggle = 1, liftWobToggle, towerAdjust, powerAdjust1, powerAdjust2, powerAdjust3 = 0;
+    private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastBButton, lastXButton, lastYButton, lastAButton2, lastXButton2, lastYButton2, lastBButton2 = false, slowMode;
     private double lastTime, distOffX, distOffY, turn;
 
     /*
@@ -151,22 +151,12 @@ public class Eggman extends OpMode {
 
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
         //it is already in that position in which it moves back to its starting position (gamepad 1)
-        if(!lastRightTrigger && gamepad1.right_trigger == 1) {
-            if(outFeedToggle == 1) {
-                outFeedToggle = 0;
-            }
-            else if(outFeedToggle == 0 && outtake.isReady()) {
-                outFeedToggle = 1;
-            }
-        }
-        if(outFeedToggle == 0) {
+        if(gamepad1.right_trigger == 0) {
             outtake.resetFeed();
         }
-        if(outFeedToggle == 1) {
+        else if(gamepad1.right_trigger == 1 && outtake.isReady()) {
             outtake.feedRun();
         }
-
-        lastRightTrigger = gamepad1.right_trigger == 1;
 
         //when b button is pressed, wobble goal is opened unless it is already opened in which it closes (gamepad 1)
         if(!lastBButton && gamepad1.b) {
@@ -214,8 +204,8 @@ public class Eggman extends OpMode {
             distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
-                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
-                distOffY = (sensorF.getDistance(DistanceUnit.INCH) - 63);
+                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27);
+                distOffY = (sensorF.getDistance(DistanceUnit.INCH) - 68);
                 turn = drive.getAngle() / 100;
 
                 if (distOffX < 1 && distOffX > -1) {
