@@ -103,11 +103,19 @@ public class AutoRedRightManual extends LinearOpMode {
         }
 
         drive.alignForward();
+        telemetry.addLine("waiting for outtake");
+        telemetry.update();
 
         //shoot power shots
         for(int i = 0; i < 10; i++)  //make sure outtake is really ready
             while(!outtake.isReady())
+            {
                 idle();
+                telemetry.update();
+            }
+
+        telemetry.addLine("Outtake ready, starting to shoot");
+        telemetry.update();
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
