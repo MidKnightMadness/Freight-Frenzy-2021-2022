@@ -214,8 +214,8 @@ public class Eggman extends OpMode {
             distOffY = 1;
             while(distOffX != 0 ||  distOffY != 0) {
                 //adjust using distance sensors
-                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 30.5);
-                distOffY = (sensorF.getDistance(DistanceUnit.INCH) - 63);
+                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27);
+                distOffY = (sensorF.getDistance(DistanceUnit.INCH) - 68);
                 turn = drive.getAngle() / 100;
 
                 if (distOffX < 1 && distOffX > -1) {
