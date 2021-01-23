@@ -45,16 +45,11 @@ public class AutoRedRightManual extends LinearOpMode {
         while(!isStopRequested() && !isStarted())
             idle();
 
-        /*
-        while (!isStarted() && !isStopRequested() && opModeIsActive()) {
-            idle();
-        }
-
         if(isStopRequested())
         {
             return;
         }
-        */
+
         outtake.startPowerShot();
 
         wobbleGoal.close();
