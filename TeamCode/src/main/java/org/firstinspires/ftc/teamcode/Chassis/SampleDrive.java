@@ -151,10 +151,10 @@ public class SampleDrive extends Drive{
         motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
 
         //add tolerance of 0.1 inches in case bot is not exact
-        motorFL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.2));
-        motorFR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.2));
-        motorBL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.2));
-        motorBR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.2));
+        motorFL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorFR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
 
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
