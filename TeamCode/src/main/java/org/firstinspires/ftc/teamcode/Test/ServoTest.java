@@ -3,34 +3,35 @@ package org.firstinspires.ftc.teamcode.Test;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.teamcode.Common.Config;
 
-@TeleOp
-@Disabled
-public class ServoTest extends OpMode {
-    Servo servo;
+import static java.lang.Math.*;
 
-    double pos = 0;
+@TeleOp
+public class ServoTest extends OpMode {
+    CRServo servo;
+
+    double pos  = 0;
+    double snap = 0.1;
 
     @Override
-    public void init() {
-        servo = hardwareMap.servo.get(Config.INTAKERELEASE);
+    public void init(){
+        servo = hardwareMap.crservo.get(Config.INTAKERELEASE);
     }
 
     @Override
-    public void loop() {
-        pos += gamepad1.left_stick_y / 100;
-        if(pos < 0)
-            pos = 0;
-        else if(pos > 1)
-            pos = 1;
+    public void loop(){
+        pos += (gamepad1.left_stick_y)/100;
+        pos = min(max(pos,-1),1);
+             if(pos> .9-snap && pos< .9+snap) pos =  .9;
+        else if(pos>-.9-snap && pos<-.9+snap) pos = -.9;
 
-        if(gamepad1.a)
-            servo.setPosition(pos);
+        if(gamepad1.a) servo.setPower(pos);
 
-        telemetry.addData("target position", pos);
-        telemetry.addData("servo position", servo.getPosition());
+        telemetry.addData("target", pos);
+        telemetry.addData("servo", servo.getPower());
+        telemetry.addData("snap", snap);
     }
 }
