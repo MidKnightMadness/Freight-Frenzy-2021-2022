@@ -288,7 +288,7 @@ public class SampleDrive extends Drive{
     //technically just turns the bot whatever angle it faced when the round started
     @Override
     public void alignForward() {
-        turn(-currentAngle);
+        turn(currentAngle);
     }
 
     //move the bot to a position on the field using maths

@@ -123,6 +123,7 @@ public class AutoRedRightManual extends LinearOpMode {
 
         drive.move(-6, 0);
 
+        drive.alignForward();
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
@@ -130,6 +131,7 @@ public class AutoRedRightManual extends LinearOpMode {
 
         drive.move(-6, 0);
 
+        drive.alignForward();
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
