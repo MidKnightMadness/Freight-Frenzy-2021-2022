@@ -68,7 +68,7 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to correct drop zone
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
-            drive.move(-5, 58);
+            drive.move(0, 58);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
@@ -76,7 +76,7 @@ public class AutoRedRightManual extends LinearOpMode {
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-5, 105);
+            drive.move(0, 105);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
@@ -84,25 +84,23 @@ public class AutoRedRightManual extends LinearOpMode {
         //release wobble goal
         wobbleGoal.lower();
         wobbleGoal.open();
-        drive.alignForward();
         drive.move(-10, 0);
 
         //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-18.25, -21);
+            drive.move(-24.25, -21);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(7.25, -43);
+            drive.move(1.25, -43);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-18.25, -68);
+            drive.move(-24.25, -68);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
 
-        drive.alignForward();
         telemetry.addLine("waiting for outtake");
         telemetry.update();
 
@@ -114,6 +112,8 @@ public class AutoRedRightManual extends LinearOpMode {
                 telemetry.update();
             }
 
+        drive.alignForward();
+
         telemetry.addLine("Outtake ready, starting to shoot");
         telemetry.update();
         outtake.feedRun();
@@ -122,13 +122,15 @@ public class AutoRedRightManual extends LinearOpMode {
         sleep(1000);
 
         drive.move(-6, 0);
+        drive.alignForward();
 
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
-        drive.move(-6, 0);
+        drive.move(-6   , 0);
+        drive.alignForward();
 
         outtake.feedRun();
         sleep(1000);

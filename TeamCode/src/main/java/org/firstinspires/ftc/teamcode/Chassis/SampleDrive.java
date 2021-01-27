@@ -220,6 +220,7 @@ public class SampleDrive extends Drive{
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
+        currentAngle = imu.getAngularOrientation().firstAngle;
         double targetAngle = convertAngle(currentAngle + degrees);
         double angleCounter;
         double angleChange = imu.getAngularOrientation().firstAngle;
@@ -288,7 +289,7 @@ public class SampleDrive extends Drive{
     //technically just turns the bot whatever angle it faced when the round started
     @Override
     public void alignForward() {
-        turn(-currentAngle);
+        turn(-imu.getAngularOrientation().firstAngle);
     }
 
     //move the bot to a position on the field using maths
