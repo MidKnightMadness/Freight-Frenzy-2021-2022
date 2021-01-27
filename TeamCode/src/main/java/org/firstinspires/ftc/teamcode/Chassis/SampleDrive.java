@@ -196,6 +196,90 @@ public class SampleDrive extends Drive{
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    @Override
+    public void smoothMove(double inchesX, double inchesY) {
+        double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
+        setCurrentX(currentX + (-inchesX * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle))));
+        setCurrentY(currentY + (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesY * Math.sin(Math.toRadians(currentAngle))));
+
+        //convert to encoder ticks for run to position
+        inchesX *= encoderTicksPerInch;
+        inchesY *= encoderTicksPerInch;
+
+        //set where bot should end up according to encoders
+        motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int)inchesY + (int)inchesX);
+        motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int)inchesY + (int)inchesX);
+        motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
+        motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
+
+        //add tolerance of 0.1 inches in case bot is not exact
+        motorFL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorFR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+
+        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double flGoal = Math.abs(motorFL.getCurrentPosition() - motorFL.getTargetPosition());
+        double frGoal = Math.abs(motorFR.getCurrentPosition() - motorFR.getTargetPosition());
+        double blGoal = Math.abs(motorBL.getCurrentPosition() - motorBL.getTargetPosition());
+        double brGoal = Math.abs(motorBR.getCurrentPosition() - motorBR.getTargetPosition());
+
+        double goal = (flGoal + frGoal + blGoal + brGoal) / 4;
+
+        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0) {
+            try {
+                if(isStopRequested.call())
+                    return;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
+
+            double flProgress = Math.abs(motorFL.getCurrentPosition() - motorFL.getTargetPosition());
+            double frProgress = Math.abs(motorFR.getCurrentPosition() - motorFR.getTargetPosition());
+            double blProgress = Math.abs(motorBL.getCurrentPosition() - motorBL.getTargetPosition());
+            double brProgress = Math.abs(motorBR.getCurrentPosition() - motorBR.getTargetPosition());
+
+            double progress = (flProgress + frProgress + blProgress + brProgress) / 4;
+            if(progress == goal) {
+                motorFL.setPower(0.1);
+                motorFR.setPower(0.1);
+                motorBL.setPower(0.1);
+                motorBR.setPower(0.1);
+            }
+            //speed up for first portion
+            else if((progress/goal) > 0.25) {
+                motorFL.setPower(1 - (progress / goal));
+                motorFR.setPower(1 - (progress / goal));
+                motorBL.setPower(1 - (progress / goal));
+                motorBR.setPower(1 - (progress / goal));
+            }
+            //slow down for second portion
+            else {
+                motorFL.setPower(progress / goal);
+                motorFR.setPower(progress / goal);
+                motorBL.setPower(progress / goal);
+                motorBR.setPower(progress / goal);
+            }
+
+        }
+
+        //stop everything
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorBL.setPower(0);
+        motorBR.setPower(0);
+        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
     //just move without a power idk
     @Override
     public void move(double inchesX, double inchesY) {
@@ -223,7 +307,6 @@ public class SampleDrive extends Drive{
         currentAngle = imu.getAngularOrientation().firstAngle;
         double targetAngle = convertAngle(currentAngle + degrees);
         double angleCounter;
-        double angleChange = imu.getAngularOrientation().firstAngle;
         double clockwiseDistance = 0;
         double counterClockwiseDistance = 0;
 
@@ -270,8 +353,7 @@ public class SampleDrive extends Drive{
             else if(clockwiseDistance < counterClockwiseDistance) {
                 drive(0,0,0.5);
             }
-            angleChange = imu.getAngularOrientation().firstAngle - angleChange;
-            setAngle(convertAngle(currentAngle + angleChange));
+            setAngle(convertAngle(currentAngle + degrees));
         }
         //stop everything
         telemetry.addLine("turning done");
