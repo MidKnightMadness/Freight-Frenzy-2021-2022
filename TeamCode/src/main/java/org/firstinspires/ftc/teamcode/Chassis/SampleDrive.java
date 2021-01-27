@@ -353,7 +353,7 @@ public class SampleDrive extends Drive{
             else if(clockwiseDistance < counterClockwiseDistance) {
                 drive(0,0,0.5);
             }
-            setAngle(convertAngle(currentAngle + degrees));
+            setAngle(convertAngle(imu.getAngularOrientation().firstAngle));
         }
         //stop everything
         telemetry.addLine("turning done");
