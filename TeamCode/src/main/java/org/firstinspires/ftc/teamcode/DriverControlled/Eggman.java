@@ -217,7 +217,11 @@ public class Eggman extends OpMode {
 
                 drive.drive(distOffY / 10, distOffX / 10, turn);
 
-                if(gamepad2.a) {
+                telemetry.addData("distX", distOffX);
+                telemetry.addData("distY", distOffY);
+                telemetry.addData("turn", turn);
+
+                if(gamepad2.x) {
                     distOffX = 0;
                     distOffY = 0;
                 }
