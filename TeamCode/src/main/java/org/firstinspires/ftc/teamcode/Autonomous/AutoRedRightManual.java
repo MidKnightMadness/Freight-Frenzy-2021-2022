@@ -84,7 +84,6 @@ public class AutoRedRightManual extends LinearOpMode {
         //release wobble goal
         wobbleGoal.lower();
         wobbleGoal.open();
-        drive.alignForward();
         drive.move(-10, 0);
 
         //move to shooting position 3
@@ -102,7 +101,6 @@ public class AutoRedRightManual extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.alignForward();
         telemetry.addLine("waiting for outtake");
         telemetry.update();
 
@@ -121,17 +119,14 @@ public class AutoRedRightManual extends LinearOpMode {
         outtake.resetFeed();
         sleep(1000);
 
-        drive.move(-6, 0);
+        drive.move(-7, 0);
 
-        drive.alignForward();
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
-        drive.move(-6, 0);
-
-        drive.alignForward();
+        drive.move(-5, 0);
 
         outtake.feedRun();
         sleep(1000);
