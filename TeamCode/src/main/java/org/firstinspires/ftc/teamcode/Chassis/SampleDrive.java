@@ -229,7 +229,7 @@ public class SampleDrive extends Drive{
 
         boolean angleTolerance = false;
 
-        while(!angleTolerance && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0)  {
+        while(!angleTolerance && !gamepad2.x)  {
             try {
                 if(isStopRequested.call())
                     return;

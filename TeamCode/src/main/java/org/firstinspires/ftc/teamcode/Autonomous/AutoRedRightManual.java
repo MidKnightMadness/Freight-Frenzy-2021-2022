@@ -112,7 +112,7 @@ public class AutoRedRightManual extends LinearOpMode {
                 telemetry.update();
             }
 
-        drive.alignForward();
+        //drive.alignForward();
 
         telemetry.addLine("Outtake ready, starting to shoot");
         telemetry.update();
@@ -122,15 +122,15 @@ public class AutoRedRightManual extends LinearOpMode {
         sleep(1000);
 
         drive.move(-6, 0);
-        drive.alignForward();
+        //drive.alignForward();
 
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
-        drive.move(-6   , 0);
-        drive.alignForward();
+        drive.move(-6, 0);
+        //drive.alignForward();
 
         outtake.feedRun();
         sleep(1000);
