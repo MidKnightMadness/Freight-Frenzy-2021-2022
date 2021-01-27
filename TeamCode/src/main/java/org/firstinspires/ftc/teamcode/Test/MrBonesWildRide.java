@@ -20,7 +20,7 @@ public class MrBonesWildRide extends LinearOpMode {
         drive.init(hardwareMap, telemetry, gamepad1, gamepad2);
         waitForStart();
 
-        drive.smoothMove(0, 10);
+        drive.smoothMove(0, 20);
 
     }
 }
