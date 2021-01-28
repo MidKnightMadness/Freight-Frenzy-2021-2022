@@ -387,7 +387,7 @@ public class SampleDrive extends Drive{
     //technically just turns the bot whatever angle it faced when the round started
     @Override
     public void alignForward() {
-        turn(-imu.getAngularOrientation().firstAngle);
+        turn(-imu.getAngularOrientation().firstAngle + 5);
     }
 
     //move the bot to a position on the field using maths
