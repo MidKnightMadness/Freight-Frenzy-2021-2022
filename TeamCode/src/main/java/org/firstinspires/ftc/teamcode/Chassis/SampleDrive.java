@@ -137,8 +137,8 @@ public class SampleDrive extends Drive{
     @Override
     public void move(double inchesX, double inchesY, double power) {
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        setCurrentX(currentX + (-inchesX * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle))));
-        setCurrentY(currentY + (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesY * Math.sin(Math.toRadians(currentAngle))));
+        setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
+        setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -161,7 +161,7 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0) {
+        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
                     return;
@@ -199,8 +199,8 @@ public class SampleDrive extends Drive{
     @Override
     public void smoothMove(double inchesX, double inchesY) {
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        setCurrentX(currentX + (-inchesX * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle))));
-        setCurrentY(currentY + (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesY * Math.sin(Math.toRadians(currentAngle))));
+        setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
+        setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -230,7 +230,7 @@ public class SampleDrive extends Drive{
 
         double goal = (flGoal + frGoal + blGoal + brGoal) / 4;
 
-        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0) {
+        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
                     return;
@@ -312,7 +312,7 @@ public class SampleDrive extends Drive{
 
         boolean angleTolerance = false;
 
-        while(!angleTolerance && !gamepad2.x)  {
+        while(!angleTolerance)  {
             try {
                 if(isStopRequested.call())
                     return;
@@ -329,12 +329,28 @@ public class SampleDrive extends Drive{
 
             //calculate clockwise distance and counter-clockwise distance
             while(angleCounter < targetAngle) {
+                try {
+                    if(isStopRequested.call())
+                        return;
+                }
+                catch (NullPointerException exception){
+                    telemetry.addLine("You need to set isStopRequested when using move");
+                }
+                catch (Exception ignored) {}
                 angleCounter = convertAngle(angleCounter + 1);
                 counterClockwiseDistance = counterClockwiseDistance + 1;
             }
 
             angleCounter = currentAngle;
             while(angleCounter > targetAngle) {
+                try {
+                    if(isStopRequested.call())
+                        return;
+                }
+                catch (NullPointerException exception){
+                    telemetry.addLine("You need to set isStopRequested when using move");
+                }
+                catch (Exception ignored) {}
                 angleCounter = convertAngle(angleCounter - 1);
                 clockwiseDistance = clockwiseDistance + 1;
             }
