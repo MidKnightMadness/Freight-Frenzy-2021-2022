@@ -82,12 +82,15 @@ public class Eggman extends OpMode {
         telemetry.addData("loop time", time - lastTime);
         lastTime = time;
 
-        //drive controlled by left stick used to move forwards and sideways, right stick used to turn (gamepad 1)
-        if(slowMode) {
-            drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 5);
-            telemetry.addLine("slow mode enabled");
-        } else {
-            drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        if(!gamepad2.a)
+        {
+            //drive controlled by left stick used to move forwards and sideways, right stick used to turn (gamepad 1)
+            if(slowMode) {
+                drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 5);
+                telemetry.addLine("slow mode enabled");
+            } else {
+                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            }
         }
 
         //x toggle button to enable slow mode
@@ -194,38 +197,34 @@ public class Eggman extends OpMode {
         lastYButton = gamepad1.y;
 
         //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
+        /*
         if(!lastAButton2 && gamepad2.a) {
             if(towerAdjust == 0) {
                 towerAdjust = 1;
             }
-        }
-        if(towerAdjust == 1) {
-            distOffX = 1;
-            distOffY = 1;
-            while(distOffX != 0 ||  distOffY != 0) {
-                //adjust using distance sensors
-                distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27);
-                distOffY = (sensorF.getDistance(DistanceUnit.INCH) - 68);
-                turn = drive.getAngle() / 100;
+        }*/
+        if(gamepad2.a) {
+            //distOffX = 1;
+            //distOffY = 1;
 
-                if (distOffX < 1 && distOffX > -1) {
-                    distOffX = 0;
-                }
-                if (distOffY < 1 && distOffY > -1) {
-                    distOffY = 0;
-                }
+            //adjust using distance sensors
+            distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
+            distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 68) / 48;
+            turn = drive.getAngle() / 50;
 
-                drive.drive(distOffY / 10, distOffX / 10, turn);
+            //discard unusual output
+            if(Math.abs(distOffX) > 1000)
+                distOffX = 0;
+            if(Math.abs(distOffY) > 1000)
+                distOffY = 0;
 
-                telemetry.addData("distX", distOffX);
-                telemetry.addData("distY", distOffY);
-                telemetry.addData("turn", turn);
+            telemetry.addData("distX", distOffX);
+            telemetry.addData("distY", distOffY);
+            telemetry.addData("turn", turn);
 
-                if(gamepad2.x || Thread.interrupted()) {
-                    break;
-                }
-            }
-            towerAdjust = 0;
+            drive.drive(distOffY, distOffX, turn);
+
+            //towerAdjust = 0;
         }
         lastAButton2 = gamepad2.a;
 
