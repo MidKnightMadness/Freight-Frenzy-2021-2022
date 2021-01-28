@@ -154,11 +154,13 @@ public class Eggman extends OpMode {
 
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
         //it is already in that position in which it moves back to its starting position (gamepad 1)
-        if(gamepad1.right_trigger == 0) {
+        if(gamepad1.right_trigger != 1) {
             outtake.resetFeed();
+            telemetry.addLine("resetting feeder");
         }
-        else if(gamepad1.right_trigger == 1 && outtake.isReady()) {
+        else if(outtake.isReady()) {
             outtake.feedRun();
+            telemetry.addLine("feeding");
         }
 
         //when b button is pressed, wobble goal is opened unless it is already opened in which it closes (gamepad 1)
@@ -218,15 +220,14 @@ public class Eggman extends OpMode {
             if(Math.abs(distOffY) > 1000)
                 distOffY = 0;
 
-            telemetry.addData("distX", distOffX);
-            telemetry.addData("distY", distOffY);
-            telemetry.addData("turn", turn);
-
             drive.drive(distOffY, distOffX, turn);
 
             //towerAdjust = 0;
         }
         lastAButton2 = gamepad2.a;
+        telemetry.addData("distX", distOffX);
+        telemetry.addData("distY", distOffY);
+        telemetry.addData("turn", turn);
 
         /*
         //when x button is pressed, start adjusting bot to shooting position in front of leftmost power shot unless it already is in which it stops (gamepad 2)
