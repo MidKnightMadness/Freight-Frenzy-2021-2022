@@ -221,9 +221,8 @@ public class Eggman extends OpMode {
                 telemetry.addData("distY", distOffY);
                 telemetry.addData("turn", turn);
 
-                if(gamepad2.x) {
-                    distOffX = 0;
-                    distOffY = 0;
+                if(gamepad2.x || Thread.interrupted()) {
+                    break;
                 }
             }
             towerAdjust = 0;
