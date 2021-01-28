@@ -24,11 +24,10 @@ public class RangeSensorTest extends OpMode {
 
     @Override
     public void loop() {
-        telemetry.addData("distance", sensor.getDistance(DistanceUnit.INCH));
-
+        telemetry.addData("distance"      , sensor.getDistance(DistanceUnit.INCH));
         telemetry.addData("raw ultrasonic", sensor.rawUltrasonic());
-        telemetry.addData("raw optical", sensor.rawOptical());
-        telemetry.addData("cm ultrasonic", sensor.cmUltrasonic());
-        telemetry.addData("cm optical", sensor.cmOptical());
+        telemetry.addData("raw optical"   , sensor.rawOptical());
+        telemetry.addData("cm ultrasonic" , sensor.cmUltrasonic());
+        telemetry.addData("cm optical"    , sensor.cmOptical());
     }
 }
