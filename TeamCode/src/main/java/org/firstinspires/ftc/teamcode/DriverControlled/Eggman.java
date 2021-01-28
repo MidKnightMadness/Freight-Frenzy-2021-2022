@@ -217,9 +217,12 @@ public class Eggman extends OpMode {
 
                 drive.drive(distOffY / 10, distOffX / 10, turn);
 
-                if(gamepad2.a) {
-                    distOffX = 0;
-                    distOffY = 0;
+                telemetry.addData("distX", distOffX);
+                telemetry.addData("distY", distOffY);
+                telemetry.addData("turn", turn);
+
+                if(gamepad2.x || Thread.interrupted()) {
+                    break;
                 }
             }
             towerAdjust = 0;

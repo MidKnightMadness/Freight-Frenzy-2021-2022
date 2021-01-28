@@ -20,6 +20,8 @@ import java.io.PrintWriter;
 import java.io.File;
 
 @Autonomous
+
+
 public class AutoRedRightManual extends LinearOpMode {
     private Drive drive = new SampleDrive();
     private Intake intake = new SampleIntake();
@@ -112,7 +114,7 @@ public class AutoRedRightManual extends LinearOpMode {
                 telemetry.update();
             }
 
-        drive.alignForward();
+        //drive.alignForward();
 
         telemetry.addLine("Outtake ready, starting to shoot");
         telemetry.update();
@@ -122,22 +124,22 @@ public class AutoRedRightManual extends LinearOpMode {
         sleep(1000);
 
         drive.move(-6, 0);
-        drive.alignForward();
+        //drive.alignForward();
 
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
-        drive.move(-6   , 0);
-        drive.alignForward();
+        drive.move(-6, 0);
+        //drive.alignForward();
 
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
             sleep(1000);
         outtake.stop();
-        drive.move(0, 12);
+        drive.move(0, 14);
 
         visual.stop();
         telemetry.addLine("Program End :)");
