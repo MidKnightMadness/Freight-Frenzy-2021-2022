@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
 import static org.firstinspires.ftc.teamcode.Common.Constants.encoderTicksPerInch;
 
 public class SampleDrive extends Drive{
+    BNO055IMU imu;
 
     //declare wheel motors
     private DcMotorEx motorFL;
@@ -42,9 +43,7 @@ public class SampleDrive extends Drive{
     private Visual visual;
     public double currentX = 0;
     public double currentY = 0;
-    public double currentAngle = 0;
-
-    BNO055IMU imu;
+    public double currentAngle = imu.getAngularOrientation().firstAngle;
 
     @Override
     public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
@@ -100,16 +99,12 @@ public class SampleDrive extends Drive{
         double changeFR = motorFR.getCurrentPosition();
         double changeBL = motorBL.getCurrentPosition();
         double changeBR = motorBR.getCurrentPosition();
-        double angleChange = imu.getAngularOrientation().firstAngle;
+        currentAngle = imu.getAngularOrientation().firstAngle;
 
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
         motorFR.setVelocity((forwards + sideways + turn) * maxVel);
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
-
-
-        angleChange = imu.getAngularOrientation().firstAngle - angleChange;
-        setAngle(convertAngle(angleChange + currentAngle));
 
         changeFL = motorFL.getCurrentPosition() - changeFL;
         changeFR = motorFR.getCurrentPosition() - changeFR;

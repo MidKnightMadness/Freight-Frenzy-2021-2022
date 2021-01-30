@@ -150,7 +150,7 @@ public class Eggman extends OpMode {
                 outToggle = 1;
             }
         }
-        if(outToggle == 0) {
+        if(outToggle == 0 && outToggle2 == 0) {
             outtake.stop();
         }
         if(outToggle == 1) {
@@ -170,7 +170,7 @@ public class Eggman extends OpMode {
                 outToggle2 = 1;
             }
         }
-        if(outToggle2 == 0) {
+        if(outToggle2 == 0 && outToggle == 0) {
             outtake.stop();
         }
         if(outToggle2 == 1) {
@@ -181,6 +181,8 @@ public class Eggman extends OpMode {
         //in case all hell breaks loose
         if(outToggle == 1 && outToggle2 == 1) {
             outtake.stop();
+            outToggle = 0;
+            outToggle2 = 0;
         }
 
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
