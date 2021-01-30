@@ -33,27 +33,30 @@ public class Eggman extends OpMode {
     private double lastTime, distOffX, distOffY, turn;
 
     /*
-    gamepad1: manual
-    LBumper - intake
-    LTrigger - intake reverse
-    RBumper - outtake start
-    RTrigger - outtake shoot
+    reconfigured as according to drive team request
+
+    gamepad1: intake and driving
+    LBumper - toggle intake
+    LTrigger - toggle intake reverse
+
     LStick - directional drive
     RStickX - turn
-    A - deploy intake
-    B - open wobble claw
-    X - slow drive
-    Y - lift wobble goal
 
-    gamepad2: driver assist
-    either trigger - cancel action
-    move to:
-    A - tower
-    X - left power shot
-    Y - middle power shot
-    B - right power shot
-    auto shoot:
-    DPadUp - aim at high tower goal
+    A - deploy intake
+    X - toggle slow drive
+
+
+
+    gamepad2: wobble goal, outtake, and driver assist
+    RBumper - toggle outtake flywheel
+    RTrigger - toggle outtake feeder
+
+    B - toggle wobble claw
+    Y - toggle lift wobble goal
+
+    NOTE: removed cancel driver assist since it is not allowed to block loop anyways
+
+    A - drive to shoot at tower
      */
 
     @Override
