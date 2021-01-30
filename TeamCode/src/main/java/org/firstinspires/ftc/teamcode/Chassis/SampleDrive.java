@@ -100,16 +100,11 @@ public class SampleDrive extends Drive{
         double changeFR = motorFR.getCurrentPosition();
         double changeBL = motorBL.getCurrentPosition();
         double changeBR = motorBR.getCurrentPosition();
-        double angleChange = imu.getAngularOrientation().firstAngle;
 
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
         motorFR.setVelocity((forwards + sideways + turn) * maxVel);
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
-
-
-        angleChange = imu.getAngularOrientation().firstAngle - angleChange;
-        setAngle(convertAngle(angleChange + currentAngle));
 
         changeFL = motorFL.getCurrentPosition() - changeFL;
         changeFR = motorFR.getCurrentPosition() - changeFR;
@@ -126,6 +121,7 @@ public class SampleDrive extends Drive{
         double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
         double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
 
+        currentAngle = imu.getAngularOrientation().firstAngle;
         setCurrentX(currentX + (-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle))));
         setCurrentY(currentY + (distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle))));
 
@@ -136,6 +132,8 @@ public class SampleDrive extends Drive{
 
     @Override
     public void move(double inchesX, double inchesY, double power) {
+        currentAngle = imu.getAngularOrientation().firstAngle;
+
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
         setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
@@ -184,6 +182,7 @@ public class SampleDrive extends Drive{
                 motorBR.setPower(power / 2);
             }
         }
+        currentAngle = imu.getAngularOrientation().firstAngle;
 
         //stop everything
         motorFL.setPower(0);
@@ -199,6 +198,7 @@ public class SampleDrive extends Drive{
     @Override
     public void smoothMove(double inchesX, double inchesY) {
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
+        currentAngle = imu.getAngularOrientation().firstAngle;
         setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
         setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
 
@@ -268,6 +268,7 @@ public class SampleDrive extends Drive{
             }
 
         }
+        currentAngle = imu.getAngularOrientation().firstAngle;
 
         //stop everything
         motorFL.setPower(0);
@@ -307,6 +308,7 @@ public class SampleDrive extends Drive{
             return degrees;
         }
     }
+
 
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
