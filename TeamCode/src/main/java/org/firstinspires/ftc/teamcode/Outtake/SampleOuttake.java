@@ -88,6 +88,7 @@ public class SampleOuttake extends Outtake {
     //checks if outtake is the right speed for shooting
     public boolean isReady() {
         telemetry.addData("Outtake Velocity", motor.getVelocity());
+        telemetry.addData("Outtake Target Velocity", targetVel);
         boolean ready = Math.abs((motor.getVelocity() + lastVel)*.5 - targetVel) <= 10;
         lastVel = motor.getVelocity();
         return ready;
