@@ -180,4 +180,9 @@ public class SampleOuttake extends Outtake {
         try { wait(2000); }
         catch (InterruptedException ignored) { }
     }
+
+    @Override
+    public double getVelocity() {
+        return motor.getVelocity();
+    }
 }

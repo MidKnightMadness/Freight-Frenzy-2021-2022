@@ -310,6 +310,7 @@ public class Eggman extends OpMode {
         else{
             telemetry.addLine("Outtake: OFF");
         }
+        telemetry.addData("Outtake Velocity", outtake.getVelocity());
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());
