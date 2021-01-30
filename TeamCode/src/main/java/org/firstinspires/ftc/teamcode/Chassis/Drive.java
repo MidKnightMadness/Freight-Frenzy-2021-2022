@@ -37,6 +37,8 @@ public abstract class Drive extends Assembly {
     public abstract void setCurrentX(double x);
     public abstract void setCurrentY(double y);
 
+    public abstract void updateAngle();
+
     public Callable<Boolean> isStopRequested;  //you need to set this is
     public abstract void stop();
 }

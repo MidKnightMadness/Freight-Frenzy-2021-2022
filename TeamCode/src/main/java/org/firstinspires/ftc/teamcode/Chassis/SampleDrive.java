@@ -121,7 +121,7 @@ public class SampleDrive extends Drive{
         double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
         double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
 
-        currentAngle = imu.getAngularOrientation().firstAngle;
+        updateAngle();
         setCurrentX(currentX + (-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle))));
         setCurrentY(currentY + (distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle))));
 
@@ -132,7 +132,7 @@ public class SampleDrive extends Drive{
 
     @Override
     public void move(double inchesX, double inchesY, double power) {
-        currentAngle = imu.getAngularOrientation().firstAngle;
+        updateAngle();
 
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
@@ -182,7 +182,7 @@ public class SampleDrive extends Drive{
                 motorBR.setPower(power / 2);
             }
         }
-        currentAngle = imu.getAngularOrientation().firstAngle;
+        updateAngle();
 
         //stop everything
         motorFL.setPower(0);
@@ -198,7 +198,7 @@ public class SampleDrive extends Drive{
     @Override
     public void smoothMove(double inchesX, double inchesY) {
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        currentAngle = imu.getAngularOrientation().firstAngle;
+        updateAngle();
         setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
         setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
 
@@ -268,7 +268,7 @@ public class SampleDrive extends Drive{
             }
 
         }
-        currentAngle = imu.getAngularOrientation().firstAngle;
+        updateAngle();
 
         //stop everything
         motorFL.setPower(0);
@@ -290,9 +290,9 @@ public class SampleDrive extends Drive{
     //adjust to correct position with range sensors
     @Override
     public void adjust(double x, double y) {
-        double currentF = 0;
-        double currentR = 0;
-        double currentL = 0;
+        double targetF = 127 - y;
+        double targetR = 15 - x;
+        double targetL = 65 + x;
     }
 
     //imu only accounts for angles from -180 to 180
@@ -313,7 +313,7 @@ public class SampleDrive extends Drive{
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
-        currentAngle = imu.getAngularOrientation().firstAngle;
+        updateAngle();
         double targetAngle = convertAngle(currentAngle + degrees);
         double angleCounter;
         double clockwiseDistance = 0;
@@ -331,7 +331,7 @@ public class SampleDrive extends Drive{
             }
             catch (Exception ignored) {}
 
-            currentAngle = imu.getAngularOrientation().firstAngle;
+            updateAngle();
             //add tolerance of 5 degrees over and under in case bot is not exact
             angleTolerance = (currentAngle >= convertAngle(targetAngle-5) && currentAngle <= convertAngle(targetAngle+5));
 
@@ -379,7 +379,7 @@ public class SampleDrive extends Drive{
             else if(clockwiseDistance < counterClockwiseDistance) {
                 drive(0,0,0.5);
             }
-            currentAngle = imu.getAngularOrientation().firstAngle;
+            updateAngle();
         }
         //stop everything
         telemetry.addLine("turning done");
@@ -397,7 +397,7 @@ public class SampleDrive extends Drive{
     //technically just turns the bot whatever angle it faced when the round started
     @Override
     public void alignForward() {
-        currentAngle = imu.getAngularOrientation().firstAngle;
+        updateAngle();
         if(currentAngle > 0) {
             turn(-imu.getAngularOrientation().firstAngle - 5);
         }
@@ -570,5 +570,9 @@ public class SampleDrive extends Drive{
         currentY = y;
     }
 
-
+    //update angular position
+    @Override
+    public void updateAngle() {
+        setAngle(imu.getAngularOrientation().firstAngle);
+    }
 }
