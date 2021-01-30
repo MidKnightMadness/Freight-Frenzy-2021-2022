@@ -139,7 +139,7 @@ public class Eggman extends OpMode {
         lastLeftTrigger = gamepad1.left_trigger == 1;
 
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 1)
-        if(!lastRightBumper && gamepad1.right_bumper) {
+        if(!lastRightBumper && gamepad2.right_bumper) {
             if(outToggle == 1) {
                 outToggle = 0;
             }
@@ -153,11 +153,11 @@ public class Eggman extends OpMode {
         if(outToggle == 1) {
             outtake.start();
         }
-        lastRightBumper = gamepad1.right_bumper;
+        lastRightBumper = gamepad2.right_bumper;
 
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
         //it is already in that position in which it moves back to its starting position (gamepad 1)
-        if(gamepad1.right_trigger != 1) {
+        if(gamepad2.right_trigger != 1) {
             outtake.resetFeed();
             telemetry.addLine("resetting feeder");
         }
@@ -167,7 +167,7 @@ public class Eggman extends OpMode {
         }
 
         //when b button is pressed, wobble goal is opened unless it is already opened in which it closes (gamepad 1)
-        if(!lastBButton && gamepad1.b) {
+        if(!lastBButton && gamepad2.b) {
             if(openWobToggle == 1) {
                 openWobToggle = 0;
             }
@@ -181,10 +181,10 @@ public class Eggman extends OpMode {
         if(openWobToggle == 1) {
             wobbleGoal.open();
         }
-        lastBButton = gamepad1.b;
+        lastBButton = gamepad2.b;
 
         //when y button is pressed, wobble goal is lifted unless it is already lifted in which it lowers (gamepad 1)
-        if(!lastYButton && gamepad1.y) {
+        if(!lastYButton && gamepad2.y) {
             if(liftWobToggle == 1) {
                 liftWobToggle = 0;
             }
@@ -199,7 +199,7 @@ public class Eggman extends OpMode {
             wobbleGoal.lift();
         }
 //        wobbleGoal.outputTelemetry();
-        lastYButton = gamepad1.y;
+        lastYButton = gamepad2.y;
 
         //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
         /*
@@ -214,8 +214,8 @@ public class Eggman extends OpMode {
 
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
-            distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 68) / 48;
-            turn = drive.getAngle() / 50;
+            distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
+            turn = drive.getAngle() / 30;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
