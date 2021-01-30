@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.DriverControlled;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -19,6 +20,7 @@ import java.util.Scanner;
 import java.io.File;
 
 @TeleOp
+@Disabled
 public class Eggman extends OpMode {
 
     private Drive drive = new SampleDrive();
