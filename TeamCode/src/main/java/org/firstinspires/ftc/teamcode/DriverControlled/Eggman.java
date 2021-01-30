@@ -28,8 +28,8 @@ public class Eggman extends OpMode {
     ModernRoboticsI2cRangeSensor sensorL;
     ModernRoboticsI2cRangeSensor sensorR;
     ModernRoboticsI2cRangeSensor sensorF;
-    private int intToggle, outToggle, openWobToggle = 1, liftWobToggle, towerAdjust, powerAdjust1, powerAdjust2, powerAdjust3 = 0;
-    private boolean lastLeftBumper, lastLeftTrigger, lastRightBumper, lastBButton, lastXButton, lastYButton, lastAButton2, lastXButton2, lastYButton2, lastBButton2 = false, slowMode;
+    private int intToggle, outToggle, outToggle2, openWobToggle = 1, liftWobToggle = 0;
+    private boolean lastLeftBumper, lastLeftBumper2, lastLeftTrigger, lastRightBumper, lastBButton, lastXButton, lastYButton = false, slowMode;
     private double lastTime, distOffX, distOffY, turn;
 
     /*
@@ -85,7 +85,7 @@ public class Eggman extends OpMode {
         telemetry.addData("loop time", time - lastTime);
         lastTime = time;
 
-        if(!gamepad2.a)
+        if(!gamepad2.a || !gamepad2.dpad_right || !gamepad2.dpad_up || !gamepad2.dpad_left)
         {
             //drive controlled by left stick used to move forwards and sideways, right stick used to turn (gamepad 1)
             if(slowMode) {
@@ -140,6 +140,9 @@ public class Eggman extends OpMode {
 
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 1)
         if(!lastRightBumper && gamepad2.right_bumper) {
+            if(outToggle2 == 1) {
+                outToggle2 = 0;
+            }
             if(outToggle == 1) {
                 outToggle = 0;
             }
@@ -154,6 +157,31 @@ public class Eggman extends OpMode {
             outtake.start();
         }
         lastRightBumper = gamepad2.right_bumper;
+
+        //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
+        if(!lastLeftBumper2 && gamepad2.left_bumper) {
+            if(outToggle == 1) {
+                outToggle = 0;
+            }
+            if(outToggle2 == 1) {
+                outToggle2 = 0;
+            }
+            else if(outToggle2 == 0) {
+                outToggle2 = 1;
+            }
+        }
+        if(outToggle2 == 0) {
+            outtake.stop();
+        }
+        if(outToggle2 == 1) {
+            outtake.startPowerShot();
+        }
+        lastLeftBumper2 = gamepad2.left_bumper;
+
+        //in case all hell breaks loose
+        if(outToggle == 1 && outToggle2 == 1) {
+            outtake.stop();
+        }
 
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
         //it is already in that position in which it moves back to its starting position (gamepad 1)
@@ -202,16 +230,7 @@ public class Eggman extends OpMode {
         lastYButton = gamepad2.y;
 
         //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
-        /*
-        if(!lastAButton2 && gamepad2.a) {
-            if(towerAdjust == 0) {
-                towerAdjust = 1;
-            }
-        }*/
         if(gamepad2.a) {
-            //distOffX = 1;
-            //distOffY = 1;
-
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = sensorF.getDistance(DistanceUnit.INCH);
@@ -226,123 +245,68 @@ public class Eggman extends OpMode {
                 distOffY = 0;
 
             drive.drive(distOffY, distOffX, turn);
-
-            //towerAdjust = 0;
         }
-        lastAButton2 = gamepad2.a;
         telemetry.addData("distX", distOffX);
         telemetry.addData("distY", distOffY);
         telemetry.addData("turn", turn);
 
-        /*
         //when x button is pressed, start adjusting bot to shooting position in front of leftmost power shot unless it already is in which it stops (gamepad 2)
-        if(!lastXButton2 && gamepad2.x) {
-            if(powerAdjust1 == 0) {
-                powerAdjust1 = 1;
-            }
+        if(gamepad2.dpad_left) {
+            //adjust using distance sensors
+            distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
+            distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
+            turn = drive.getAngle() / 30;
+
+            //discard unusual output
+            if(Math.abs(distOffX) > 1000)
+                distOffX = 0;
+            if(Math.abs(distOffY) > 1000)
+                distOffY = 0;
+
+            drive.drive(distOffY, distOffX, turn);
         }
-        if(powerAdjust1 == 1) {
-            drive.alignForward();
-
-            distOffX = 1;
-            distOffY = 1;
-            while(distOffX != 0 ||  distOffY != 0) {
-                //adjust using distance sensors
-                distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 21.5);
-                distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
-
-                if (distOffX < 1 && distOffX > -1) {
-                    distOffX = 0;
-                }
-                if (distOffY < 1 && distOffY > -1) {
-                    distOffY = 0;
-                }
-
-                drive.drive(distOffX / 10, distOffY / 10, 0);
-
-                if(gamepad2.x) {
-                    distOffX = 0;
-                }
-            }
-            powerAdjust1 = 0;
-        }
-        lastAButton2 = gamepad2.a;
 
         //when y button is pressed, start adjusting bot to shooting position in front of center power shot unless it already is in which it stops (gamepad 2)
-        if(!lastYButton2 && gamepad2.y) {
-            if(powerAdjust2 == 0) {
-                powerAdjust2 = 1;
-            }
+        if(gamepad2.dpad_up) {
+            //adjust using distance sensors
+            distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
+            distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
+            turn = drive.getAngle() / 30;
+
+            //discard unusual output
+            if(Math.abs(distOffX) > 1000)
+                distOffX = 0;
+            if(Math.abs(distOffY) > 1000)
+                distOffY = 0;
+
+            drive.drive(distOffY, distOffX, turn);
         }
-        if(powerAdjust2 == 1) {
-            drive.alignForward();
-
-            distOffX = 1;
-            distOffY = 1;
-            while(distOffX != 0 ||  distOffY != 0) {
-                //adjust using distance sensors
-                distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 29.5);
-                distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
-
-                if (distOffX < 1 && distOffX > -1) {
-                    distOffX = 0;
-                }
-                if (distOffY < 1 && distOffY > -1) {
-                    distOffY = 0;
-                }
-
-                drive.drive(distOffX / 10, distOffY / 10, 0);
-
-                if(gamepad2.y) {
-                    distOffX = 0;
-                }
-            }
-            towerAdjust = 0;
-        }
-        lastYButton2 = gamepad2.y;
 
 
         //when b button is pressed, start adjusting bot to shooting position in front of rightmost power shot unless it already is in which it stops (gamepad 2)
-        if(!lastBButton2 && gamepad2.b) {
-            if(powerAdjust3 == 0) {
-                powerAdjust3 = 1;
-            }
+        if(gamepad2.dpad_right) {
+            //adjust using distance sensors
+            distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
+            distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
+            turn = drive.getAngle() / 30;
+
+            //discard unusual output
+            if(Math.abs(distOffX) > 1000)
+                distOffX = 0;
+            if(Math.abs(distOffY) > 1000)
+                distOffY = 0;
+
+            drive.drive(distOffY, distOffX, turn);
         }
-        if(powerAdjust3 == 1) {
-            drive.alignForward();
 
-            distOffX = 1;
-            distOffY = 1;
-            while(distOffX != 0 ||  distOffY != 0) {
-                //adjust using distance sensors
-                distOffX = (sensorL.getDistance(DistanceUnit.INCH) - 36.5);
-                distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 63);
-
-                if (distOffX < 1 && distOffX > -1) {
-                    distOffX = 0;
-                }
-                if (distOffY < 1 && distOffY > -1) {
-                    distOffY = 0;
-                }
-
-                drive.drive(distOffX / 10, distOffY / 10, 0);
-
-                if(gamepad2.b) {
-                    distOffX = 0;
-                }
-            }
-            powerAdjust3 = 0;
+        if(outToggle == 1) {
+            telemetry.addLine("Outtake: Tower Speed");
         }
-        lastBButton2 = gamepad2.b;
-         */
-
-        if(gamepad2.dpad_up)
-        {
-            //start up outtake
-            outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 9);
-
-            //turn to towergoal
-            drive.turnToPoint(-28.75, 80);  //TODO: correct towergoal position –– (check tower position in SampleOuttake) –– FINISHED?
+        else if(outToggle2 == 1) {
+            telemetry.addLine("Outtake: Power Shot Speed");
+        }
+        else{
+            telemetry.addLine("Outtake: OFF");
         }
 
         telemetry.addData("Current X", drive.getCurrentX());

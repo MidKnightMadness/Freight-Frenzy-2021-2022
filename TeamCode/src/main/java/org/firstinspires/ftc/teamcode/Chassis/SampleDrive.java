@@ -286,6 +286,13 @@ public class SampleDrive extends Drive{
         move(inchesX, inchesY, 1);
     }
 
+    //adjust to correct position with range sensors
+    @Override
+    public void adjust(double x, double y) {
+        double currentF = 0;
+        double currentR = 0;
+        double currentL = 0;
+    }
 
     //imu only accounts for angles from -180 to 180
     //convert angles out of this range to usable angles in this range

@@ -21,6 +21,7 @@ public class MrBonesWildRide extends LinearOpMode {
         waitForStart();
 
         drive.smoothMove(0, 20);
-
+        drive.turn(10);
+        drive.alignForward();
     }
 }
