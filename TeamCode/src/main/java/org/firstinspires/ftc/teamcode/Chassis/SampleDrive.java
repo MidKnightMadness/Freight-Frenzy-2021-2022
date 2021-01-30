@@ -331,11 +331,12 @@ public class SampleDrive extends Drive{
             }
             catch (Exception ignored) {}
 
-            angleCounter = currentAngle;
-
+            currentAngle = imu.getAngularOrientation().firstAngle;
             //add tolerance of 5 degrees over and under in case bot is not exact
             angleTolerance = (currentAngle >= convertAngle(targetAngle-5) && currentAngle <= convertAngle(targetAngle+5));
 
+
+            angleCounter = currentAngle;
             //calculate clockwise distance and counter-clockwise distance
             while(angleCounter < targetAngle) {
                 try {
@@ -378,7 +379,7 @@ public class SampleDrive extends Drive{
             else if(clockwiseDistance < counterClockwiseDistance) {
                 drive(0,0,0.5);
             }
-            setAngle(convertAngle(imu.getAngularOrientation().firstAngle));
+            currentAngle = imu.getAngularOrientation().firstAngle;
         }
         //stop everything
         telemetry.addLine("turning done");
@@ -396,10 +397,11 @@ public class SampleDrive extends Drive{
     //technically just turns the bot whatever angle it faced when the round started
     @Override
     public void alignForward() {
-        if(imu.getAngularOrientation().firstAngle > 0) {
+        currentAngle = imu.getAngularOrientation().firstAngle;
+        if(currentAngle > 0) {
             turn(-imu.getAngularOrientation().firstAngle - 5);
         }
-        else if(imu.getAngularOrientation().firstAngle < 0) {
+        else if(currentAngle < 0) {
             turn(-imu.getAngularOrientation().firstAngle + 5);
         }
     }
