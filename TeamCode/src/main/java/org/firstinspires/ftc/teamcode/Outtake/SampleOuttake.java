@@ -185,4 +185,8 @@ public class SampleOuttake extends Outtake {
     public double getVelocity() {
         return motor.getVelocity();
     }
+    @Override
+    public double getTargetVelocity() {
+        return targetVel;
+    }
 }

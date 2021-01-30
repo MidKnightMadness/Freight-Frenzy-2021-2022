@@ -21,5 +21,6 @@ public abstract class Outtake extends Assembly {
     public abstract void resetFeed();
     public abstract void feed();
     public abstract double getVelocity();
+    public abstract double getTargetVelocity();
 
 }

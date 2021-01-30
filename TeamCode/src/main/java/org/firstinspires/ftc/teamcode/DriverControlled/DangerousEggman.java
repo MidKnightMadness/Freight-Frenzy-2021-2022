@@ -12,14 +12,14 @@ import org.firstinspires.ftc.teamcode.Intake.Intake;
 import org.firstinspires.ftc.teamcode.Intake.SampleIntake;
 import org.firstinspires.ftc.teamcode.Outtake.Outtake;
 import org.firstinspires.ftc.teamcode.Outtake.SampleOuttake;
-import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
+import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 
-import java.util.Scanner;
 import java.io.File;
+import java.util.Scanner;
 
 @TeleOp
-public class Eggman extends OpMode {
+public class DangerousEggman extends OpMode {
 
     private Drive drive = new SampleDrive();
     private Intake intake = new SampleIntake();
@@ -94,7 +94,7 @@ public class Eggman extends OpMode {
                 drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 5);
                 telemetry.addLine("slow mode enabled");
             } else {
-                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x / 3);
+                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
             }
         }
 
@@ -193,7 +193,7 @@ public class Eggman extends OpMode {
             outtake.resetFeed();
             telemetry.addLine("resetting feeder");
         }
-        else if(outtake.isReady()) {
+        else {
             outtake.feedRun();
             telemetry.addLine("feeding");
         }
