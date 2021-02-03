@@ -21,6 +21,7 @@ import java.io.File;
 
 @TeleOp
 @Disabled
+@Deprecated
 public class Eggman extends OpMode {
 
     private Drive drive = new SampleDrive();
