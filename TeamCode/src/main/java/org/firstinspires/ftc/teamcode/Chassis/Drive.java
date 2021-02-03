@@ -15,6 +15,8 @@ public abstract class Drive extends Assembly {
 
     public abstract void move(double inchesX, double inchesY);
     public abstract void move(double inchesX, double inchesY, double power);
+    public abstract void smoothMove(double inchesX, double inchesY);
+    public abstract void adjust(double x, double y);
     public abstract void turn(double degrees);
     public abstract void turnToPoint(double x, double y);
     public abstract void alignForward();
@@ -34,6 +36,8 @@ public abstract class Drive extends Assembly {
     public abstract void setAngle(double angle);
     public abstract void setCurrentX(double x);
     public abstract void setCurrentY(double y);
+
+    public abstract void updateAngle();
 
     public Callable<Boolean> isStopRequested;  //you need to set this is
     public abstract void stop();

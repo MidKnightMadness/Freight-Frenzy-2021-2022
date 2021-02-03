@@ -39,7 +39,7 @@ public class SampleIntake extends Intake{
     public void start() {
         intakeMotorL.setVelocity(2500);
         intakeMotorR.setVelocity(-2500);
-        roller.setPower(1);
+        roller.setPower(-1);
 
         telemetry.addData("intake L", intakeMotorL.getVelocity());
         telemetry.addData("intake R", intakeMotorR.getVelocity());
@@ -50,7 +50,7 @@ public class SampleIntake extends Intake{
     public void eject() {
         intakeMotorL.setVelocity(-2500);
         intakeMotorR.setVelocity(2500);
-        roller.setPower(-1);
+        roller.setPower(1);
     }
 
     //stop motor

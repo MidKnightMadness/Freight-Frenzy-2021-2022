@@ -100,16 +100,11 @@ public class SampleDrive extends Drive{
         double changeFR = motorFR.getCurrentPosition();
         double changeBL = motorBL.getCurrentPosition();
         double changeBR = motorBR.getCurrentPosition();
-        double angleChange = imu.getAngularOrientation().firstAngle;
 
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
         motorFR.setVelocity((forwards + sideways + turn) * maxVel);
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
-
-
-        angleChange = imu.getAngularOrientation().firstAngle - angleChange;
-        setAngle(convertAngle(angleChange + currentAngle));
 
         changeFL = motorFL.getCurrentPosition() - changeFL;
         changeFR = motorFR.getCurrentPosition() - changeFR;
@@ -123,22 +118,21 @@ public class SampleDrive extends Drive{
         changeBL -= rotation;
         changeBR -= rotation;
 
-        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
-        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
+        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / 180;
+        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 180;
 
-        setCurrentX(currentX + (-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle))));
-        setCurrentY(currentY + (distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle))));
-
-//      telemetry.addData("Current X", currentX);
-//      telemetry.addData("Current Y", currentY);
-//      telemetry.addData("Current Angle", currentAngle);
+        updateAngle();
+        setCurrentX(-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
+        setCurrentY(distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
     }
 
     @Override
     public void move(double inchesX, double inchesY, double power) {
-        double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        setCurrentX(currentX + (-inchesX * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle))));
-        setCurrentY(currentY + (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesY * Math.sin(Math.toRadians(currentAngle))));
+        updateAngle();
+
+        double distance = Math.sqrt(inchesX*inchesX + inchesY*inchesY);
+        setCurrentX((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle)));
+        setCurrentY((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle)));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -151,17 +145,132 @@ public class SampleDrive extends Drive{
         motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
 
         //add tolerance of 0.1 inches in case bot is not exact
-        motorFL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.2));
-        motorFR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.2));
-        motorBL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.2));
-        motorBR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.2));
+        motorFL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorFR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
 
         motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy()) && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0) {
+        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
+            try {
+                if(isStopRequested.call())
+                    return;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
+
+            double prevx = currentX; //previous x
+            double prevy = currentY; //previous y
+            double prevAng = imu.getAngularOrientation().firstAngle; //previous angle
+
+            double changeFL = motorFL.getCurrentPosition();
+            double changeFR = motorFR.getCurrentPosition();
+            double changeBL = motorBL.getCurrentPosition();
+            double changeBR = motorBR.getCurrentPosition();
+
+            //move different speeds depending on how far you're moving
+            if (distance > 24) {
+                motorFL.setPower(power);
+                motorFR.setPower(power);
+                motorBL.setPower(power);
+                motorBR.setPower(power);
+            } else if (distance <= 24) {
+                motorFL.setPower(power / 2);
+                motorFR.setPower(power / 2);
+                motorBL.setPower(power / 2);
+                motorBR.setPower(power / 2);
+            }
+            changeFL = motorFL.getCurrentPosition() - changeFL;
+            changeFR = motorFR.getCurrentPosition() - changeFR;
+            changeBL = motorBL.getCurrentPosition() - changeBL;
+            changeBR = motorBR.getCurrentPosition() - changeBR;
+
+            double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
+            changeFL -= rotation;
+            changeFR -= rotation;
+            changeBL -= rotation;
+            changeBR -= rotation;
+
+            double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / 180;
+            double distanceY = (changeFL - changeFR + changeBL - changeBR) / 180;
+
+            updateAngle();
+            setCurrentX(-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
+            setCurrentY(distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
+
+            if(currentX != prevx || currentY != prevy || currentAngle != prevAng) { //Something changed
+                double dx = currentX-prevx; //change in x
+                double dy = currentY-prevy; //change in y
+                //double da = currentAngle-prevAng; //change in angle, not used currently but could be helpful?
+                double dist = Math.sqrt(dx*dx+dy*dy); //distance traveled
+                double x2 = Math.sin(-Math.toRadians(currentAngle))*dist; //x position based on gryo
+                double y2 = Math.cos(-Math.toRadians(currentAngle))*dist; //y position based on gryo
+                double ddx = x2-dx; //Distance along x that we are off by
+                double ddy = y2-dy; //Distance along y that we are off by;
+
+                prevx = currentX; //update previous x
+                prevy = currentY; //update previous y
+                prevAng = currentAngle; //update previous angle
+
+                currentX += ddx; //offset by error
+                currentY += ddy; //offset by error
+
+                //Update target positions!
+                motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int) inchesY + (int) inchesX);
+                motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int) inchesY + (int) inchesX);
+                motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int) inchesY - (int) inchesX);
+                motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int) inchesY - (int) inchesX);
+            }
+        }
+
+        //stop everything
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorBL.setPower(0);
+        motorBR.setPower(0);
+        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    /*
+    @Override
+    public void move(double inchesX, double inchesY, double power) {
+        updateAngle();
+
+        double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
+        setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
+        setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
+
+        //convert to encoder ticks for run to position
+        inchesX *= encoderTicksPerInch;
+        inchesY *= encoderTicksPerInch;
+
+        //set where bot should end up according to encoders
+        motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int)inchesY + (int)inchesX);
+        motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int)inchesY + (int)inchesX);
+        motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
+        motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
+
+        //add tolerance of 0.1 inches in case bot is not exact
+        motorFL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorFR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+
+        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
                     return;
@@ -184,6 +293,94 @@ public class SampleDrive extends Drive{
                 motorBR.setPower(power / 2);
             }
         }
+        updateAngle();
+
+        //stop everything
+        motorFL.setPower(0);
+        motorFR.setPower(0);
+        motorBL.setPower(0);
+        motorBR.setPower(0);
+        motorFL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorFR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    */
+
+    @Override
+    public void smoothMove(double inchesX, double inchesY) {
+        double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
+        updateAngle();
+        setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
+        setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
+
+        //convert to encoder ticks for run to position
+        inchesX *= encoderTicksPerInch;
+        inchesY *= encoderTicksPerInch;
+
+        //set where bot should end up according to encoders
+        motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int)inchesY + (int)inchesX);
+        motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int)inchesY + (int)inchesX);
+        motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int)inchesY - (int)inchesX);
+        motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int)inchesY - (int)inchesX);
+
+        //add tolerance of 0.1 inches in case bot is not exact
+        motorFL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorFR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBL.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+        motorBR.setTargetPositionTolerance((int)(encoderTicksPerInch * 0.3));
+
+        motorFL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorFR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        double flGoal = Math.abs(motorFL.getCurrentPosition() - motorFL.getTargetPosition());
+        double frGoal = Math.abs(motorFR.getCurrentPosition() - motorFR.getTargetPosition());
+        double blGoal = Math.abs(motorBL.getCurrentPosition() - motorBL.getTargetPosition());
+        double brGoal = Math.abs(motorBR.getCurrentPosition() - motorBR.getTargetPosition());
+
+        double goal = (flGoal + frGoal + blGoal + brGoal) / 4;
+
+        while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
+            try {
+                if(isStopRequested.call())
+                    return;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
+
+            double flProgress = Math.abs(motorFL.getCurrentPosition() - motorFL.getTargetPosition());
+            double frProgress = Math.abs(motorFR.getCurrentPosition() - motorFR.getTargetPosition());
+            double blProgress = Math.abs(motorBL.getCurrentPosition() - motorBL.getTargetPosition());
+            double brProgress = Math.abs(motorBR.getCurrentPosition() - motorBR.getTargetPosition());
+
+            double progress = (flProgress + frProgress + blProgress + brProgress) / 4;
+            if(progress == goal) {
+                motorFL.setPower(0.1);
+                motorFR.setPower(0.1);
+                motorBL.setPower(0.1);
+                motorBR.setPower(0.1);
+            }
+            //speed up for first portion
+            else if((progress/goal) > 0.25) {
+                motorFL.setPower(1 - (progress / goal));
+                motorFR.setPower(1 - (progress / goal));
+                motorBL.setPower(1 - (progress / goal));
+                motorBR.setPower(1 - (progress / goal));
+            }
+            //slow down for second portion
+            else {
+                motorFL.setPower(progress / goal);
+                motorFR.setPower(progress / goal);
+                motorBL.setPower(progress / goal);
+                motorBR.setPower(progress / goal);
+            }
+
+        }
+        updateAngle();
 
         //stop everything
         motorFL.setPower(0);
@@ -202,6 +399,41 @@ public class SampleDrive extends Drive{
         move(inchesX, inchesY, 1);
     }
 
+    //adjust to point (x, y)
+    @Override
+    public void adjust(double x, double y) {
+        double targetF = 127 - y;
+        double targetR = 15 - x;
+        double targetL = 65 + x;
+
+        double distOffF = 1;
+        double distOffR = 1;
+        double distOffL = 1;
+
+        while (Math.abs(distOffF) > 0.00625 || Math.abs(distOffL) > 0.00625 || Math.abs(distOffR) > 0.00625) {
+            distOffF = distF.getDistance(DistanceUnit.INCH);
+            if (distOffF != 0) {
+                distOffF = -(distOffF - targetF) / 48;
+            }
+            distOffR = (distR.getDistance(DistanceUnit.INCH) - targetR) / 48;
+            distOffL = -(distL.getDistance(DistanceUnit.INCH) - targetL) / 48;
+            double turn = getAngle() / 30;
+
+            //discard unusual output
+            if (Math.abs(distOffR) > 1000)
+                distOffR = 0;
+            if (Math.abs(distOffL) > 1000)
+                distOffL = 0;
+            if (Math.abs(distOffF) > 1000)
+                distOffF = 0;
+
+            if (distOffR < distOffL) {
+                drive(distOffF, distOffR, turn);
+            } else if (distOffL < distOffR) {
+                drive(distOffF, distOffL, turn);
+            }
+        }
+    }
 
     //imu only accounts for angles from -180 to 180
     //convert angles out of this range to usable angles in this range
@@ -217,18 +449,19 @@ public class SampleDrive extends Drive{
         }
     }
 
+
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
+        updateAngle();
         double targetAngle = convertAngle(currentAngle + degrees);
         double angleCounter;
-        double angleChange = imu.getAngularOrientation().firstAngle;
         double clockwiseDistance = 0;
         double counterClockwiseDistance = 0;
 
         boolean angleTolerance = false;
 
-        while(!angleTolerance && gamepad2.left_trigger == 0 && gamepad2.right_trigger == 0)  {
+        while(!angleTolerance)  {
             try {
                 if(isStopRequested.call())
                     return;
@@ -238,19 +471,36 @@ public class SampleDrive extends Drive{
             }
             catch (Exception ignored) {}
 
-            angleCounter = currentAngle;
-
+            updateAngle();
             //add tolerance of 5 degrees over and under in case bot is not exact
             angleTolerance = (currentAngle >= convertAngle(targetAngle-5) && currentAngle <= convertAngle(targetAngle+5));
 
+
+            angleCounter = currentAngle;
             //calculate clockwise distance and counter-clockwise distance
             while(angleCounter < targetAngle) {
+                try {
+                    if(isStopRequested.call())
+                        return;
+                }
+                catch (NullPointerException exception){
+                    telemetry.addLine("You need to set isStopRequested when using move");
+                }
+                catch (Exception ignored) {}
                 angleCounter = convertAngle(angleCounter + 1);
                 counterClockwiseDistance = counterClockwiseDistance + 1;
             }
 
             angleCounter = currentAngle;
             while(angleCounter > targetAngle) {
+                try {
+                    if(isStopRequested.call())
+                        return;
+                }
+                catch (NullPointerException exception){
+                    telemetry.addLine("You need to set isStopRequested when using move");
+                }
+                catch (Exception ignored) {}
                 angleCounter = convertAngle(angleCounter - 1);
                 clockwiseDistance = clockwiseDistance + 1;
             }
@@ -269,8 +519,7 @@ public class SampleDrive extends Drive{
             else if(clockwiseDistance < counterClockwiseDistance) {
                 drive(0,0,0.5);
             }
-            angleChange = imu.getAngularOrientation().firstAngle - angleChange;
-            setAngle(convertAngle(currentAngle + angleChange));
+            updateAngle();
         }
         //stop everything
         telemetry.addLine("turning done");
@@ -288,7 +537,13 @@ public class SampleDrive extends Drive{
     //technically just turns the bot whatever angle it faced when the round started
     @Override
     public void alignForward() {
-        turn(-currentAngle);
+        updateAngle();
+        if(currentAngle > 0) {
+            turn(-imu.getAngularOrientation().firstAngle - 5);
+        }
+        else if(currentAngle < 0) {
+            turn(-imu.getAngularOrientation().firstAngle + 5);
+        }
     }
 
     //move the bot to a position on the field using maths
@@ -422,6 +677,7 @@ public class SampleDrive extends Drive{
     //get the angle
     @Override
     public double getAngle() {
+        currentAngle = imu.getAngularOrientation().firstAngle;
         return currentAngle;
     }
 
@@ -455,5 +711,9 @@ public class SampleDrive extends Drive{
         currentY = y;
     }
 
-
+    //update angular position
+    @Override
+    public void updateAngle() {
+        setAngle(imu.getAngularOrientation().firstAngle);
+    }
 }

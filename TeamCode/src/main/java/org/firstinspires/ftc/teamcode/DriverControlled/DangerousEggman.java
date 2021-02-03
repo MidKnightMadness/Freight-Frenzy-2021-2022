@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.DriverControlled;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,16 +12,14 @@ import org.firstinspires.ftc.teamcode.Intake.Intake;
 import org.firstinspires.ftc.teamcode.Intake.SampleIntake;
 import org.firstinspires.ftc.teamcode.Outtake.Outtake;
 import org.firstinspires.ftc.teamcode.Outtake.SampleOuttake;
-import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
+import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
 
-import java.util.Scanner;
 import java.io.File;
+import java.util.Scanner;
 
 @TeleOp
-@Disabled
-@Deprecated
-public class Eggman extends OpMode {
+public class DangerousEggman extends OpMode {
 
     private Drive drive = new SampleDrive();
     private Intake intake = new SampleIntake();
@@ -34,6 +31,7 @@ public class Eggman extends OpMode {
     private int intToggle, outToggle, outToggle2, openWobToggle = 1, liftWobToggle = 0;
     private boolean lastLeftBumper, lastLeftBumper2, lastLeftTrigger, lastRightBumper, lastBButton, lastXButton, lastYButton = false, slowMode;
     private double lastTime, distOffX, distOffY, turn;
+    private double driveAngleOffset;
 
     /*
     reconfigured as according to drive team request
@@ -41,6 +39,8 @@ public class Eggman extends OpMode {
     gamepad1: intake and driving
     LBumper - toggle intake
     LTrigger - toggle intake reverse
+
+    RBumper - reset drive heading
 
     LStick - directional drive
     RStickX - turn
@@ -62,7 +62,12 @@ public class Eggman extends OpMode {
 
     A - drive to shoot at tower
     X - prevent driver assist A from moving backwards
-     */
+
+    Dpad_up - middle power shot
+    Dpad_down - top tower goal from current position
+    Dpad_right - right power shot
+    Dpad_left - left power shot
+    */
 
     @Override
     public void init() {
@@ -97,8 +102,13 @@ public class Eggman extends OpMode {
                 drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 5);
                 telemetry.addLine("slow mode enabled");
             } else {
-                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x / 3);
+                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x / 4 * 3);
             }
+        }
+        //reset drive angle
+        if(gamepad1.right_bumper)
+        {
+            driveAngleOffset = -drive.getAngle();
         }
 
         //x toggle button to enable slow mode
@@ -196,7 +206,7 @@ public class Eggman extends OpMode {
             outtake.resetFeed();
             telemetry.addLine("resetting feeder");
         }
-        else if(outtake.isReady()) {
+        else {
             outtake.feedRun();
             telemetry.addLine("feeding");
         }
@@ -242,8 +252,8 @@ public class Eggman extends OpMode {
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = sensorF.getDistance(DistanceUnit.INCH);
             if(distOffY != 0)
-                distOffY = -(distOffY - 58) / 48;
-            turn = drive.getAngle() / 30;
+                distOffY = -(distOffY - 65) / 48;
+            turn = (drive.getAngle() + driveAngleOffset) / 50;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -251,7 +261,7 @@ public class Eggman extends OpMode {
             if(Math.abs(distOffY) > 1000)
                 distOffY = 0;
             //manual override backwards movement
-            if(distOffY < 0 && gamepad2.x)
+            if(distOffY > 0 && gamepad2.x)
                 distOffY = 0;
 
             drive.drive(distOffY, distOffX, turn);
@@ -260,13 +270,12 @@ public class Eggman extends OpMode {
         telemetry.addData("distY", distOffY);
         telemetry.addData("turn", turn);
 
-        /*
         //when x button is pressed, start adjusting bot to shooting position in front of leftmost power shot unless it already is in which it stops (gamepad 2)
         if(gamepad2.dpad_left) {
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
-            turn = drive.getAngle() / 30;
+            turn = (drive.getAngle() + driveAngleOffset) / 30;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -277,12 +286,12 @@ public class Eggman extends OpMode {
             drive.drive(distOffY, distOffX, turn);
         }
 
-        //when y button is pressed, start adjusting bot to shooting position in front of center power shot unless it already is in which it stops (gamepad 2)
+        //when button is pressed, start adjusting bot to shooting position in front of center power shot unless it already is in which it stops (gamepad 2)
         if(gamepad2.dpad_up) {
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
-            turn = drive.getAngle() / 30;
+            turn = (drive.getAngle() + driveAngleOffset) / 30;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -299,7 +308,7 @@ public class Eggman extends OpMode {
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
-            turn = drive.getAngle() / 30;
+            turn = (drive.getAngle() + driveAngleOffset) / 30;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -309,8 +318,17 @@ public class Eggman extends OpMode {
 
             drive.drive(distOffY, distOffX, turn);
         }
-        */
 
+        if(gamepad2.dpad_down)
+        {
+            //start outtake according to velocity
+            outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 5);
+
+            //turn to tower
+            double angle = (drive.getAngle() + driveAngleOffset);
+            double targetAngle = Math.toDegrees(Math.atan2(-28.75 - drive.getCurrentX(), 80 - drive.getCurrentY()));  //get the angle that we want to turn to
+            drive.drive(0,0, angle);
+        }
 
         if(outToggle == 1) {
             telemetry.addLine("Outtake: Tower Speed");
@@ -326,7 +344,7 @@ public class Eggman extends OpMode {
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());
-        telemetry.addData("Current Angle", drive.getAngle());
+        telemetry.addData("Current Angle", (drive.getAngle() + driveAngleOffset));
         telemetry.update();
     }
 

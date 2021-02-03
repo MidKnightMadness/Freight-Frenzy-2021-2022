@@ -70,16 +70,15 @@ public class AutonomousRedRightUseThis extends LinearOpMode{
             wobbleGoal.open();
             drive.moveToPosition(-15,112);
         }
-
-
-//        outtake.start();
+        
+        //outtake.start();
         drive.moveToPower3();              //insert aiming position 3
-//        outtake.feed();
+        //outtake.feed();
         drive.moveToPower2();              //insert aiming position 2
-//        outtake.feed();
+        //outtake.feed();
         drive.moveToPower1();            //insert aiming position 1
-//        outtake.feed();
-//        outtake.stop();
+        //outtake.feed();
+        //outtake.stop();
 
         drive.move(0, 12);
 
@@ -90,7 +89,8 @@ public class AutonomousRedRightUseThis extends LinearOpMode{
             outFile.println(drive.getCurrentY());
             outFile.println(drive.getAngle());
             outFile.close();
-        }catch (Exception e){
+        }
+        catch (Exception e){
             telemetry.addLine(e.getMessage());
         }
     }

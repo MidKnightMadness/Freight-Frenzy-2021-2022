@@ -44,26 +44,29 @@ public class SampleOuttake extends Outtake {
     //start motor
     @Override
     public void start() {
-        targetVel = 475;
+        targetVel = 1800;
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
 
     public void startPowerShot(){
-        targetVel = 437; //TBD
+        targetVel = 1600; //TBD
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
 
+    /*
     public void startHighGoal(){
         targetVel = 475; //TBD
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
+    */
+
 
     @Override
     public void startFromPos(double x, double y, double z) {
-        targetVel = (int)getLaunchVelocity(x - towerX, y - towerY, z - towerZ);
+        targetVel = -(int)getLaunchVelocity(x - towerX, y - towerY, z - towerZ);
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
@@ -84,6 +87,8 @@ public class SampleOuttake extends Outtake {
     @Override
     //checks if outtake is the right speed for shooting
     public boolean isReady() {
+        telemetry.addData("Outtake Velocity", motor.getVelocity());
+        telemetry.addData("Outtake Target Velocity", targetVel);
         boolean ready = Math.abs((motor.getVelocity() + lastVel)*.5 - targetVel) <= 10;
         lastVel = motor.getVelocity();
         return ready;
@@ -174,5 +179,14 @@ public class SampleOuttake extends Outtake {
         resetFeed();
         try { wait(2000); }
         catch (InterruptedException ignored) { }
+    }
+
+    @Override
+    public double getVelocity() {
+        return motor.getVelocity();
+    }
+    @Override
+    public double getTargetVelocity() {
+        return targetVel;
     }
 }

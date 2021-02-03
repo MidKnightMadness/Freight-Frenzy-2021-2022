@@ -20,6 +20,8 @@ import java.io.PrintWriter;
 import java.io.File;
 
 @Autonomous
+
+
 public class AutoRedRightManual extends LinearOpMode {
     private Drive drive = new SampleDrive();
     private Intake intake = new SampleIntake();
@@ -30,9 +32,9 @@ public class AutoRedRightManual extends LinearOpMode {
     @Override
     public void runOpMode() {
         //create stop requested callable
-        //Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
+        Callable<Boolean> stopRequestedCall = new Callable<Boolean>() {@Override public Boolean call() {return isStopRequested();}};
         drive.init(hardwareMap, telemetry, gamepad1, gamepad2);
-//        drive.isStopRequested = stopRequestedCall;
+        drive.isStopRequested = stopRequestedCall;
         telemetry.addLine("Drive initialized!");
         telemetry.update();
         intake.init(hardwareMap, telemetry, gamepad1, gamepad2);
@@ -45,16 +47,11 @@ public class AutoRedRightManual extends LinearOpMode {
         while(!isStopRequested() && !isStarted())
             idle();
 
-        /*
-        while (!isStarted() && !isStopRequested() && opModeIsActive()) {
-            idle();
-        }
-
         if(isStopRequested())
         {
             return;
         }
-        */
+
         outtake.startPowerShot();
 
         wobbleGoal.close();
@@ -73,7 +70,7 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move to correct drop zone
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
-            drive.move(-5, 58);
+            drive.move(0, 58);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
@@ -81,7 +78,7 @@ public class AutoRedRightManual extends LinearOpMode {
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-5, 105);
+            drive.move(0, 105);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
@@ -89,7 +86,6 @@ public class AutoRedRightManual extends LinearOpMode {
         //release wobble goal
         wobbleGoal.lower();
         wobbleGoal.open();
-        drive.alignForward();
         drive.move(-10, 0);
 
         //move to shooting position 3
@@ -107,18 +103,28 @@ public class AutoRedRightManual extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.alignForward();
+        telemetry.addLine("waiting for outtake");
+        telemetry.update();
 
         //shoot power shots
         for(int i = 0; i < 10; i++)  //make sure outtake is really ready
             while(!outtake.isReady())
+            {
                 idle();
+                telemetry.update();
+            }
+
+        //drive.alignForward();
+
+        telemetry.addLine("Outtake ready, starting to shoot");
+        telemetry.update();
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
         drive.move(-6, 0);
+        //drive.alignForward();
 
         outtake.feedRun();
         sleep(1000);
@@ -126,13 +132,14 @@ public class AutoRedRightManual extends LinearOpMode {
         sleep(1000);
 
         drive.move(-6, 0);
+        //drive.alignForward();
 
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
             sleep(1000);
         outtake.stop();
-        drive.move(0, 12);
+        drive.move(0, 14);
 
         visual.stop();
         telemetry.addLine("Program End :)");

@@ -52,12 +52,18 @@ public class SampleVisual extends Visual{
     public void init(HardwareMap hardwareMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2) {
         super.init(hardwareMap, telemetry, gamepad1, gamepad2);
 
+        telemetry.addLine("Starting visual init");
+        telemetry.update();
+
         //  Instantiate the Vuforia engine
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = "Ae7oRjb/////AAABmV3pkVnpEU9Pv3XaN0o2EZ5ttngvTMliTd5nX0843lAXhah50oPXg63sdsiK9/BFMjXkw9lMippdx4bHQo5kycWr1GcFcv+QlVNEpSclUqu9Zzj4FYVl+J2ScSAXSyuCRWMRWd3AikCfhAtlwFe7dnMIfpVniU8Yr8o3YumS2/5LjNU2wIkiJak5IHlnugT414wsrzyqemO63BHn0Olbi3REkd61RxW3cE4lbSts3OI0GfnT57/Nw6/YfLAZQ69eCz0eEckVjPmbt7evb8lYo5gEpzm+wf5LVPaAzZWVj/gSQywzPKA8zoz4q6hl4zuAd3647Y3smuWVI8PpQzRwt5vP8d07Qt39p+/zEOrcGRDo";
         parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         targetsUltimateGoal = vuforia.loadTrackablesFromAsset("UltimateGoal");
+
+        telemetry.addLine("Visual init checkpoint 1");
+        telemetry.update();
 
         //set trackable positions
         //Red Alliance Target
@@ -85,15 +91,17 @@ public class SampleVisual extends Visual{
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 //        targetsUltimateGoal.activate();
 
-
+        telemetry.addLine("Visual init checkpoint 2");
+        telemetry.update();
 
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.5f;
+        tfodParameters.minResultConfidence = 0.4f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset("UltimateGoal.tflite", "Quad", "Single");
         tfod.activate();
         telemetry.addLine("visual initialized");
+        telemetry.update();
     }
 
     @Override
@@ -121,7 +129,7 @@ public class SampleVisual extends Visual{
             else{
                 for (Recognition recognition : updatedRecognitions) {
                     String label = recognition.getLabel();
-                    if(label.equals("Single"))  //single ring detected, B
+                    if(label.equals("Single") && starterstack != STARTERSTACK.C)  //single ring detected, B  (quad has precendence)
                         starterstack = STARTERSTACK.B;
                     else if(label.equals("Quad"))  //4 rings detected, C
                         starterstack = STARTERSTACK.C;
