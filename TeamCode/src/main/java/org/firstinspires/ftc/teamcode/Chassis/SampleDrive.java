@@ -118,16 +118,12 @@ public class SampleDrive extends Drive{
         changeBL -= rotation;
         changeBR -= rotation;
 
-        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / (4 * Math.sqrt(2));
-        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 4;
+        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / 180;
+        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 180;
 
         updateAngle();
-        setCurrentX(currentX + (-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle))));
-        setCurrentY(currentY + (distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle))));
-
-//      telemetry.addData("Current X", currentX);
-//      telemetry.addData("Current Y", currentY);
-//      telemetry.addData("Current Angle", currentAngle);
+        setCurrentX(-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
+        setCurrentY(distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
     }
 
     @Override
@@ -135,8 +131,8 @@ public class SampleDrive extends Drive{
         updateAngle();
 
         double distance = Math.sqrt(inchesX*inchesX + inchesY*inchesY);
-        setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
-        setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
+        setCurrentX((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle)));
+        setCurrentY((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle)));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -383,12 +379,40 @@ public class SampleDrive extends Drive{
         move(inchesX, inchesY, 1);
     }
 
-    //adjust to correct position with range sensors
+    //adjust to point (x, y)
     @Override
     public void adjust(double x, double y) {
         double targetF = 127 - y;
         double targetR = 15 - x;
         double targetL = 65 + x;
+
+        double distOffF = 1;
+        double distOffR = 1;
+        double distOffL = 1;
+
+        while (Math.abs(distOffF) > 0.00625 || Math.abs(distOffL) > 0.00625 || Math.abs(distOffR) > 0.00625) {
+            distOffF = distF.getDistance(DistanceUnit.INCH);
+            if (distOffF != 0) {
+                distOffF = -(distOffF - targetF) / 48;
+            }
+            distOffR = (distR.getDistance(DistanceUnit.INCH) - targetR) / 48;
+            distOffL = -(distL.getDistance(DistanceUnit.INCH) - targetL) / 48;
+            double turn = getAngle() / 30;
+
+            //discard unusual output
+            if (Math.abs(distOffR) > 1000)
+                distOffR = 0;
+            if (Math.abs(distOffL) > 1000)
+                distOffL = 0;
+            if (Math.abs(distOffF) > 1000)
+                distOffF = 0;
+
+            if (distOffR < distOffL) {
+                drive(distOffF, distOffR, turn);
+            } else if (distOffL < distOffR) {
+                drive(distOffF, distOffL, turn);
+            }
+        }
     }
 
     //imu only accounts for angles from -180 to 180
@@ -633,6 +657,7 @@ public class SampleDrive extends Drive{
     //get the angle
     @Override
     public double getAngle() {
+        currentAngle = imu.getAngularOrientation().firstAngle;
         return currentAngle;
     }
 
