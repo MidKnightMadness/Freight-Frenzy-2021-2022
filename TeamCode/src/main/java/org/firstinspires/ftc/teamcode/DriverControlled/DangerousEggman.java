@@ -31,6 +31,7 @@ public class DangerousEggman extends OpMode {
     private int intToggle, outToggle, outToggle2, openWobToggle = 1, liftWobToggle = 0;
     private boolean lastLeftBumper, lastLeftBumper2, lastLeftTrigger, lastRightBumper, lastBButton, lastXButton, lastYButton = false, slowMode;
     private double lastTime, distOffX, distOffY, turn;
+    private double driveAngleOffset;
 
     /*
     reconfigured as according to drive team request
@@ -38,6 +39,8 @@ public class DangerousEggman extends OpMode {
     gamepad1: intake and driving
     LBumper - toggle intake
     LTrigger - toggle intake reverse
+
+    RBumper - reset drive heading
 
     LStick - directional drive
     RStickX - turn
@@ -101,6 +104,11 @@ public class DangerousEggman extends OpMode {
             } else {
                 drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x / 4 * 3);
             }
+        }
+        //reset drive angle
+        if(gamepad1.right_bumper)
+        {
+            driveAngleOffset = -drive.getAngle();
         }
 
         //x toggle button to enable slow mode
@@ -245,7 +253,7 @@ public class DangerousEggman extends OpMode {
             distOffY = sensorF.getDistance(DistanceUnit.INCH);
             if(distOffY != 0)
                 distOffY = -(distOffY - 65) / 48;
-            turn = drive.getAngle() / 50;
+            turn = (drive.getAngle() + driveAngleOffset) / 50;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -267,7 +275,7 @@ public class DangerousEggman extends OpMode {
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
-            turn = drive.getAngle() / 30;
+            turn = (drive.getAngle() + driveAngleOffset) / 30;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -283,7 +291,7 @@ public class DangerousEggman extends OpMode {
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
-            turn = drive.getAngle() / 30;
+            turn = (drive.getAngle() + driveAngleOffset) / 30;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -300,7 +308,7 @@ public class DangerousEggman extends OpMode {
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = -(sensorF.getDistance(DistanceUnit.INCH) - 62) / 48;
-            turn = drive.getAngle() / 30;
+            turn = (drive.getAngle() + driveAngleOffset) / 30;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -317,7 +325,7 @@ public class DangerousEggman extends OpMode {
             outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 5);
 
             //turn to tower
-            double angle = drive.getAngle();
+            double angle = (drive.getAngle() + driveAngleOffset);
             double targetAngle = Math.toDegrees(Math.atan2(-28.75 - drive.getCurrentX(), 80 - drive.getCurrentY()));  //get the angle that we want to turn to
             drive.drive(0,0, angle);
         }
@@ -336,7 +344,7 @@ public class DangerousEggman extends OpMode {
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());
-        telemetry.addData("Current Angle", drive.getAngle());
+        telemetry.addData("Current Angle", (drive.getAngle() + driveAngleOffset));
         telemetry.update();
     }
 
