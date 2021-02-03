@@ -59,7 +59,12 @@ public class DangerousEggman extends OpMode {
 
     A - drive to shoot at tower
     X - prevent driver assist A from moving backwards
-     */
+
+    Dpad_up - middle power shot
+    Dpad_down - top tower goal from current position
+    Dpad_right - right power shot
+    Dpad_left - left power shot
+    */
 
     @Override
     public void init() {
@@ -94,7 +99,7 @@ public class DangerousEggman extends OpMode {
                 drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 5);
                 telemetry.addLine("slow mode enabled");
             } else {
-                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x / 4 * 3);
             }
         }
 
@@ -239,8 +244,8 @@ public class DangerousEggman extends OpMode {
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
             distOffY = sensorF.getDistance(DistanceUnit.INCH);
             if(distOffY != 0)
-                distOffY = -(distOffY - 58) / 48;
-            turn = drive.getAngle() / 30;
+                distOffY = -(distOffY - 65) / 48;
+            turn = drive.getAngle() / 50;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)
@@ -248,7 +253,7 @@ public class DangerousEggman extends OpMode {
             if(Math.abs(distOffY) > 1000)
                 distOffY = 0;
             //manual override backwards movement
-            if(distOffY < 0 && gamepad2.x)
+            if(distOffY > 0 && gamepad2.x)
                 distOffY = 0;
 
             drive.drive(distOffY, distOffX, turn);
@@ -273,7 +278,7 @@ public class DangerousEggman extends OpMode {
             drive.drive(distOffY, distOffX, turn);
         }
 
-        //when y button is pressed, start adjusting bot to shooting position in front of center power shot unless it already is in which it stops (gamepad 2)
+        //when button is pressed, start adjusting bot to shooting position in front of center power shot unless it already is in which it stops (gamepad 2)
         if(gamepad2.dpad_up) {
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
@@ -304,6 +309,17 @@ public class DangerousEggman extends OpMode {
                 distOffY = 0;
 
             drive.drive(distOffY, distOffX, turn);
+        }
+
+        if(gamepad2.dpad_down)
+        {
+            //start outtake according to velocity
+            outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 5);
+
+            //turn to tower
+            double angle = drive.getAngle();
+            double targetAngle = Math.toDegrees(Math.atan2(-28.75 - drive.getCurrentX(), 80 - drive.getCurrentY()));  //get the angle that we want to turn to
+            drive.drive(0,0, angle);
         }
 
         if(outToggle == 1) {
