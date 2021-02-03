@@ -155,36 +155,7 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        double prevx = inchesX; //previous x
-        double prevy = inchesY; //previous y
-        double prevAng = imu.getAngularOrientation().firstAngle; //previous angle
-
         while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
-            double currentAngle = imu.getAngularOrientation().firstAngle; //direction facing
-            if(inchesX != prevx || inchesY != prevy || currentAngle != prevAng) { //Something changed
-                double dx = inchesX-prevx; //change in x
-                double dy = inchesY-prevy; //change in y
-                //double da = currentAngle-prevAng; //change in angle, not used currently but could be helpful?
-                double dist = Math.sqrt(dx*dx+dy*dy); //distance traveled
-                double x2 = Math.sin(-Math.toRadians(currentAngle))*dist; //x position based on gryo
-                double y2 = Math.cos(-Math.toRadians(currentAngle))*dist; //y position based on gryo
-                double ddx = x2-dx; //Distance along x that we are off by
-                double ddy = y2-dy; //Distance along y that we are off by;
-
-                prevx = inchesX; //update previous x
-                prevy = inchesY; //update previous y
-                prevAng = currentAngle; //update previous angle
-
-                inchesX += ddx; //offset by error
-                inchesY += ddy; //offset by error
-
-                //Update target positions!
-                motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int) inchesY + (int) inchesX);
-                motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int) inchesY + (int) inchesX);
-                motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int) inchesY - (int) inchesX);
-                motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int) inchesY - (int) inchesX);
-            }
-
             try {
                 if(isStopRequested.call())
                     return;
@@ -193,6 +164,15 @@ public class SampleDrive extends Drive{
                 telemetry.addLine("You need to set isStopRequested when using move");
             }
             catch (Exception ignored) {}
+
+            double prevx = currentX; //previous x
+            double prevy = currentY; //previous y
+            double prevAng = imu.getAngularOrientation().firstAngle; //previous angle
+
+            double changeFL = motorFL.getCurrentPosition();
+            double changeFR = motorFR.getCurrentPosition();
+            double changeBL = motorBL.getCurrentPosition();
+            double changeBR = motorBR.getCurrentPosition();
 
             //move different speeds depending on how far you're moving
             if (distance > 24) {
@@ -206,8 +186,48 @@ public class SampleDrive extends Drive{
                 motorBL.setPower(power / 2);
                 motorBR.setPower(power / 2);
             }
+            changeFL = motorFL.getCurrentPosition() - changeFL;
+            changeFR = motorFR.getCurrentPosition() - changeFR;
+            changeBL = motorBL.getCurrentPosition() - changeBL;
+            changeBR = motorBR.getCurrentPosition() - changeBR;
+
+            double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
+            changeFL -= rotation;
+            changeFR -= rotation;
+            changeBL -= rotation;
+            changeBR -= rotation;
+
+            double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / 180;
+            double distanceY = (changeFL - changeFR + changeBL - changeBR) / 180;
+
+            updateAngle();
+            setCurrentX(-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
+            setCurrentY(distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
+
+            if(currentX != prevx || currentY != prevy || currentAngle != prevAng) { //Something changed
+                double dx = currentX-prevx; //change in x
+                double dy = currentY-prevy; //change in y
+                //double da = currentAngle-prevAng; //change in angle, not used currently but could be helpful?
+                double dist = Math.sqrt(dx*dx+dy*dy); //distance traveled
+                double x2 = Math.sin(-Math.toRadians(currentAngle))*dist; //x position based on gryo
+                double y2 = Math.cos(-Math.toRadians(currentAngle))*dist; //y position based on gryo
+                double ddx = x2-dx; //Distance along x that we are off by
+                double ddy = y2-dy; //Distance along y that we are off by;
+
+                prevx = currentX; //update previous x
+                prevy = currentY; //update previous y
+                prevAng = currentAngle; //update previous angle
+
+                currentX += ddx; //offset by error
+                currentY += ddy; //offset by error
+
+                //Update target positions!
+                motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int) inchesY + (int) inchesX);
+                motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int) inchesY + (int) inchesX);
+                motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int) inchesY - (int) inchesX);
+                motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int) inchesY - (int) inchesX);
+            }
         }
-        updateAngle();
 
         //stop everything
         motorFL.setPower(0);
