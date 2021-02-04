@@ -42,6 +42,10 @@ public class SampleDrive extends Drive{
     private Visual visual;
     public double currentX = 0;
     public double currentY = 0;
+    public double lastFL = 0;
+    public double lastFR = 0;
+    public double lastBL = 0;
+    public double lastBR = 0;
     public double currentAngle = 0;
 
     BNO055IMU imu;
@@ -96,21 +100,15 @@ public class SampleDrive extends Drive{
     //positive turn value moves clockwise, negative turn value moves counter-clockwise
     @Override
     public void drive(double forwards, double sideways, double turn) {
-        double changeFL = motorFL.getCurrentPosition();
-        double changeFR = motorFR.getCurrentPosition();
-        double changeBL = motorBL.getCurrentPosition();
-        double changeBR = motorBR.getCurrentPosition();
-
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
         motorFR.setVelocity((forwards + sideways + turn) * maxVel);
         motorBL.setVelocity((-forwards - sideways + turn) * maxVel);
         motorBR.setVelocity((forwards - sideways + turn) * maxVel);
 
-        changeFL = motorFL.getCurrentPosition() - changeFL;
-        changeFR = motorFR.getCurrentPosition() - changeFR;
-        changeBL = motorBL.getCurrentPosition() - changeBL;
-        changeBR = motorBR.getCurrentPosition() - changeBR;
-
+        double changeFL = motorFL.getCurrentPosition() - lastFL;
+        double changeFR = motorFR.getCurrentPosition() - lastFR;
+        double changeBL = motorBL.getCurrentPosition() - lastBL;
+        double changeBR = motorBR.getCurrentPosition() - lastBR;
 
         double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
         changeFL -= rotation;
@@ -122,12 +120,13 @@ public class SampleDrive extends Drive{
         double distanceY = (changeFL - changeFR + changeBL - changeBR) / 180;
 
         updateAngle();
+        updatePosition();
         setCurrentX(-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
         setCurrentY(distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
     }
 
     @Override
-    public void move(double inchesX, double inchesY, double power) {
+    public void moveV2(double inchesX, double inchesY, double power) {
         updateAngle();
 
         double distance = Math.sqrt(inchesX*inchesX + inchesY*inchesY);
@@ -169,11 +168,6 @@ public class SampleDrive extends Drive{
             double prevy = currentY; //previous y
             double prevAng = imu.getAngularOrientation().firstAngle; //previous angle
 
-            double changeFL = motorFL.getCurrentPosition();
-            double changeFR = motorFR.getCurrentPosition();
-            double changeBL = motorBL.getCurrentPosition();
-            double changeBR = motorBR.getCurrentPosition();
-
             //move different speeds depending on how far you're moving
             if (distance > 24) {
                 motorFL.setPower(power);
@@ -186,10 +180,10 @@ public class SampleDrive extends Drive{
                 motorBL.setPower(power / 2);
                 motorBR.setPower(power / 2);
             }
-            changeFL = motorFL.getCurrentPosition() - changeFL;
-            changeFR = motorFR.getCurrentPosition() - changeFR;
-            changeBL = motorBL.getCurrentPosition() - changeBL;
-            changeBR = motorBR.getCurrentPosition() - changeBR;
+            double changeFL = motorFL.getCurrentPosition() - lastFL;
+            double changeFR = motorFR.getCurrentPosition() - lastFR;
+            double changeBL = motorBL.getCurrentPosition() - lastBL;
+            double changeBR = motorBR.getCurrentPosition() - lastBR;
 
             double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
             changeFL -= rotation;
@@ -200,6 +194,7 @@ public class SampleDrive extends Drive{
             double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / 180;
             double distanceY = (changeFL - changeFR + changeBL - changeBR) / 180;
 
+            updatePosition();
             updateAngle();
             setCurrentX(-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
             setCurrentY(distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
@@ -240,14 +235,13 @@ public class SampleDrive extends Drive{
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    /*
     @Override
     public void move(double inchesX, double inchesY, double power) {
         updateAngle();
 
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
-        setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
+        setCurrentX((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle)));
+        setCurrentY((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle)));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -305,14 +299,12 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    */
 
     @Override
     public void smoothMove(double inchesX, double inchesY) {
-        double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
         updateAngle();
-        setCurrentX(currentX + ((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle))));
-        setCurrentY(currentY + ((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle))));
+        setCurrentX((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle)));
+        setCurrentY((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle)));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -393,7 +385,10 @@ public class SampleDrive extends Drive{
         motorBR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    //just move without a power idk
+    @Override
+    public void moveV2(double inchesX, double inchesY) { moveV2(inchesX, inchesY, 1 );}
+
+    //just move without a power specified
     @Override
     public void move(double inchesX, double inchesY) {
         move(inchesX, inchesY, 1);
@@ -709,6 +704,14 @@ public class SampleDrive extends Drive{
     @Override
     public void setCurrentY(double y) {
         currentY = y;
+    }
+
+    @Override
+    public void updatePosition() {
+        lastFL = motorFL.getCurrentPosition();
+        lastFR = motorFR.getCurrentPosition();
+        lastBL = motorBL.getCurrentPosition();
+        lastBR = motorBR.getCurrentPosition();
     }
 
     //update angular position
