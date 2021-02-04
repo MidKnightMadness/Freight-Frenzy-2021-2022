@@ -204,8 +204,8 @@ public class SampleDrive extends Drive{
                 double dy = currentY-prevy; //change in y
                 //double da = currentAngle-prevAng; //change in angle, not used currently but could be helpful?
                 double dist = Math.sqrt(dx*dx+dy*dy); //distance traveled
-                double x2 = Math.sin(-Math.toRadians(currentAngle))*dist; //x position based on gryo
-                double y2 = Math.cos(-Math.toRadians(currentAngle))*dist; //y position based on gryo
+                double x2 = Math.sin(-Math.toRadians(currentAngle))*dist; //x position based on gyro
+                double y2 = Math.cos(-Math.toRadians(currentAngle))*dist; //y position based on gyro
                 double ddx = x2-dx; //Distance along x that we are off by
                 double ddy = y2-dy; //Distance along y that we are off by;
 
@@ -399,34 +399,57 @@ public class SampleDrive extends Drive{
     public void adjust(double x, double y) {
         double targetF = 127 - y;
         double targetR = 15 - x;
-        double targetL = 65 + x;
+        //double targetL = 65 + x;
 
         double distOffF = 1;
         double distOffR = 1;
-        double distOffL = 1;
+        //double distOffL = 1;
 
-        while (Math.abs(distOffF) > 0.00625 || Math.abs(distOffL) > 0.00625 || Math.abs(distOffR) > 0.00625) {
+        while (Math.abs(distOffF) > 0.3 || /*Math.abs(distOffL) > 0.3 ||*/ Math.abs(distOffR) > 0.3) {
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - targetF) / 48;
             }
             distOffR = (distR.getDistance(DistanceUnit.INCH) - targetR) / 48;
-            distOffL = -(distL.getDistance(DistanceUnit.INCH) - targetL) / 48;
+            //distOffL = -(distL.getDistance(DistanceUnit.INCH) - targetL) / 48;
             double turn = getAngle() / 30;
 
             //discard unusual output
             if (Math.abs(distOffR) > 1000)
                 distOffR = 0;
-            if (Math.abs(distOffL) > 1000)
-                distOffL = 0;
+            //if (Math.abs(distOffL) > 1000)
+            //    distOffL = 0;
             if (Math.abs(distOffF) > 1000)
                 distOffF = 0;
 
-            if (distOffR < distOffL) {
+            //if (distOffR < distOffL) {
                 drive(distOffF, distOffR, turn);
-            } else if (distOffL < distOffR) {
-                drive(distOffF, distOffL, turn);
+            //}  else if (distOffL < distOffR) {
+                //drive(distOffF, distOffL, turn);
+            //}
+        }
+    }
+
+    @Override
+    public void adjustWalls(double inchesF, double inchesR) {
+        double distOffF = 1;
+        double distOffR = 1;
+
+        while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3) {
+            distOffF = distF.getDistance(DistanceUnit.INCH);
+            if (distOffF != 0) {
+                distOffF = -(distOffF - inchesF) / 48;
             }
+            distOffR = (distR.getDistance(DistanceUnit.INCH) - inchesR) / 48;
+            double turn = getAngle() / 30;
+
+            //discard unusual output
+            if (Math.abs(distOffR) > 1000)
+                distOffR = 0;
+            if (Math.abs(distOffF) > 1000)
+                distOffF = 0;
+
+            drive(distOffF, distOffR, turn);
         }
     }
 

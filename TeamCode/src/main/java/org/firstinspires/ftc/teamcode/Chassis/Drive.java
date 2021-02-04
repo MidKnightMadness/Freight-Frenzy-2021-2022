@@ -19,6 +19,7 @@ public abstract class Drive extends Assembly {
     public abstract void move(double inchesX, double inchesY, double power);
     public abstract void smoothMove(double inchesX, double inchesY);
     public abstract void adjust(double x, double y);
+    public abstract void adjustWalls(double inchesF, double inchesR);
     public abstract void turn(double degrees);
     public abstract void turnToPoint(double x, double y);
     public abstract void alignForward();
