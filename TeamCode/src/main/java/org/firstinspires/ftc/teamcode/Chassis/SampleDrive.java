@@ -95,7 +95,7 @@ public class SampleDrive extends Drive{
         imu.startAccelerationIntegration(new Position(), new Velocity(), 10);
     }
 
-    //positive forwards value moves forwards, negative forwards value moves backwards
+    //positive forwards value moves backwards, negative forwards value moves forwards
     //positive sideways value moves right, negative sideways value moves left
     //positive turn value moves clockwise, negative turn value moves counter-clockwise
     @Override
@@ -404,15 +404,16 @@ public class SampleDrive extends Drive{
         double distOffF = 1;
         double distOffR = 1;
         //double distOffL = 1;
+        double turn = 1;
 
-        while (Math.abs(distOffF) > 0.3 || /*Math.abs(distOffL) > 0.3 ||*/ Math.abs(distOffR) > 0.3) {
+        while (Math.abs(distOffF) > 0.3 || /*Math.abs(distOffL) > 0.3 ||*/ Math.abs(distOffR) > 0.3 || turn > (0.166666)) {
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - targetF) / 48;
             }
             distOffR = (distR.getDistance(DistanceUnit.INCH) - targetR) / 48;
             //distOffL = -(distL.getDistance(DistanceUnit.INCH) - targetL) / 48;
-            double turn = getAngle() / 30;
+            turn = getAngle() / 30;
 
             //discard unusual output
             if (Math.abs(distOffR) > 1000)
@@ -434,14 +435,15 @@ public class SampleDrive extends Drive{
     public void adjustWalls(double inchesF, double inchesR) {
         double distOffF = 1;
         double distOffR = 1;
+        double turn = 1;
 
-        while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3) {
+        while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3 || turn > (0.166666)) {
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - inchesF) / 48;
             }
             distOffR = (distR.getDistance(DistanceUnit.INCH) - inchesR) / 48;
-            double turn = getAngle() / 30;
+            turn = getAngle() / 30;
 
             //discard unusual output
             if (Math.abs(distOffR) > 1000)
