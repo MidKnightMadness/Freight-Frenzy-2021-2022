@@ -270,6 +270,7 @@ public class DangerousEggman extends OpMode {
         telemetry.addData("distY", distOffY);
         telemetry.addData("turn", turn);
 
+        /*
         //when x button is pressed, start adjusting bot to shooting position in front of leftmost power shot unless it already is in which it stops (gamepad 2)
         if(gamepad2.dpad_left) {
             //adjust using distance sensors
@@ -318,6 +319,8 @@ public class DangerousEggman extends OpMode {
 
             drive.drive(distOffY, distOffX, turn);
         }
+        */
+
 
         if(gamepad2.dpad_down)
         {

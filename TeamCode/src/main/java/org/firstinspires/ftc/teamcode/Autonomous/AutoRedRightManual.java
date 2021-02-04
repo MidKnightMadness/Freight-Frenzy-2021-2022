@@ -103,6 +103,8 @@ public class AutoRedRightManual extends LinearOpMode {
             telemetry.update();
         }
 
+        drive.adjustWalls(65, 41);
+
         telemetry.addLine("waiting for outtake");
         telemetry.update();
 
@@ -124,6 +126,7 @@ public class AutoRedRightManual extends LinearOpMode {
         sleep(1000);
 
         drive.move(-6, 0);
+        drive.adjustWalls(65, 48.5);
         //drive.alignForward();
 
         outtake.feedRun();
@@ -132,6 +135,7 @@ public class AutoRedRightManual extends LinearOpMode {
         sleep(1000);
 
         drive.move(-6, 0);
+        drive.adjustWalls(65, 56);
         //drive.alignForward();
 
         outtake.feedRun();
