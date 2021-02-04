@@ -422,13 +422,20 @@ public class SampleDrive extends Drive{
             //    distOffL = 0;
             if (Math.abs(distOffF) > 1000)
                 distOffF = 0;
-
+            /*
+            if(distOffF < 0) {
+                distOffF = 0;
+            }
+            */
+            
             //if (distOffR < distOffL) {
                 drive(distOffF, distOffR, turn);
             //}  else if (distOffL < distOffR) {
                 //drive(distOffF, distOffL, turn);
             //}
         }
+
+        drive(0,0,0);
     }
 
     @Override
@@ -451,8 +458,16 @@ public class SampleDrive extends Drive{
             if (Math.abs(distOffF) > 1000)
                 distOffF = 0;
 
+            /*
+            if(distOffF < 0) {
+                distOffF = 0;
+            }
+            */
+
             drive(distOffF, distOffR, turn);
         }
+
+        drive(0,0,0);
     }
 
     //imu only accounts for angles from -180 to 180
