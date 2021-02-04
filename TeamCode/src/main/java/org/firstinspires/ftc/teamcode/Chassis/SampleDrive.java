@@ -406,7 +406,7 @@ public class SampleDrive extends Drive{
         //double distOffL = 1;
         double turn = 1;
 
-        while (Math.abs(distOffF) > 0.3 || /*Math.abs(distOffL) > 0.3 ||*/ Math.abs(distOffR) > 0.3 || turn > Math.abs(0.166666)) {
+        while (Math.abs(distOffF) > 0.3 || /*Math.abs(distOffL) > 0.3 ||*/ Math.abs(distOffR) > 0.3 || Math.abs(turn) > 0.166666) {
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - targetF) / 48;
@@ -437,7 +437,7 @@ public class SampleDrive extends Drive{
         double distOffR = 1;
         double turn = 1;
 
-        while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3 || turn > Math.abs(0.166666)) {
+        while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3 || Math.abs(turn) > 0.166666) {
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - inchesF) / 48;
