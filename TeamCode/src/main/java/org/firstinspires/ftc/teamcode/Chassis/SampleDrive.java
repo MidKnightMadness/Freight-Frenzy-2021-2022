@@ -406,7 +406,7 @@ public class SampleDrive extends Drive{
         //double distOffL = 1;
         double turn = 1;
 
-        while (Math.abs(distOffF) > 0.3 || /*Math.abs(distOffL) > 0.3 ||*/ Math.abs(distOffR) > 0.3 || Math.abs(turn) > 0.166666) {
+        while (Math.abs(distOffF) > 0.3 || /*Math.abs(distOffL) > 0.3 ||*/ Math.abs(distOffR) > 0.3 || Math.abs(turn) > 0.033333) {
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - targetF) / 48;
@@ -422,11 +422,10 @@ public class SampleDrive extends Drive{
             //    distOffL = 0;
             if (Math.abs(distOffF) > 1000)
                 distOffF = 0;
-            /*
+
             if(distOffF < 0) {
                 distOffF = 0;
             }
-            */
             
             //if (distOffR < distOffL) {
                 drive(distOffF, distOffR, turn);
@@ -444,7 +443,7 @@ public class SampleDrive extends Drive{
         double distOffR = 1;
         double turn = 1;
 
-        while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3 || Math.abs(turn) > 0.166666) {
+        while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3 || Math.abs(turn) > 0.033333) {
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - inchesF) / 48;
@@ -458,11 +457,9 @@ public class SampleDrive extends Drive{
             if (Math.abs(distOffF) > 1000)
                 distOffF = 0;
 
-            /*
             if(distOffF < 0) {
                 distOffF = 0;
             }
-            */
 
             drive(distOffF, distOffR, turn);
         }
@@ -484,13 +481,25 @@ public class SampleDrive extends Drive{
         }
     }
 
+    public int convertAngle(int degrees) {
+        if(degrees > 180) {
+            return degrees - 360;
+        }
+        else if(degrees < -180) {
+            return degrees + 360;
+        }
+        else{
+            return degrees;
+        }
+    }
+
 
     //positive degrees is counter clockwise and negative degrees is clockwise
     @Override
     public void turn(double degrees) {
         updateAngle();
         double targetAngle = convertAngle(currentAngle + degrees);
-        double angleCounter;
+        int angleCounter;
         double clockwiseDistance = 0;
         double counterClockwiseDistance = 0;
 
@@ -508,12 +517,12 @@ public class SampleDrive extends Drive{
 
             updateAngle();
             //add tolerance of 5 degrees over and under in case bot is not exact
-            angleTolerance = (currentAngle >= convertAngle(targetAngle-5) && currentAngle <= convertAngle(targetAngle+5));
+            angleTolerance = (currentAngle >= convertAngle(targetAngle-1) && currentAngle <= convertAngle(targetAngle+1));
 
 
-            angleCounter = currentAngle;
+            angleCounter = (int)currentAngle;
             //calculate clockwise distance and counter-clockwise distance
-            while(angleCounter < targetAngle) {
+            while(angleCounter != (int)targetAngle) {
                 try {
                     if(isStopRequested.call())
                         return;
@@ -526,8 +535,8 @@ public class SampleDrive extends Drive{
                 counterClockwiseDistance = counterClockwiseDistance + 1;
             }
 
-            angleCounter = currentAngle;
-            while(angleCounter > targetAngle) {
+            angleCounter = (int)currentAngle;
+            while(angleCounter != (int)targetAngle) {
                 try {
                     if(isStopRequested.call())
                         return;
@@ -573,12 +582,7 @@ public class SampleDrive extends Drive{
     @Override
     public void alignForward() {
         updateAngle();
-        if(currentAngle > 0) {
-            turn(-imu.getAngularOrientation().firstAngle - 5);
-        }
-        else if(currentAngle < 0) {
-            turn(-imu.getAngularOrientation().firstAngle + 5);
-        }
+        turn(-currentAngle);
     }
 
     //move the bot to a position on the field using maths
