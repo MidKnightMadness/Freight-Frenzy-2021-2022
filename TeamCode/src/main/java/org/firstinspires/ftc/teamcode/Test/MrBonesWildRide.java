@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.Chassis.SampleDrive;
 import java.util.concurrent.Callable;
 
 @Autonomous
-@Disabled
 public class MrBonesWildRide extends LinearOpMode {
     BNO055IMU imu;
 
