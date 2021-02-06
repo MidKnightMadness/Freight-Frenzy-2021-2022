@@ -253,7 +253,7 @@ public class DangerousEggman extends OpMode {
             distOffY = sensorF.getDistance(DistanceUnit.INCH);
             if(distOffY != 0)
                 distOffY = -(distOffY - 65) / 48;
-            turn = (drive.getAngle() + driveAngleOffset) / 50;
+            turn = (drive.getAngle() + driveAngleOffset) / 30;
 
             //discard unusual output
             if(Math.abs(distOffX) > 1000)

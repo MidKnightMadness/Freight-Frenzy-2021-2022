@@ -476,10 +476,6 @@ public class SampleDrive extends Drive{
             if (Math.abs(distOffF) > 1000)
                 distOffF = 0;
 
-            if(distOffF < 0) {
-                distOffF = 0;
-            }
-
             drive(distOffF, distOffR, turn);
         }
 
