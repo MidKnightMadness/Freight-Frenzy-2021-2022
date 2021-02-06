@@ -214,10 +214,9 @@ public class SampleDrive extends Drive{
 
                 prevx = currentX; //update previous x
                 prevy = currentY; //update previous y
-                prevAng = currentAngle; //update previous angle
 
-                currentX += ddx-(currentX-initX); //offset by error
-                currentY += ddy-(currentY-initY); //offset by error
+                inchesX += ddx-(currentX-initX); //offset by error
+                inchesY += ddy-(currentY-initY); //offset by error
 
                 //Update target positions!
                 motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int) inchesY + (int) inchesX);
