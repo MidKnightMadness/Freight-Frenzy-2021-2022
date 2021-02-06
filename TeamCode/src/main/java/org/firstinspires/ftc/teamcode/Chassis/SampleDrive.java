@@ -516,8 +516,8 @@ public class SampleDrive extends Drive{
             catch (Exception ignored) {}
 
             updateAngle();
-            //add tolerance of 5 degrees over and under in case bot is not exact
-            angleTolerance = (currentAngle >= convertAngle(targetAngle-1) && currentAngle <= convertAngle(targetAngle+1));
+            //add tolerance of 3 degrees over and under in case bot is not exact
+            angleTolerance = (currentAngle >= convertAngle(targetAngle-3) && currentAngle <= convertAngle(targetAngle+3));
 
 
             angleCounter = (int)currentAngle;
