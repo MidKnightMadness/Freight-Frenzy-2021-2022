@@ -144,7 +144,7 @@ public class AutoRedRightManual extends LinearOpMode {
             sleep(1000);
         outtake.stop();
         drive.moveV2(0, 14);
-        drive.alignForward();
+        //drive.alignForward();
 
         visual.stop();
         telemetry.addLine("Program End :)");
