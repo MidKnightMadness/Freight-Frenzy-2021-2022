@@ -1,4 +1,7 @@
 package org.firstinspires.ftc.teamcode.Test;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,8 +12,9 @@ import org.firstinspires.ftc.teamcode.Chassis.SampleDrive;
 import java.util.concurrent.Callable;
 
 @Autonomous
-@Disabled
 public class MrBonesWildRide extends LinearOpMode {
+    BNO055IMU imu;
+
     private Drive drive = new SampleDrive();
 
     @Override
@@ -20,8 +24,6 @@ public class MrBonesWildRide extends LinearOpMode {
         drive.init(hardwareMap, telemetry, gamepad1, gamepad2);
         waitForStart();
 
-        drive.smoothMove(0, 20);
-        drive.turn(10);
-        drive.alignForward();
+        drive.moveV2(0,12);
     }
 }

@@ -157,6 +157,9 @@ public class SampleDrive extends Drive{
         double initX = currentX;
         double initY = currentY;
 
+        telemetry.addData("initposx", currentX);
+        telemetry.addData("initposy", currentY);
+
         while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
@@ -215,15 +218,22 @@ public class SampleDrive extends Drive{
                 prevx = currentX; //update previous x
                 prevy = currentY; //update previous y
 
-                inchesX += ddx-(currentX-initX); //offset by error
-                inchesY += ddy-(currentY-initY); //offset by error
+                inchesX += ddx-dx; //offset by error
+                inchesY += ddy-dy; //offset by error
 
                 //Update target positions!
                 motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int) inchesY + (int) inchesX);
                 motorFR.setTargetPosition(motorFR.getCurrentPosition() - (int) inchesY + (int) inchesX);
                 motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int) inchesY - (int) inchesX);
                 motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int) inchesY - (int) inchesX);
+
+                telemetry.addData("ddx: ", ddx);
+                telemetry.addData("ddy: ", ddy);
+                telemetry.addData("inchesX: ", inchesX);
+                telemetry.addData("inchesY: ", inchesY);
             }
+            telemetry.addData("Gryo Angle: ", imu.getAngularOrientation().firstAngle);
+            telemetry.update();
         }
 
         //stop everything
