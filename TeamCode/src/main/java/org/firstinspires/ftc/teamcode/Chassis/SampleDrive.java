@@ -227,8 +227,12 @@ public class SampleDrive extends Drive{
                 motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int) inchesY - (int) inchesX);
                 motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int) inchesY - (int) inchesX);
 
+                telemetry.addData("currentX: ", currentX);
+                telemetry.addData("currentY: ", currentY);
                 telemetry.addData("ddx: ", ddx);
                 telemetry.addData("ddy: ", ddy);
+                telemetry.addData("dx: ", dx);
+                telemetry.addData("du: ", dx);
                 telemetry.addData("inchesX: ", inchesX);
                 telemetry.addData("inchesY: ", inchesY);
             }
