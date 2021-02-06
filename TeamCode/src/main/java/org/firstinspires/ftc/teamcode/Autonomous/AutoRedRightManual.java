@@ -90,20 +90,20 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //moveV2 to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-25.25, -21);
+            drive.move(-32.25, -21);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(0.25, -43);
+            drive.move(-7.25, -43);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-25.25, -68);
+            drive.move(-32.25, -68);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
 
-        drive.adjustWalls(60, 39);
+        drive.adjustWalls(60, 46);
 
         telemetry.addLine("waiting for outtake");
         telemetry.update();
@@ -123,24 +123,38 @@ public class AutoRedRightManual extends LinearOpMode {
         outtake.resetFeed();
         sleep(1000);
 
-        drive.move(-7, 0);
-        drive.adjustWalls(60, 46);
+        drive.turnToPoint(-31.5,144);
+        outtake.feedRun();
+        sleep(1000);
+        outtake.resetFeed();
+        sleep(1000);
+
+        drive.turnToPoint(-39,144);
+        outtake.feedRun();
+        sleep(1000);
+        outtake.resetFeed();
+        sleep(1000);
+        /*
+        drive.move(-7.5, 0);
+        drive.adjustWalls(60, 46.5);
 
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
-        drive.move(-7, 0);
-        drive.adjustWalls(60, 53);
+        drive.move(-7.5, 0);
+        drive.adjustWalls(60, 53.5);
 
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
             sleep(1000);
+         */
+
         outtake.stop();
         drive.move(0, 14);
-        drive.adjustWalls(46,53);
+        drive.adjustWalls(46,53.5);
 
         visual.stop();
         telemetry.addLine("Program End :)");

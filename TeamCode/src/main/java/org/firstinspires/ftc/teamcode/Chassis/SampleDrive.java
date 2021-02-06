@@ -573,6 +573,7 @@ public class SampleDrive extends Drive{
 
     @Override
     public void turnToPoint(double x, double y) {
+        updateAngle();
         double targetAngle = Math.toDegrees(Math.atan2(y - currentY, x - currentX));  //get the angle that we want to turn to
         turn(targetAngle - currentAngle);  //turn the amount of offset
     }
