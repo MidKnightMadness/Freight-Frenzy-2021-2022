@@ -154,6 +154,9 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        double initX = currentX;
+        double initY = currentY;
+
         while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
@@ -211,10 +214,9 @@ public class SampleDrive extends Drive{
 
                 prevx = currentX; //update previous x
                 prevy = currentY; //update previous y
-                prevAng = currentAngle; //update previous angle
 
-                currentX += ddx; //offset by error
-                currentY += ddy; //offset by error
+                inchesX += ddx-(currentX-initX); //offset by error
+                inchesY += ddy-(currentY-initY); //offset by error
 
                 //Update target positions!
                 motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int) inchesY + (int) inchesX);
