@@ -583,11 +583,44 @@ public class SampleDrive extends Drive{
         telemetry.update();
     }
 
+    //positive degrees is counter clockwise and negative degrees is clockwise
+    @Override
+    public void betterTurn(double degrees) {
+        updateAngle();
+        double targetAngle = convertAngle(currentAngle + degrees);
+        double angleDifference = 1000;
+
+        while(angleDifference > 1)  {
+            try {
+                if(isStopRequested.call())
+                    return;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
+
+            updateAngle();
+            angleDifference = Math.abs(currentAngle - targetAngle);
+
+            if(targetAngle > currentAngle) {
+                drive(0,0, -angleDifference);
+            }
+            else if(currentAngle > targetAngle) {
+                drive(0,0, angleDifference);
+            }
+        }
+        //stop everything
+        telemetry.addLine("turning done");
+        drive(0,0,0);
+        telemetry.update();
+    }
+
     @Override
     public void turnToPoint(double x, double y) {
         updateAngle();
         double targetAngle = Math.toDegrees(Math.atan2(y - currentY, x - currentX));  //get the angle that we want to turn to
-        turn(targetAngle - currentAngle);  //turn the amount of offset
+        betterTurn(targetAngle - currentAngle);  //turn the amount of offset
     }
 
     //turn until the bot is facing the front of the field
@@ -595,7 +628,7 @@ public class SampleDrive extends Drive{
     @Override
     public void alignForward() {
         updateAngle();
-        turn(-currentAngle);
+        betterTurn(-currentAngle);
     }
 
     //move the bot to a position on the field using maths
