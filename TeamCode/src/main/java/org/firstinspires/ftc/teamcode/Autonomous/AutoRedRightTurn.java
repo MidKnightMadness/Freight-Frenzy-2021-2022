@@ -22,7 +22,7 @@ import java.io.File;
 @Autonomous
 
 
-public class AutoRedRightManual extends LinearOpMode {
+public class AutoRedRightTurn extends LinearOpMode {
     private Drive drive = new SampleDrive();
     private Intake intake = new SampleIntake();
     private Outtake outtake = new SampleOuttake();
@@ -123,21 +123,17 @@ public class AutoRedRightManual extends LinearOpMode {
         outtake.resetFeed();
         sleep(1000);
 
-        drive.moveV2(-7.5, 0);
-        drive.adjustWalls(60, 46.5);
-
+        drive.turnToPoint(-31.5,144);
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
-        drive.moveV2(-7.5, 0);
-        drive.adjustWalls(60, 53.5);
-
+        drive.turnToPoint(-39,144);
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
-            sleep(1000);
+        sleep(1000);
 
         outtake.stop();
         drive.moveV2(0, 14);

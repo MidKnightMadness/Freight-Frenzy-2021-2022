@@ -154,6 +154,9 @@ public class SampleDrive extends Drive{
         motorBL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorBR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        double initX = currentX;
+        double initY = currentY;
+
         while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
@@ -211,10 +214,9 @@ public class SampleDrive extends Drive{
 
                 prevx = currentX; //update previous x
                 prevy = currentY; //update previous y
-                prevAng = currentAngle; //update previous angle
 
-                currentX += ddx; //offset by error
-                currentY += ddy; //offset by error
+                inchesX += ddx-(currentX-initX); //offset by error
+                inchesY += ddy-(currentY-initY); //offset by error
 
                 //Update target positions!
                 motorFL.setTargetPosition(motorFL.getCurrentPosition() + (int) inchesY + (int) inchesX);
@@ -516,8 +518,8 @@ public class SampleDrive extends Drive{
             catch (Exception ignored) {}
 
             updateAngle();
-            //add tolerance of 5 degrees over and under in case bot is not exact
-            angleTolerance = (currentAngle >= convertAngle(targetAngle-1) && currentAngle <= convertAngle(targetAngle+1));
+            //add tolerance of 3 degrees over and under in case bot is not exact
+            angleTolerance = (currentAngle >= convertAngle(targetAngle-3) && currentAngle <= convertAngle(targetAngle+3));
 
 
             angleCounter = (int)currentAngle;
@@ -573,6 +575,7 @@ public class SampleDrive extends Drive{
 
     @Override
     public void turnToPoint(double x, double y) {
+        updateAngle();
         double targetAngle = Math.toDegrees(Math.atan2(y - currentY, x - currentX));  //get the angle that we want to turn to
         turn(targetAngle - currentAngle);  //turn the amount of offset
     }
