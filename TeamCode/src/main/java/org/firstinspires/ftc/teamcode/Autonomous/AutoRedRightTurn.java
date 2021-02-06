@@ -103,7 +103,7 @@ public class AutoRedRightTurn extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.adjustWalls(60, 46);
+        drive.adjustWalls(60, 38);
 
         telemetry.addLine("waiting for outtake");
         telemetry.update();
