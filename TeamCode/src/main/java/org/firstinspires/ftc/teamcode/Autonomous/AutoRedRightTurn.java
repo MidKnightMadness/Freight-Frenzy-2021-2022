@@ -116,6 +116,7 @@ public class AutoRedRightTurn extends LinearOpMode {
                 telemetry.update();
             }
 
+        drive.turnToPoint(-24,144);
         telemetry.addLine("Outtake ready, starting to shoot");
         telemetry.update();
         outtake.feedRun();

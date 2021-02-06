@@ -455,6 +455,9 @@ public class SampleDrive extends Drive{
 
     @Override
     public void adjustWalls(double inchesF, double inchesR) {
+        //adjust for range sensor inaccuracies
+        inchesF = inchesF * 1.08;
+        inchesR = inchesR * 1.08;
         double distOffF = 1;
         double distOffR = 1;
         double turn = 1;
