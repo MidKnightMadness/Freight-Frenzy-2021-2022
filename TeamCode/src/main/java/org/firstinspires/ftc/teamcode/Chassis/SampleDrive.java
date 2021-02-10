@@ -591,26 +591,15 @@ public class SampleDrive extends Drive{
     public void betterTurn(double degrees) {
         updateAngle();
         double targetAngle = convertAngle(currentAngle + degrees);
-        double angleDifference = 1000;
+        double turn = 1000;
 
-        while(angleDifference > 3)  {
-            try {
-                if(isStopRequested.call())
-                    return;
+        while(turn > 0.033333)  {
+            turn = Math.abs(imu.getAngularOrientation().firstAngle - targetAngle) / 30;
+            if(imu.getAngularOrientation().firstAngle > targetAngle) {
+                drive(0,0, turn);
             }
-            catch (NullPointerException exception){
-                telemetry.addLine("You need to set isStopRequested when using move");
-            }
-            catch (Exception ignored) {}
-
-            updateAngle();
-            angleDifference = Math.abs(currentAngle - targetAngle);
-
-            if(targetAngle > currentAngle) {
-                drive(0,0, -angleDifference);
-            }
-            else if(targetAngle < currentAngle) {
-                drive(0,0, angleDifference);
+            else if(imu.getAngularOrientation().firstAngle < targetAngle) {
+                drive(0,0, -turn);
             }
         }
         //stop everything
