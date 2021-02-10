@@ -593,7 +593,7 @@ public class SampleDrive extends Drive{
         double targetAngle = convertAngle(currentAngle + degrees);
         double angleDifference = 1000;
 
-        while(angleDifference > 1)  {
+        while(angleDifference > 3)  {
             try {
                 if(isStopRequested.call())
                     return;
@@ -609,7 +609,7 @@ public class SampleDrive extends Drive{
             if(targetAngle > currentAngle) {
                 drive(0,0, -angleDifference);
             }
-            else if(currentAngle > targetAngle) {
+            else if(targetAngle < currentAngle) {
                 drive(0,0, angleDifference);
             }
         }
@@ -622,8 +622,10 @@ public class SampleDrive extends Drive{
     @Override
     public void turnToPoint(double x, double y) {
         updateAngle();
-        double targetAngle = Math.toDegrees(Math.atan2(y - currentY, x - currentX));  //get the angle that we want to turn to
+        double dist = Math.sqrt( Math.pow((y - currentY), 2) + Math.pow((x - currentX), 2));
+        double targetAngle = Math.toDegrees(Math.asin( (y-currentY) / dist ));  //get the angle that we want to turn to
         betterTurn(targetAngle - currentAngle);  //turn the amount of offset
+        telemetry.addData("Target Angle: ", targetAngle);
     }
 
     //turn until the bot is facing the front of the field
