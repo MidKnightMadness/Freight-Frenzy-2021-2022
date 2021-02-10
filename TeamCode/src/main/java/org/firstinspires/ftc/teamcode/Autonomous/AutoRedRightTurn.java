@@ -63,10 +63,17 @@ public class AutoRedRightTurn extends LinearOpMode {
         sleep(10); //Reason?
         //get starting stack
         visual.update();
+
+        telemetry.addData("Current X: ", drive.getCurrentX());
+        telemetry.addData("Current Y: ", drive.getCurrentY());
+
         telemetry.addLine("Zone: " + visual.getStartStack());
         telemetry.update();
         drive.move(13, 0);
 
+        telemetry.addData("Current X: ", drive.getCurrentX());
+        telemetry.addData("Current Y: ", drive.getCurrentY());
+        telemetry.update();
 
         //move to correct drop zone
         if (visual.getStartStack() == Visual.STARTERSTACK .A) {
@@ -83,27 +90,39 @@ public class AutoRedRightTurn extends LinearOpMode {
             telemetry.update();
         }
 
+        telemetry.addData("Current X: ", drive.getCurrentX());
+        telemetry.addData("Current Y: ", drive.getCurrentY());
+        telemetry.update();
+
         //release wobble goal
         wobbleGoal.lower();
         wobbleGoal.open();
         drive.move(-10, 0);
 
+        telemetry.addData("Current X: ", drive.getCurrentX());
+        telemetry.addData("Current Y: ", drive.getCurrentY());
+        telemetry.update();
+
         //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-32.25, -21);
+            drive.move(-15, -21);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-7.25, -43);
+            drive.move(25, -43);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-32.25, -68);
+            drive.move(-15, -68);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
 
-        drive.adjustWalls(60, 38);
+        telemetry.addData("Current X: ", drive.getCurrentX());
+        telemetry.addData("Current Y: ", drive.getCurrentY());
+        telemetry.update();
+
+        drive.adjustWalls(78, 40);
 
         telemetry.addLine("waiting for outtake");
         telemetry.update();
@@ -117,6 +136,7 @@ public class AutoRedRightTurn extends LinearOpMode {
             }
 
         drive.turnToPoint(-24,144);
+
         telemetry.addLine("Outtake ready, starting to shoot");
         telemetry.update();
         outtake.feedRun();
@@ -139,6 +159,10 @@ public class AutoRedRightTurn extends LinearOpMode {
         outtake.stop();
         drive.move(0, 14);
         drive.adjustWalls(46,53.5);
+
+        telemetry.addData("Current X: ", drive.getCurrentX());
+        telemetry.addData("Current Y: ", drive.getCurrentY());
+        telemetry.update();
 
         visual.stop();
         telemetry.addLine("Program End :)");

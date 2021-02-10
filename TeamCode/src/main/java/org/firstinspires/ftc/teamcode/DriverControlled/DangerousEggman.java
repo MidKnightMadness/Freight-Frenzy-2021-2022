@@ -343,7 +343,7 @@ public class DangerousEggman extends OpMode {
             telemetry.addLine("Outtake: OFF");
         }
         telemetry.addData("Outtake Velocity", outtake.getVelocity());
-        telemetry.addData("Target Velocity", outtake.getVelocity());
+        telemetry.addData("Target Velocity", outtake.getTargetVelocity());
 
         telemetry.addData("Current X", drive.getCurrentX());
         telemetry.addData("Current Y", drive.getCurrentY());
