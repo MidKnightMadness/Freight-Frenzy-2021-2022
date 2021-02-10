@@ -124,8 +124,13 @@ public class AutoRedRightTurn extends LinearOpMode {
 
         drive.adjustWalls(78, 40);
 
+        telemetry.addData("DistF: ", drive.getDistF());
+        telemetry.addData("DistR: ", drive.getDistR());
+        telemetry.addData("CurrentX: ", drive.getCurrentX());
+        telemetry.addData("CurrentY: ", drive.getCurrentY());
         telemetry.addLine("waiting for outtake");
         telemetry.update();
+        sleep(1000);
 
         //shoot power shots
         for(int i = 0; i < 10; i++)  //make sure outtake is really ready

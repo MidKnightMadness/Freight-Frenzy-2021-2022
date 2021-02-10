@@ -778,6 +778,14 @@ public class SampleDrive extends Drive{
         return currentY;
     }
 
+    //get distF
+    @Override
+    public double getDistF() { return distF.getDistance(DistanceUnit.INCH); }
+
+    //get distR
+    @Override
+    public double getDistR() { return distR.getDistance(DistanceUnit.INCH); }
+
     //set the angle
     @Override
     public void setAngle(double angle) {
