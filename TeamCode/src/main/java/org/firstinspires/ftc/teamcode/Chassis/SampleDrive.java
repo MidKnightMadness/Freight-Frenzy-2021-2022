@@ -227,8 +227,12 @@ public class SampleDrive extends Drive{
                 motorBL.setTargetPosition(motorBL.getCurrentPosition() + (int) inchesY - (int) inchesX);
                 motorBR.setTargetPosition(motorBR.getCurrentPosition() - (int) inchesY - (int) inchesX);
 
+                telemetry.addData("currentX: ", currentX);
+                telemetry.addData("currentY: ", currentY);
                 telemetry.addData("ddx: ", ddx);
                 telemetry.addData("ddy: ", ddy);
+                telemetry.addData("dx: ", dx);
+                telemetry.addData("du: ", dx);
                 telemetry.addData("inchesX: ", inchesX);
                 telemetry.addData("inchesY: ", inchesY);
             }
@@ -451,6 +455,9 @@ public class SampleDrive extends Drive{
 
     @Override
     public void adjustWalls(double inchesF, double inchesR) {
+        //adjust for range sensor inaccuracies
+        inchesF = inchesF * 1.08;
+        inchesR = inchesR * 1.08;
         double distOffF = 1;
         double distOffR = 1;
         double turn = 1;
@@ -468,10 +475,6 @@ public class SampleDrive extends Drive{
                 distOffR = 0;
             if (Math.abs(distOffF) > 1000)
                 distOffF = 0;
-
-            if(distOffF < 0) {
-                distOffF = 0;
-            }
 
             drive(distOffF, distOffR, turn);
         }
@@ -583,11 +586,44 @@ public class SampleDrive extends Drive{
         telemetry.update();
     }
 
+    //positive degrees is counter clockwise and negative degrees is clockwise
+    @Override
+    public void betterTurn(double degrees) {
+        updateAngle();
+        double targetAngle = convertAngle(currentAngle + degrees);
+        double angleDifference = 1000;
+
+        while(angleDifference > 1)  {
+            try {
+                if(isStopRequested.call())
+                    return;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
+
+            updateAngle();
+            angleDifference = Math.abs(currentAngle - targetAngle);
+
+            if(targetAngle > currentAngle) {
+                drive(0,0, -angleDifference);
+            }
+            else if(currentAngle > targetAngle) {
+                drive(0,0, angleDifference);
+            }
+        }
+        //stop everything
+        telemetry.addLine("turning done");
+        drive(0,0,0);
+        telemetry.update();
+    }
+
     @Override
     public void turnToPoint(double x, double y) {
         updateAngle();
         double targetAngle = Math.toDegrees(Math.atan2(y - currentY, x - currentX));  //get the angle that we want to turn to
-        turn(targetAngle - currentAngle);  //turn the amount of offset
+        betterTurn(targetAngle - currentAngle);  //turn the amount of offset
     }
 
     //turn until the bot is facing the front of the field
@@ -595,7 +631,7 @@ public class SampleDrive extends Drive{
     @Override
     public void alignForward() {
         updateAngle();
-        turn(-currentAngle);
+        betterTurn(-currentAngle);
     }
 
     //move the bot to a position on the field using maths

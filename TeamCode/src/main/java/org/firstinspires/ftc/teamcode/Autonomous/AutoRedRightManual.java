@@ -60,7 +60,7 @@ public class AutoRedRightManual extends LinearOpMode {
 
         //move up to starting stack
         drive.move(-13, 12);
-        sleep(10); //Reason?
+        sleep(10);
         //get starting stack
         visual.update();
         telemetry.addLine("Zone: " + visual.getStartStack());
@@ -94,7 +94,7 @@ public class AutoRedRightManual extends LinearOpMode {
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(-7.25, -43);
+            drive.move(7.75, -43);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
@@ -103,7 +103,7 @@ public class AutoRedRightManual extends LinearOpMode {
             telemetry.update();
         }
 
-        drive.adjustWalls(60, 46);
+        drive.adjustWalls(60, 38);
 
         telemetry.addLine("waiting for outtake");
         telemetry.update();
@@ -124,7 +124,7 @@ public class AutoRedRightManual extends LinearOpMode {
         sleep(1000);
 
         drive.move(-7.5, 0);
-        drive.adjustWalls(60, 46.5);
+        drive.adjustWalls(60, 45.5);
 
         outtake.feedRun();
         sleep(1000);
@@ -132,7 +132,7 @@ public class AutoRedRightManual extends LinearOpMode {
         sleep(1000);
 
         drive.move(-7.5, 0);
-        drive.adjustWalls(60, 53.5);
+        drive.adjustWalls(60, 53);
 
         outtake.feedRun();
         sleep(1000);
