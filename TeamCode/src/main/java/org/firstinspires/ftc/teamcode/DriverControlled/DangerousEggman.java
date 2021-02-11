@@ -407,7 +407,6 @@ public class DangerousEggman extends OpMode {
         telemetry.addData("Current Angle", (drive.getAngle() + driveAngleOffset));
         telemetry.update();
 
-        LED.update();
     }
 
 }
