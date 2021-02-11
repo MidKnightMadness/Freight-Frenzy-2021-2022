@@ -256,8 +256,8 @@ public class SampleDrive extends Drive{
         updateAngle();
 
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        setCurrentX((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle)));
-        setCurrentY((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle)));
+        setCurrentX(currentX + (-inchesX * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle))));
+        setCurrentY(currentY + (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesY * Math.sin(Math.toRadians(currentAngle))));
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
