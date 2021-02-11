@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 
 import org.firstinspires.ftc.teamcode.LEDs.LED;
 import org.firstinspires.ftc.teamcode.LEDs.LEDColor;
+import org.firstinspires.ftc.teamcode.LEDs.LEDModes;
 
 import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.BLUE;
 import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.GREEN;
@@ -58,6 +59,7 @@ public class LEDTest extends OpMode {
      */
     @Override
     public void start() {
+        LEDModes.telemetry = telemetry;
         LED.ALL.set(LED.Modes.BOUNCING,
                 LED.Colors.RED);
         LED.update();

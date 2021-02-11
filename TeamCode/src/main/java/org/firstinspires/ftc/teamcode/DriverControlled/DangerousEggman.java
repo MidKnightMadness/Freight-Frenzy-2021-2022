@@ -50,13 +50,14 @@ public class DangerousEggman extends OpMode {
     LBumper - toggle intake
     LTrigger - toggle intake reverse
 
-    RBumper - reset drive heading
+    RTrigger - reset drive heading
 
     LStick - directional drive
     RStickX - turn
 
     A - deploy intake
     X - toggle slow drive
+    RBumper - toggle slow drive
 
 
 
@@ -144,10 +145,10 @@ public class DangerousEggman extends OpMode {
         }
 
         //x toggle button to enable slow mode
-        if(!lastXButton && gamepad1.x) {
+        if(!lastXButton && (gamepad1.x || gamepad1.right_bumper)) {
             slowMode = !slowMode;
         }
-        lastXButton = gamepad1.x;
+        lastXButton = (gamepad1.x || gamepad1.right_bumper);
 
         //a button to deploy intake (gamepad 1)
         if(gamepad1.a){
@@ -287,7 +288,7 @@ public class DangerousEggman extends OpMode {
         //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
         if(gamepad2.a) {
             //adjust using distance sensors
-            distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 27) / 48;
+            distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 25) / 48;
             distOffY = sensorF.getDistance(DistanceUnit.INCH);
             if(distOffY != 0)
                 distOffY = -(distOffY - 65) / 48;

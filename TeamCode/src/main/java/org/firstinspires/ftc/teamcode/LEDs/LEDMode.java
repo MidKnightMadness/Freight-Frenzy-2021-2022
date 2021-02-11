@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.LEDs;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 /**** Abstract LEDMode for controlling the leds ****/
 public abstract class LEDMode {
     protected LEDSection section;
