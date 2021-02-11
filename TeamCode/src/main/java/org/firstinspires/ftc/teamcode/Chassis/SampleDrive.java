@@ -121,8 +121,11 @@ public class SampleDrive extends Drive{
 
         updateAngle();
         updatePosition();
-        setCurrentX(-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
-        setCurrentY(distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
+        double trueX = (-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
+        double trueY = (distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
+
+        setCurrentX(currentX + trueX);
+        setCurrentY(currentY + trueY);
     }
 
     @Override
@@ -130,8 +133,11 @@ public class SampleDrive extends Drive{
         updateAngle();
 
         double distance = Math.sqrt(inchesX*inchesX + inchesY*inchesY);
-        setCurrentX((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle)));
-        setCurrentY((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle)));
+        double trueX = (-inchesY * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle)));
+        double trueY = (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesX * Math.sin(Math.toRadians(currentAngle)));
+
+        setCurrentX(currentX + trueX);
+        setCurrentY(currentY + trueY);
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -254,10 +260,12 @@ public class SampleDrive extends Drive{
     @Override
     public void move(double inchesX, double inchesY, double power) {
         updateAngle();
-
+        double trueX = (-inchesY * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle)));
+        double trueY = (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesX * Math.sin(Math.toRadians(currentAngle)));
         double distance = Math.sqrt(Math.pow(inchesX, 2) + Math.pow(inchesY, 2));
-        setCurrentX((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle)));
-        setCurrentY((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle)));
+
+        setCurrentX(currentX + trueX);
+        setCurrentY(currentY + trueY);
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
@@ -319,8 +327,11 @@ public class SampleDrive extends Drive{
     @Override
     public void smoothMove(double inchesX, double inchesY) {
         updateAngle();
-        setCurrentX((-inchesX * 0.3) * Math.sin(Math.toRadians(currentAngle)) + (inchesX * 0.3) * Math.cos(Math.toRadians(currentAngle)));
-        setCurrentY((inchesY * 0.3) * Math.cos(Math.toRadians(currentAngle)) + (inchesY * 0.3) * Math.sin(Math.toRadians(currentAngle)));
+        double trueX = (-inchesY * Math.sin(Math.toRadians(currentAngle)) + inchesX * Math.cos(Math.toRadians(currentAngle)));
+        double trueY = (inchesY * Math.cos(Math.toRadians(currentAngle)) + inchesX * Math.sin(Math.toRadians(currentAngle)));
+
+        setCurrentX(currentX + trueX);
+        setCurrentY(currentY + trueY);
 
         //convert to encoder ticks for run to position
         inchesX *= encoderTicksPerInch;
