@@ -462,7 +462,7 @@ public class SampleDrive extends Drive{
         double distOffR = 1;
         double turn = 1;
 
-        while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3 || Math.abs(turn) > 0.033333) {
+        while (Math.abs(distOffF) >  0 || Math.abs(distOffR) > 0 || Math.abs(turn) > 0) {
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - inchesF) / 48;
