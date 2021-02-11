@@ -36,8 +36,8 @@ public class DangerousEggman extends OpMode {
     ModernRoboticsI2cRangeSensor sensorL;
     ModernRoboticsI2cRangeSensor sensorR;
     ModernRoboticsI2cRangeSensor sensorF;
-    private int intToggle, outToggle, outToggle2, openWobToggle = 1, liftWobToggle = 0;
-    private boolean lastLeftBumper, lastLeftBumper2, lastLeftTrigger, lastRightBumper, lastBButton, lastXButton, lastYButton = false, slowMode;
+    private int intToggle, outToggle, openWobToggle = 1, liftWobToggle = 0;
+    private boolean lastLeftBumper, lastLeftBumper2, lastLeftTrigger, lastLeftTrigger2, lastRightBumper, lastBButton, lastXButton, lastYButton = false, slowMode;
     private double lastTime, distOffX, distOffY, turn;
     private double driveAngleOffset;
 
@@ -63,6 +63,7 @@ public class DangerousEggman extends OpMode {
     gamepad2: wobble goal, outtake, and driver assist
     RBumper - toggle outtake flywheel for tower
     LBumper - toggle outtake flywheel for power shot
+    LTrigger - toggle outtake flywheel for tower from corner
     RTrigger - toggle outtake feeder
 
     B - toggle wobble claw
@@ -212,49 +213,46 @@ public class DangerousEggman extends OpMode {
 
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 1)
         if(!lastRightBumper && gamepad2.right_bumper) {
-            if(outToggle2 == 1) {
-                outToggle2 = 0;
-            }
             if(outToggle == 1) {
                 outToggle = 0;
             }
-            else if(outToggle == 0) {
+            else {
                 outToggle = 1;
             }
-        }
-        if(outToggle == 0 && outToggle2 == 0) {
-            outtake.stop();
-        }
-        if(outToggle == 1) {
-            outtake.start();
         }
         lastRightBumper = gamepad2.right_bumper;
 
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
         if(!lastLeftBumper2 && gamepad2.left_bumper) {
-            if(outToggle == 1) {
+            if(outToggle == 2) {
                 outToggle = 0;
             }
-            if(outToggle2 == 1) {
-                outToggle2 = 0;
+            else {
+                outToggle = 2;
             }
-            else if(outToggle2 == 0) {
-                outToggle2 = 1;
-            }
-        }
-        if(outToggle2 == 0 && outToggle == 0) {
-            outtake.stop();
-        }
-        if(outToggle2 == 1) {
-            outtake.startPowerShot();
         }
         lastLeftBumper2 = gamepad2.left_bumper;
-
-        //in case all hell breaks loose
-        if(outToggle == 1 && outToggle2 == 1) {
+        //when right trigger is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
+        if(!lastLeftTrigger2 && gamepad2.left_trigger != 0) {
+            if(outToggle == 3) {
+                outToggle = 0;
+            }
+            else {
+                outToggle = 3;
+            }
+        }
+        lastLeftTrigger2 = gamepad2.left_trigger != 0;
+        if(outToggle == 0) {
             outtake.stop();
-            outToggle = 0;
-            outToggle2 = 0;
+        }
+        else if(outToggle == 1) {
+            outtake.start();
+        }
+        else if(outToggle == 2) {
+            outtake.startPowerShot();
+        }
+        else if(outToggle == 3) {
+            outtake.startFar();
         }
 
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
@@ -393,8 +391,11 @@ public class DangerousEggman extends OpMode {
         if(outToggle == 1) {
             telemetry.addLine("Outtake: Tower Speed");
         }
-        else if(outToggle2 == 1) {
+        else if(outToggle == 2) {
             telemetry.addLine("Outtake: Power Shot Speed");
+        }
+        else if(outToggle == 3) {
+            telemetry.addLine("Outtake: Far");
         }
         else{
             telemetry.addLine("Outtake: OFF");
@@ -407,7 +408,6 @@ public class DangerousEggman extends OpMode {
         telemetry.addData("Current Angle", (drive.getAngle() + driveAngleOffset));
         telemetry.update();
 
-        LED.update();
     }
 
 }
