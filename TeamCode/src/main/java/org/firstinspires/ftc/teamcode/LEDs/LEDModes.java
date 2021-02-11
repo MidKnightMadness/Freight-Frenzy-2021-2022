@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.LEDs;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class LEDModes {
     // A simple mode to set the entire section to a single color.
     static class Static extends LEDMode {

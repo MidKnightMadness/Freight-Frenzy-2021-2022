@@ -58,8 +58,8 @@ public class LEDTest extends OpMode {
      */
     @Override
     public void start() {
-        LED.ALL.set(LED.Modes.BOUNCING,
-                LED.Colors.RED);
+        LED.ALL.set(LED.Modes.STATIC,
+                LED.Colors.GREEN);
         LED.update();
 
     }
