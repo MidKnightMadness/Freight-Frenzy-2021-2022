@@ -40,7 +40,7 @@ public class LEDTest extends OpMode {
             I2cDeviceSynch leds = hardwareMap.get(I2cDeviceSynch.class, "ledstrip");
             LED.init(leds);
             LED.update();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         telemetry.addData("Status", "Initialized");
@@ -63,6 +63,10 @@ public class LEDTest extends OpMode {
         LED.ALL.set(LED.Modes.STATIC,
                 LED.Colors.GREEN);
         LED.update();
+
+        //LED.ALL.set(LED.Modes.PROGRESS, 2);
+        //LED.ALL
+
 
     }
 

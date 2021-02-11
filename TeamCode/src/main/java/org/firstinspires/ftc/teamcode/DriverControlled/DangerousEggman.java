@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Chassis.SampleDrive;
 import org.firstinspires.ftc.teamcode.Common.Config;
 import org.firstinspires.ftc.teamcode.Intake.Intake;
 import org.firstinspires.ftc.teamcode.Intake.SampleIntake;
+import org.firstinspires.ftc.teamcode.LEDs.LEDModes;
 import org.firstinspires.ftc.teamcode.Outtake.Outtake;
 import org.firstinspires.ftc.teamcode.Outtake.SampleOuttake;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
@@ -106,7 +107,7 @@ public class DangerousEggman extends OpMode {
         telemetry.addLine("Creating LEDs");
         try {
             I2cDeviceSynch leds = hardwareMap.get(I2cDeviceSynch.class, "ledstrip");
-            LED.init(leds);;
+            LED.init(leds);
             LED.update();
         } catch (Exception e) {
             //e.printStackTrace(Log.out);
@@ -117,6 +118,7 @@ public class DangerousEggman extends OpMode {
 
     @Override
     public void start() {
+        LEDModes.telemetry = telemetry;
         LED.ALL.set(LED.Modes.STATIC,
                 LED.Colors.OFF);
         LED.update();
@@ -139,16 +141,17 @@ public class DangerousEggman extends OpMode {
             }
         }
         //reset drive angle
-        if(gamepad1.right_bumper)
+        if(gamepad1.right_trigger == 1)
         {
             driveAngleOffset = -drive.getAngle();
         }
 
         //x toggle button to enable slow mode
-        if(!lastXButton && (gamepad1.x || gamepad1.right_bumper)) {
-            slowMode = !slowMode;
-        }
-        lastXButton = (gamepad1.x || gamepad1.right_bumper);
+//        if(!lastXButton && (gamepad1.x || gamepad1.right_bumper)) {
+//            slowMode = !slowMode;
+//        }
+//        lastXButton = (gamepad1.x || gamepad1.right_bumper);
+        slowMode = gamepad1.right_bumper;
 
         //a button to deploy intake (gamepad 1)
         if(gamepad1.a){
