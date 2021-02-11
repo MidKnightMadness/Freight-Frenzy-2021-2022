@@ -7,13 +7,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class testAaron extends OpMode {
     @Override
     public void init() {
-        telemetry.addLine("Hello World! 2: Electric Boogaloo.");
-        telemetry.update();
+        telemetry.addLine("Hello World!");
     }
 
     @Override
     public void loop() {
-        telemetry.addLine("hi");
+        if (gamepad1.a) {
+            telemetry.addLine("a");
+        } else telemetry.addLine("");
         telemetry.update();
     }
 }

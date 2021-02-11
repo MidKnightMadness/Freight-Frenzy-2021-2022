@@ -14,6 +14,14 @@ import org.firstinspires.ftc.teamcode.Outtake.Outtake;
 import org.firstinspires.ftc.teamcode.Outtake.SampleOuttake;
 import org.firstinspires.ftc.teamcode.WobbleGoal.SampleWobbleGoal;
 import org.firstinspires.ftc.teamcode.WobbleGoal.WobbleGoal;
+import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
+
+import org.firstinspires.ftc.teamcode.LEDs.LED;
+import org.firstinspires.ftc.teamcode.LEDs.LEDColor;
+
+import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.BLUE;
+import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.GREEN;
+import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.RED;
 
 import java.io.File;
 import java.util.Scanner;
@@ -32,6 +40,8 @@ public class DangerousEggman extends OpMode {
     private boolean lastLeftBumper, lastLeftBumper2, lastLeftTrigger, lastRightBumper, lastBButton, lastXButton, lastYButton = false, slowMode;
     private double lastTime, distOffX, distOffY, turn;
     private double driveAngleOffset;
+
+
 
     /*
     reconfigured as according to drive team request
@@ -88,6 +98,44 @@ public class DangerousEggman extends OpMode {
         }catch (Exception e){
             telemetry.addLine(e.getMessage());
         }
+
+        //LED experiments below
+
+        telemetry.addLine("Creating LEDs");
+        try {
+            I2cDeviceSynch leds = hardwareMap.get(I2cDeviceSynch.class, "ledstrip");
+
+            //Log.out.println("Init");
+            LED.init(leds);
+
+            //Log.out.println("Modes");
+            LED.ALL.set(LED.Modes.BOUNCING,  new LEDColor(0xFF3030, 31), BLUE);
+
+            //Log.out.println("update");
+            //Log.out.flush();
+            LED.update();
+            //Log.out.println("done");
+            //Log.out.flush();
+
+            LED.BACK.set(LED.Modes.RUNNING, LED.Colors.RED, GREEN, GREEN, RED, BLUE);
+            LED.BACK.set(BLUE);
+
+
+        } catch (Exception e) {
+            //e.printStackTrace(Log.out);
+            //Log.out.close();
+        }
+        telemetry.addData("Status", "Initialized");
+    }
+
+    @Override
+    public void start() {
+        LED.ALL.set(LED.Modes.RUNNING,
+                LED.Colors.OFF,
+                LED.Colors.OFF,
+                LED.Colors.OFF);
+        LED.update();
+
     }
 
     @Override
@@ -143,12 +191,21 @@ public class DangerousEggman extends OpMode {
         }
         if(intToggle == 0) {
             intake.stop();
+            LED.ALL.set(LED.Modes.RUNNING,
+                    LED.Colors.OFF);
+            LED.update();
         }
         if(intToggle == 1) {
             intake.start();
+            LED.ALL.set(LED.Modes.RUNNING,
+                    LED.Colors.NAVY);
+            LED.update();
         }
         if(intToggle == 2) {
             intake.eject();
+            LED.ALL.set(LED.Modes.RUNNING,
+                    LED.Colors.GREEN);
+            LED.update();
         }
         lastLeftBumper = gamepad1.left_bumper;
         lastLeftTrigger = gamepad1.left_trigger == 1;
@@ -349,6 +406,8 @@ public class DangerousEggman extends OpMode {
         telemetry.addData("Current Y", drive.getCurrentY());
         telemetry.addData("Current Angle", (drive.getAngle() + driveAngleOffset));
         telemetry.update();
+
+        LED.update();
     }
 
 }
