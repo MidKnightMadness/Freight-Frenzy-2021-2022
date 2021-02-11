@@ -48,15 +48,7 @@ public class LED {
     }
 
     /**** LED configuration. Set the lengths and make new sections as needed. Order matters. ****/
-    public static final LEDSection BACK = new LEDSection(7);
-    public static final LEDSection RIGHT = new LEDSection(8);
-    public static final LEDSection LOWER_BACK = new LEDSection( 7);
-    public static final LEDSection LEFT = new LEDSection(8);
-
-    public static final LEDPseudoSection ALL = new LEDPseudoSection(BACK, RIGHT, LEFT, LOWER_BACK);
-    public static final LEDPseudoSection LOWER = new LEDPseudoSection(RIGHT, LEFT, LOWER_BACK);
-
-
+    public static final LEDSection ALL = new LEDSection(7);
 
     private static I2cDeviceSynch ledController;
     static LEDColor[] leds = new LEDColor[30];
