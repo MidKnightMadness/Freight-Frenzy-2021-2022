@@ -36,6 +36,8 @@ public abstract class Drive extends Assembly {
     public abstract double getAngle();
     public abstract double getCurrentX();
     public abstract double getCurrentY();
+    public abstract double getDistF();
+    public abstract double getDistR();
 
     public abstract void setAngle(double angle);
     public abstract void setCurrentX(double x);
