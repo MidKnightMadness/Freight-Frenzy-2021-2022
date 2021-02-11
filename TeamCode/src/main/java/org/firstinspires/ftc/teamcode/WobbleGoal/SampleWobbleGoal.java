@@ -18,7 +18,7 @@ public class SampleWobbleGoal extends WobbleGoal{
     //declare servo
     private Servo servo1;
     //open value
-    private final double open = 0.50;
+    private final double open = 0.80;
     //close value
     private final double closed = 0.10;
     //lifted value (encoder ticks)
