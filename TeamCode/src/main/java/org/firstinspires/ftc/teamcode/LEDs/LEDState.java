@@ -8,9 +8,9 @@ public class LEDState {
                         time > 90 ? LED.Colors.ORANGE :
                                 time > 80 ? LED.Colors.YELLOW : LED.Colors.GREEN
         );
-        if(LED.LEFT.getModeEnum() == LED.Modes.STATIC && slow)
+        if(LED.ALL.getModeEnum() == LED.Modes.STATIC && slow)
             LED.ALL.set(LED.Modes.FLASHING);
-        else if(LED.LEFT.getModeEnum() == LED.Modes.FLASHING && !slow)
+        else if(LED.ALL.getModeEnum() == LED.Modes.FLASHING && !slow)
             LED.ALL.set(LED.Modes.STATIC);
     }
 }

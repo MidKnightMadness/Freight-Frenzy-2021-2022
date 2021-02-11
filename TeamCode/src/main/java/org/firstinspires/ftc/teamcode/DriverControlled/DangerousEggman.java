@@ -104,23 +104,8 @@ public class DangerousEggman extends OpMode {
         telemetry.addLine("Creating LEDs");
         try {
             I2cDeviceSynch leds = hardwareMap.get(I2cDeviceSynch.class, "ledstrip");
-
-            //Log.out.println("Init");
-            LED.init(leds);
-
-            //Log.out.println("Modes");
-            LED.ALL.set(LED.Modes.BOUNCING,  new LEDColor(0xFF3030, 31), BLUE);
-
-            //Log.out.println("update");
-            //Log.out.flush();
+            LED.init(leds);;
             LED.update();
-            //Log.out.println("done");
-            //Log.out.flush();
-
-            LED.BACK.set(LED.Modes.RUNNING, LED.Colors.RED, GREEN, GREEN, RED, BLUE);
-            LED.BACK.set(BLUE);
-
-
         } catch (Exception e) {
             //e.printStackTrace(Log.out);
             //Log.out.close();
@@ -130,9 +115,7 @@ public class DangerousEggman extends OpMode {
 
     @Override
     public void start() {
-        LED.ALL.set(LED.Modes.RUNNING,
-                LED.Colors.OFF,
-                LED.Colors.OFF,
+        LED.ALL.set(LED.Modes.STATIC,
                 LED.Colors.OFF);
         LED.update();
 
@@ -191,20 +174,20 @@ public class DangerousEggman extends OpMode {
         }
         if(intToggle == 0) {
             intake.stop();
-            LED.ALL.set(LED.Modes.RUNNING,
-                    LED.Colors.OFF);
+            LED.ALL.set(LED.Modes.STATIC,
+                    LED.Colors.YELLOW);
             LED.update();
         }
         if(intToggle == 1) {
             intake.start();
-            LED.ALL.set(LED.Modes.RUNNING,
-                    LED.Colors.NAVY);
+            LED.ALL.set(LED.Modes.STATIC,
+                    LED.Colors.GREEN);
             LED.update();
         }
         if(intToggle == 2) {
             intake.eject();
-            LED.ALL.set(LED.Modes.RUNNING,
-                    LED.Colors.GREEN);
+            LED.ALL.set(LED.Modes.STATIC,
+                    LED.Colors.RED);
             LED.update();
         }
         lastLeftBumper = gamepad1.left_bumper;

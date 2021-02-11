@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.LEDs.LEDColor;
 
 import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.BLUE;
 import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.GREEN;
+import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.OFF;
 import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.RED;
 
 /**
@@ -36,26 +37,10 @@ public class LEDTest extends OpMode {
         telemetry.addLine("Creating LEDs");
         try {
             I2cDeviceSynch leds = hardwareMap.get(I2cDeviceSynch.class, "ledstrip");
-
-            //Log.out.println("Init");
             LED.init(leds);
-
-            //Log.out.println("Modes");
-            LED.ALL.set(LED.Modes.BOUNCING,  new LEDColor(0xFF3030, 31), BLUE);
-
-            //Log.out.println("update");
-            //Log.out.flush();
             LED.update();
-            //Log.out.println("done");
-            //Log.out.flush();
-
-            LED.BACK.set(LED.Modes.RUNNING, LED.Colors.RED, GREEN, GREEN, RED, BLUE);
-            LED.BACK.set(BLUE);
-
-
         } catch (Exception e) {
-            //e.printStackTrace(Log.out);
-            //Log.out.close();
+
         }
         telemetry.addData("Status", "Initialized");
     }
@@ -73,10 +58,8 @@ public class LEDTest extends OpMode {
      */
     @Override
     public void start() {
-        LED.ALL.set(LED.Modes.RUNNING,
-                LED.Colors.NAVY,
-                LED.Colors.NAVY,
-                LED.Colors.GOLD);
+        LED.ALL.set(LED.Modes.BOUNCING,
+                LED.Colors.RED);
         LED.update();
 
     }
@@ -87,18 +70,16 @@ public class LEDTest extends OpMode {
     @Override
     public void loop() {
         LED.update();
-
-
     }
 
     /*
      * Code to run ONCE after the driver hits STOP
      */
-    /*
     @Override
     public void stop() {
-        Log.out.close();
+        LED.ALL.set(LED.Modes.STATIC,
+                OFF);
+        LED.update();
+        telemetry.addLine("Stopping");
     }
-
-     */
 }

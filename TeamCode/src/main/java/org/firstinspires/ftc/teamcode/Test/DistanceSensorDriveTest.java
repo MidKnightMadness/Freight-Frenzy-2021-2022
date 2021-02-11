@@ -50,8 +50,8 @@ public class DistanceSensorDriveTest extends OpMode {
         if(!gamepad1.x){
             turn = gamepad1.right_stick_x;
         }
-        telemetry.addData("diving y", powY);
-        telemetry.addData("diving x", -powX);
+        telemetry.addData("driving y", powY);
+        telemetry.addData("driving x", -powX);
         telemetry.addData("turning", turn);
         drive.drive(powY, powX, turn);
     }
