@@ -105,15 +105,15 @@ public class AutoRedRightTurn extends LinearOpMode {
 
         //move to shooting position 3
         if (visual.getStartStack() == Visual.STARTERSTACK.A) {
-            drive.move(-14, -21);
+            drive.move(-15, -21);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else if (visual.getStartStack() == Visual.STARTERSTACK.B) {
-            drive.move(26, -43);
+            drive.move(25, -43);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         } else {
-            drive.move(-14, -68);
+            drive.move(-15, -68);
             telemetry.addLine("Zone: " + visual.getStartStack());
             telemetry.update();
         }
@@ -129,9 +129,9 @@ public class AutoRedRightTurn extends LinearOpMode {
         telemetry.addData("Current Y: ", drive.getCurrentY());
         telemetry.update();
 
-        drive.adjustWalls(60, 39);
+        drive.adjustWalls(60, 40);
         sleep(1);
-        drive.adjustWalls(60, 39);
+        drive.adjustWalls(60, 40);
         drive.setCurrentY(drive.getCurrentY() + 18);
 
         telemetry.addData("DistF: ", drive.getDistF());
