@@ -148,7 +148,7 @@ public class AutoRedRightTurn extends LinearOpMode {
                 telemetry.update();
             }
 
-        drive.turnToPoint(-24,144);
+        //drive.turnToPoint(-24,144);
 
         telemetry.addLine("Outtake ready, starting to shoot");
         telemetry.update();
@@ -157,13 +157,15 @@ public class AutoRedRightTurn extends LinearOpMode {
         outtake.resetFeed();
         sleep(1000);
 
-        drive.turnToPoint(-31.5,144);
+        //drive.turnToPoint(-31.5,144);
+        drive.betterTurn(-5);
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
-        drive.turnToPoint(-39,144);
+        //drive.turnToPoint(-39,144);
+        drive.betterTurn(-5);
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
