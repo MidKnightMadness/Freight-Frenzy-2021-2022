@@ -609,6 +609,7 @@ public class SampleDrive extends Drive{
 
         while(turn > 0.033333)  {
             turn = Math.abs(imu.getAngularOrientation().firstAngle - targetAngle) / 30;
+
             if(imu.getAngularOrientation().firstAngle > targetAngle) {
                 drive(0,0, turn);
             }

@@ -158,14 +158,14 @@ public class AutoRedRightTurn extends LinearOpMode {
         sleep(1000);
 
         //drive.turnToPoint(-31.5,144);
-        drive.betterTurn(-5);
+        drive.betterTurn(5);
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
         sleep(1000);
 
         //drive.turnToPoint(-39,144);
-        drive.betterTurn(-5);
+        drive.betterTurn(5);
         outtake.feedRun();
         sleep(1000);
         outtake.resetFeed();
