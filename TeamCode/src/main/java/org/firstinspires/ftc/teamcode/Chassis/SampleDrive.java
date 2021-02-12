@@ -466,6 +466,8 @@ public class SampleDrive extends Drive{
 
     @Override
     public void adjustWalls(double inchesF, double inchesR) {
+        updatePosition();
+
         //adjust for range sensor inaccuracies
         inchesF = inchesF * 1.08;
         inchesR = inchesR * 1.08;
@@ -489,6 +491,28 @@ public class SampleDrive extends Drive{
 
             drive(distOffF, distOffR, turn);
         }
+
+        double changeFL = motorFL.getCurrentPosition() - lastFL;
+        double changeFR = motorFR.getCurrentPosition() - lastFR;
+        double changeBL = motorBL.getCurrentPosition() - lastBL;
+        double changeBR = motorBR.getCurrentPosition() - lastBR;
+
+        double rotation = (changeFL + changeFR + changeBL + changeBR) / 4;
+        changeFL -= rotation;
+        changeFR -= rotation;
+        changeBL -= rotation;
+        changeBR -= rotation;
+
+        double distanceX = -(-changeFL - changeFR + changeBL + changeBR) / 180;
+        double distanceY = (changeFL - changeFR + changeBL - changeBR) / 180;
+
+        updateAngle();
+        updatePosition();
+        double trueX = (-distanceY * Math.sin(Math.toRadians(currentAngle)) + distanceX * Math.cos(Math.toRadians(currentAngle)));
+        double trueY = (distanceY * Math.cos(Math.toRadians(currentAngle)) + distanceX * Math.sin(Math.toRadians(currentAngle)));
+
+        setCurrentX(currentX + trueX);
+        setCurrentY(currentY + trueY);
 
         drive(0,0,0);
     }
