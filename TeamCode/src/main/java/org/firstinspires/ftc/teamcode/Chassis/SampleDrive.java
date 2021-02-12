@@ -172,7 +172,7 @@ public class SampleDrive extends Drive{
         while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
-                    return;
+                    break;
             }
             catch (NullPointerException exception){
                 telemetry.addLine("You need to set isStopRequested when using move");
@@ -294,7 +294,7 @@ public class SampleDrive extends Drive{
         while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
-                    return;
+                    break;
             }
             catch (NullPointerException exception){
                 telemetry.addLine("You need to set isStopRequested when using move");
@@ -367,7 +367,7 @@ public class SampleDrive extends Drive{
         while((motorFL.isBusy() || motorFR.isBusy() || motorBL.isBusy() || motorBR.isBusy())) {
             try {
                 if(isStopRequested.call())
-                    return;
+                    break;
             }
             catch (NullPointerException exception){
                 telemetry.addLine("You need to set isStopRequested when using move");
@@ -477,6 +477,15 @@ public class SampleDrive extends Drive{
         double turn = 1;
 
         while (Math.abs(distOffF) >  0.3 || Math.abs(distOffR) > 0.3 || Math.abs(turn) > 0.033333) {
+            try {
+                if(isStopRequested.call())
+                    break;
+            }
+            catch (NullPointerException exception){
+                telemetry.addLine("You need to set isStopRequested when using move");
+            }
+            catch (Exception ignored) {}
+
             distOffF = distF.getDistance(DistanceUnit.INCH);
             if (distOffF != 0) {
                 distOffF = -(distOffF - inchesF) / 48;
@@ -537,7 +546,7 @@ public class SampleDrive extends Drive{
         while(!angleTolerance)  {
             try {
                 if(isStopRequested.call())
-                    return;
+                    break;
             }
             catch (NullPointerException exception){
                 telemetry.addLine("You need to set isStopRequested when using move");
@@ -554,7 +563,7 @@ public class SampleDrive extends Drive{
             while(angleCounter != (int)targetAngle) {
                 try {
                     if(isStopRequested.call())
-                        return;
+                        break;
                 }
                 catch (NullPointerException exception){
                     telemetry.addLine("You need to set isStopRequested when using move");
@@ -568,7 +577,7 @@ public class SampleDrive extends Drive{
             while(angleCounter != (int)targetAngle) {
                 try {
                     if(isStopRequested.call())
-                        return;
+                        break;
                 }
                 catch (NullPointerException exception){
                     telemetry.addLine("You need to set isStopRequested when using move");
