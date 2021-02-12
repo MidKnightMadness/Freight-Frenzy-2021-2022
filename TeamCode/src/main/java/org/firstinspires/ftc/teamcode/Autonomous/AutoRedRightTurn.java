@@ -171,7 +171,7 @@ public class AutoRedRightTurn extends LinearOpMode {
 
         outtake.stop();
         drive.move(0, 14);
-        drive.adjustWalls(46,53.5);
+        drive.alignForward();
 
         telemetry.addData("Current X: ", drive.getCurrentX());
         telemetry.addData("Current Y: ", drive.getCurrentY());
