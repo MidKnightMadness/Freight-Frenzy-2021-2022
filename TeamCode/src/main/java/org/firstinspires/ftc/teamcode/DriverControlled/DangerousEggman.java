@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.LEDs.LEDColor;
 
 import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.BLUE;
 import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.GREEN;
+import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.OFF;
 import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.RED;
 
 import java.io.File;
@@ -51,7 +52,7 @@ public class DangerousEggman extends OpMode {
     LBumper - toggle intake
     LTrigger - toggle intake reverse
 
-    RTrigger - reset drive heading
+    x - reset drive heading
 
     LStick - directional drive
     RStickX - turn
@@ -141,7 +142,7 @@ public class DangerousEggman extends OpMode {
             }
         }
         //reset drive angle
-        if(gamepad1.right_trigger == 1)
+        if(gamepad1.x)
         {
             driveAngleOffset = -drive.getAngle();
         }
@@ -180,7 +181,7 @@ public class DangerousEggman extends OpMode {
         if(intToggle == 0) {
             intake.stop();
             LED.ALL.set(LED.Modes.STATIC,
-                    LED.Colors.YELLOW);
+                    LED.Colors.PINK);
             LED.update();
         }
         if(intToggle == 1) {
@@ -399,4 +400,10 @@ public class DangerousEggman extends OpMode {
 
     }
 
+    @Override
+    public void stop() {
+        LED.ALL.set(LED.Modes.STATIC, OFF);
+        LED.update();
+        telemetry.addLine("Stopping");
+    }
 }
