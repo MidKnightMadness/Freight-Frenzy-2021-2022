@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Chassis.SampleDrive;
 import org.firstinspires.ftc.teamcode.Common.Config;
 
 @TeleOp
+@Disabled
 public class DistanceSensorDriveTest extends OpMode {
 
     Drive drive = new SampleDrive();

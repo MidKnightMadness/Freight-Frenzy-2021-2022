@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Common.Config;
 
 @TeleOp
+@Disabled
 public class DistanceSensorTest extends OpMode {
 
     //sensor declaration

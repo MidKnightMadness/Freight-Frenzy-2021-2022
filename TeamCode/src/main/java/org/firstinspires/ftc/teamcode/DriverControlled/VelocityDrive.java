@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.Common.Config;
 
 @TeleOp
+@Disabled
 public class VelocityDrive extends OpMode {
     private DcMotorEx FL;
     private DcMotorEx FR;

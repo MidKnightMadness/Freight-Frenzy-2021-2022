@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Common.Config;
 import static java.lang.Math.*;
 
 @TeleOp
+@Disabled
 public class ServoTest extends OpMode {
     CRServo servo;
 

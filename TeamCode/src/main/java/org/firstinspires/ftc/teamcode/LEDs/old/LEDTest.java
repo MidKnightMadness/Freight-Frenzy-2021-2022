@@ -24,7 +24,7 @@ import static org.firstinspires.ftc.teamcode.LEDs.LED.Colors.RED;
  * Remove a @Disabled the on the next line or two (if present) to add this opmode to the Driver Station OpMode list,
  * or add a @Disabled annotation to prevent this OpMode from being added to the Driver Station
  */
-//@Disabled
+@Disabled
 @TeleOp
 
 public class LEDTest extends OpMode {
