@@ -37,8 +37,8 @@ public class SampleIntake extends Intake{
     //start motor
     @Override
     public void start() {
-        intakeMotorL.setVelocity(2500);
-        intakeMotorR.setVelocity(-2500);
+        intakeMotorL.setVelocity(1875);
+        intakeMotorR.setVelocity(-1875);
         roller.setPower(-1);
 
         telemetry.addData("intake L", intakeMotorL.getVelocity());
