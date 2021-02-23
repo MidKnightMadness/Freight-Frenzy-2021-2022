@@ -220,15 +220,15 @@ public class DangerousEggman extends OpMode {
             }
         }
         lastLeftBumper2 = gamepad2.left_bumper;
-        //when right trigger is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
-        if(!lastLeftTrigger2 && gamepad2.left_trigger != 0) {
-            if(outToggle == 3) {
-                outToggle = 0;
-            }
-            else {
-                outToggle = 3;
-            }
-        }
+//        //when right trigger is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
+//        if(!lastLeftTrigger2 && gamepad2.left_trigger != 0) {
+//            if(outToggle == 3) {
+//                outToggle = 0;
+//            }
+//            else {
+//                outToggle = 3;
+//            }
+//        }
         lastLeftTrigger2 = gamepad2.left_trigger != 0;
         if(outToggle == 0) {
             outtake.stop();
@@ -239,9 +239,9 @@ public class DangerousEggman extends OpMode {
         else if(outToggle == 2) {
             outtake.startPowerShot();
         }
-        else if(outToggle == 3) {
-            outtake.startFar();
-        }
+//        else if(outToggle == 3) {
+//            outtake.startFar();
+//        }
 
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
         //it is already in that position in which it moves back to its starting position (gamepad 1)
