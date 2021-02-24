@@ -292,7 +292,7 @@ public class DangerousEggman extends OpMode {
         //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
         if(gamepad2.a) {
             //adjust using distance sensors
-            distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 28) / 48;
+            distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 29.5) / 48;
             distOffY = sensorF.getDistance(DistanceUnit.INCH);
             if(distOffY != 0)
                 distOffY = -(distOffY - 65) / 48;

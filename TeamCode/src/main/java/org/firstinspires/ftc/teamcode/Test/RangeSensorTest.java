@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp
-@Disabled
+//@Disabled
 public class RangeSensorTest extends OpMode {
     ModernRoboticsI2cRangeSensor sensor;
 

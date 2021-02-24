@@ -104,7 +104,7 @@ public class AutoRedRightManualHighTower extends LinearOpMode {
         }
 
         //drive to high tower
-        drive.adjustWalls(70, 22);
+        drive.adjustWalls(70, 23.5);
 
         telemetry.addLine("waiting for outtake");
         telemetry.update();

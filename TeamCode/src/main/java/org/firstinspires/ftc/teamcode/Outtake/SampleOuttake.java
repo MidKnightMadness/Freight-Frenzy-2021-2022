@@ -44,7 +44,7 @@ public class SampleOuttake extends Outtake {
     //start motor
     @Override
     public void start() {
-        targetVel = 1800;
+        targetVel = 1790;
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
