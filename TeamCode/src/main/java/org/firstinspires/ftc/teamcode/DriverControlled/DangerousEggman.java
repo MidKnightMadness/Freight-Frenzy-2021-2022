@@ -58,8 +58,8 @@ public class DangerousEggman extends OpMode {
     RStickX - turn
 
     A - deploy intake
-    X - toggle slow drive
     RBumper - toggle slow drive
+    X - toggle slow drive
 
 
 
