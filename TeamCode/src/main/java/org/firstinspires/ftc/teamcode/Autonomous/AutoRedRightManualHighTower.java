@@ -104,7 +104,8 @@ public class AutoRedRightManualHighTower extends LinearOpMode {
         }
 
         //drive to high tower
-        drive.adjustWalls(70, 23.5);
+        drive.adjustWalls(70, 19);
+        drive.adjustWalls(70, 19);
 
         telemetry.addLine("waiting for outtake");
         telemetry.update();
@@ -147,7 +148,9 @@ public class AutoRedRightManualHighTower extends LinearOpMode {
 
         //turn to power shot
         double turn = 1;
-        while (Math.abs(turn) > 0.033333) {
+        double lastTurn = 0;
+        while (Math.abs(turn) > 0.033333 && !isStopRequested() && turn != lastTurn) {
+            lastTurn = turn;
             turn = (drive.getAngle() - 15) / 30;
             drive.drive(0, 0, turn);
             telemetry.addData("turn", turn);
@@ -170,7 +173,8 @@ public class AutoRedRightManualHighTower extends LinearOpMode {
 
 
         turn = 1;
-        while (Math.abs(turn) > 0.033333) {
+        while (Math.abs(turn) > 0.033333 && !isStopRequested() && turn != lastTurn) {
+            lastTurn = turn;
             turn = drive.getAngle() / 30;
             drive.drive(0, 0, turn);
             telemetry.addData("turn", turn);
