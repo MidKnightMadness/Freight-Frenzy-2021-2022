@@ -149,7 +149,7 @@ public class AutoRedRightManualHighTower extends LinearOpMode {
         //turn to power shot
         double turn = 1;
         double lastTurn = 0;
-        while (Math.abs(turn) > 0.033333 && !isStopRequested() && turn != lastTurn) {
+        while (Math.abs(turn) > 0.033333 && !isStopRequested()) {
             lastTurn = turn;
             turn = (drive.getAngle() - 15) / 30;
             drive.drive(0, 0, turn);
@@ -173,7 +173,7 @@ public class AutoRedRightManualHighTower extends LinearOpMode {
 
 
         turn = 1;
-        while (Math.abs(turn) > 0.033333 && !isStopRequested() && turn != lastTurn) {
+        while (Math.abs(turn) > 0.033333 && !isStopRequested()) {
             lastTurn = turn;
             turn = drive.getAngle() / 30;
             drive.drive(0, 0, turn);
