@@ -131,19 +131,19 @@ public class ForCarnival extends OpMode {
         telemetry.addData("loop time", time - lastTime);
         lastTime = time;
 
-        /*
-        if(!gamepad2.a && !gamepad2.dpad_right && !gamepad2.dpad_up && !gamepad2.dpad_left)
-        {
+
+//        if(!gamepad2.a && !gamepad2.dpad_right && !gamepad2.dpad_up && !gamepad2.dpad_left)
+//        {
             //drive controlled by left stick used to move forwards and sideways, right stick used to turn (gamepad 1)
-            if(slowMode) {
-                drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 3);
-                telemetry.addLine("slow mode enabled");
-            } else {
+//            if(slowMode) {
+//                drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 3);
+//                telemetry.addLine("slow mode enabled");
+//            } else {
                 drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            }
-        }
+//            }
+//        }
         //reset drive angle
-        if(gamepad1.x)
+        /*if(gamepad1.x)
         {
             driveAngleOffset = -drive.getAngle();
         }
