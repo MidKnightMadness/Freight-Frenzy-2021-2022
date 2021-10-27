@@ -203,13 +203,22 @@ public class ForCarnival extends OpMode {
         */
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 1)
         if(!lastRightBumper && gamepad2.y) {
-            if(outToggle == 1) {
+            if (outToggle == 2) {
                 outToggle = 0;
+            } else {
+                outToggle = 2;
             }
-            else {
+        }
+
+        if (!lastRightBumper && gamepad2.a) {
+            if (outToggle == 1) {
+                outToggle = 0;
+            } else {
                 outToggle = 1;
             }
         }
+
+
         lastRightBumper = gamepad2.y;
 
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
@@ -389,13 +398,10 @@ public class ForCarnival extends OpMode {
         }*/
 
         if(outToggle == 1) {
-            telemetry.addLine("Outtake: Tower Speed");
+            telemetry.addLine("Outtake: Low");
         }
         else if(outToggle == 2) {
-            telemetry.addLine("Outtake: Power Shot Speed");
-        }
-        else if(outToggle == 3) {
-            telemetry.addLine("Outtake: Far");
+            telemetry.addLine("Outtake: High");
         }
         else{
             telemetry.addLine("Outtake: OFF");
