@@ -157,9 +157,9 @@ public class ForCarnival extends OpMode {
         //slowMode = gamepad1.right_bumper;
 
         //a button to deploy intake (gamepad 1)
-        if(gamepad1.a){
+        /*if(gamepad1.a){
             intake.deploy();
-        }
+        }*/
 
         //when left bumper is pressed, start intake unless it was previously on in which intake stops (gamepad 1)
         //when left trigger is pressed, reverse intake unless it was previously on in which intake stops (gamepad 1)
@@ -202,7 +202,7 @@ public class ForCarnival extends OpMode {
         lastLeftTrigger = gamepad1.left_trigger == 1;
         */
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 1)
-        if(!lastRightBumper && gamepad2.right_bumper) {
+        if(!lastRightBumper && gamepad2.y) {
             if(outToggle == 1) {
                 outToggle = 0;
             }
@@ -210,10 +210,10 @@ public class ForCarnival extends OpMode {
                 outToggle = 1;
             }
         }
-        lastRightBumper = gamepad2.right_bumper;
+        lastRightBumper = gamepad2.y;
 
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
-        if(!lastLeftBumper2 && gamepad2.left_bumper) {
+        /*if(!lastLeftBumper2 && gamepad2.left_bumper) {
             if(outToggle == 2) {
                 outToggle = 0;
             }
@@ -221,7 +221,7 @@ public class ForCarnival extends OpMode {
                 outToggle = 2;
             }
         }
-        lastLeftBumper2 = gamepad2.left_bumper;
+        lastLeftBumper2 = gamepad2.left_bumper;*/
 //        //when right trigger is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
 //        if(!lastLeftTrigger2 && gamepad2.left_trigger != 0) {
 //            if(outToggle == 3) {
@@ -231,7 +231,7 @@ public class ForCarnival extends OpMode {
 //                outToggle = 3;
 //            }
 //        }
-        lastLeftTrigger2 = gamepad2.left_trigger != 0;
+        /*lastLeftTrigger2 = gamepad2.left_trigger != 0;
         if(outToggle == 0) {
             outtake.stop();
         }
@@ -377,7 +377,7 @@ public class ForCarnival extends OpMode {
         */
 
 
-        if(gamepad2.dpad_down)
+        /*if(gamepad2.dpad_down)
         {
             //start outtake according to velocity
             outtake.startFromPos(drive.getCurrentX(), drive.getCurrentY(), 5);
@@ -386,7 +386,7 @@ public class ForCarnival extends OpMode {
             double angle = (drive.getAngle() + driveAngleOffset);
             double targetAngle = Math.toDegrees(Math.atan2(-28.75 - drive.getCurrentX(), 80 - drive.getCurrentY()));  //get the angle that we want to turn to
             drive.drive(0,0, angle);
-        }
+        }*/
 
         if(outToggle == 1) {
             telemetry.addLine("Outtake: Tower Speed");
