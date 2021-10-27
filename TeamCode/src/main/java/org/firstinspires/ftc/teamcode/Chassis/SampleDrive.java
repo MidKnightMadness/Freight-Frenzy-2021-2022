@@ -98,6 +98,7 @@ public class SampleDrive extends Drive{
     //positive forwards value moves backwards, negative forwards value moves forwards
     //positive sideways value moves right, negative sideways value moves left
     //positive turn value moves clockwise, negative turn value moves counter-clockwise
+
     @Override
     public void drive(double forwards, double sideways, double turn) {
         motorFL.setVelocity((-forwards + sideways + turn) * maxVel);
@@ -186,6 +187,8 @@ public class SampleDrive extends Drive{
             //move different speeds depending on how far you're moving
             if (distance > 24) {
                 motorFL.setPower(power);
+                motorFL.setPower(1);
+
                 motorFR.setPower(power);
                 motorBL.setPower(power);
                 motorBR.setPower(power);
