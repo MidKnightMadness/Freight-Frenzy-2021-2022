@@ -240,7 +240,7 @@ public class ForCarnival extends OpMode {
 //                outToggle = 3;
 //            }
 //        }
-        /*lastLeftTrigger2 = gamepad2.left_trigger != 0;
+        lastLeftTrigger2 = gamepad2.left_trigger != 0;
         if(outToggle == 0) {
             outtake.stop();
         }
