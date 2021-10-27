@@ -131,6 +131,7 @@ public class ForCarnival extends OpMode {
         telemetry.addData("loop time", time - lastTime);
         lastTime = time;
 
+        /*
         if(!gamepad2.a && !gamepad2.dpad_right && !gamepad2.dpad_up && !gamepad2.dpad_left)
         {
             //drive controlled by left stick used to move forwards and sideways, right stick used to turn (gamepad 1)
@@ -146,13 +147,14 @@ public class ForCarnival extends OpMode {
         {
             driveAngleOffset = -drive.getAngle();
         }
+        */
 
         //x toggle button to enable slow mode
 //        if(!lastXButton && (gamepad1.x || gamepad1.right_bumper)) {
 //            slowMode = !slowMode;
 //        }
 //        lastXButton = (gamepad1.x || gamepad1.right_bumper);
-        slowMode = gamepad1.right_bumper;
+        //slowMode = gamepad1.right_bumper;
 
         //a button to deploy intake (gamepad 1)
         if(gamepad1.a){
@@ -161,7 +163,7 @@ public class ForCarnival extends OpMode {
 
         //when left bumper is pressed, start intake unless it was previously on in which intake stops (gamepad 1)
         //when left trigger is pressed, reverse intake unless it was previously on in which intake stops (gamepad 1)
-        if(!lastLeftBumper && gamepad1.left_bumper) {
+        /*if(!lastLeftBumper && gamepad1.left_bumper) {
             if(intToggle == 1) {
                 intToggle = 0;
 
@@ -198,7 +200,7 @@ public class ForCarnival extends OpMode {
         }
         lastLeftBumper = gamepad1.left_bumper;
         lastLeftTrigger = gamepad1.left_trigger == 1;
-
+        */
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 1)
         if(!lastRightBumper && gamepad2.right_bumper) {
             if(outToggle == 1) {
@@ -255,7 +257,9 @@ public class ForCarnival extends OpMode {
         }
 
         //when b button is pressed, wobble goal is opened unless it is already opened in which it closes (gamepad 1)
+        /*
         if(!lastBButton && gamepad2.b) {
+
             if(openWobToggle == 1) {
                 openWobToggle = 0;
             }
@@ -270,9 +274,12 @@ public class ForCarnival extends OpMode {
             wobbleGoal.open();
         }
         lastBButton = gamepad2.b;
+        */
 
         //when y button is pressed, wobble goal is lifted unless it is already lifted in which it lowers (gamepad 1)
+        /*
         if(!lastYButton && gamepad2.y) {
+
             if(liftWobToggle == 1) {
                 liftWobToggle = 0;
             }
@@ -288,8 +295,11 @@ public class ForCarnival extends OpMode {
         }
 //        wobbleGoal.outputTelemetry();
         lastYButton = gamepad2.y;
+        */
 
         //when a button is pressed, start adjusting bot to shooting position in front of tower unless it already is in which it stops (gamepad 2)
+        //adjust to low shooting position
+        /*
         if(gamepad2.a) {
             //adjust using distance sensors
             distOffX = (sensorR.getDistance(DistanceUnit.INCH) - 29.5) / 48;
@@ -314,7 +324,7 @@ public class ForCarnival extends OpMode {
         telemetry.addData("distX", distOffX);
         telemetry.addData("distY", distOffY);
         telemetry.addData("turn", turn);
-
+        */
         /*
         //when x button is pressed, start adjusting bot to shooting position in front of leftmost power shot unless it already is in which it stops (gamepad 2)
         if(gamepad2.dpad_left) {
@@ -407,4 +417,3 @@ public class ForCarnival extends OpMode {
         telemetry.addLine("Stopping");
     }
 }
-
