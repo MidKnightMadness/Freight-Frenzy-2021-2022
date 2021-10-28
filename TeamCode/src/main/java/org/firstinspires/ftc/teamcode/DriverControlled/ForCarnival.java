@@ -256,7 +256,7 @@ public class ForCarnival extends OpMode {
 //        else if(outToggle == 3) {
 //            outtake.startFar();
 //        }
-
+*/
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
         //it is already in that position in which it moves back to its starting position (gamepad 1)
         if(gamepad2.right_trigger != 1) {
