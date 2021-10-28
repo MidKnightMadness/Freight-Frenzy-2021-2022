@@ -55,6 +55,18 @@ public class SampleOuttake extends Outtake {
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
 
+    public void startMacho(){
+        targetVel = 2000;
+        motor.setVelocity(targetVel);
+        telemetry.addData("outtake velocity", motor.getVelocity());
+    }
+
+    public void startHeidi(){
+        targetVel = 1600;
+        motor.setVelocity(targetVel);
+        telemetry.addData("outtake velocity", motor.getVelocity());
+    }
+
     /*
     public void startFar(){
         targetVel = 1890;
