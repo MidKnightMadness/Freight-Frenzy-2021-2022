@@ -307,6 +307,8 @@ public class SampleDrive extends Drive{
             //move different speeds depending on how far you're moving
             if (distance > 24) {
                 motorFL.setPower(power);
+                motorFL.setPower(1);
+
                 motorFR.setPower(power);
                 motorBL.setPower(power);
                 motorBR.setPower(power);

@@ -139,7 +139,7 @@ public class ForCarnival extends OpMode {
 //                drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 3);
 //                telemetry.addLine("slow mode enabled");
 //            } else {
-                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x / 2);
 //            }
 //        }
         //reset drive angle
