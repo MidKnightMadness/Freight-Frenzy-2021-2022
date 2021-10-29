@@ -44,13 +44,13 @@ public class SampleOuttake extends Outtake {
     //start motor
     @Override
     public void start() {
-        targetVel = 1790;
+        targetVel = 1800;
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }
 
     public void startPowerShot(){
-        targetVel = 1600;
+        targetVel = 1300;
         motor.setVelocity(targetVel);
         telemetry.addData("outtake velocity", motor.getVelocity());
     }

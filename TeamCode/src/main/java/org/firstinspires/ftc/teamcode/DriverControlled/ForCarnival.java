@@ -202,15 +202,7 @@ public class ForCarnival extends OpMode {
         lastLeftTrigger = gamepad1.left_trigger == 1;
         */
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 1)
-        if(!lastRightBumper && gamepad2.y) {
-            if (outToggle == 2) {
-                outToggle = 0;
-            } else {
-                outToggle = 2;
-            }
-        }
-
-        if (!lastRightBumper && gamepad2.a) {
+        if(gamepad2.y) {
             if (outToggle == 1) {
                 outToggle = 0;
             } else {
@@ -218,8 +210,16 @@ public class ForCarnival extends OpMode {
             }
         }
 
+        if (gamepad2.a) {
+            if (outToggle == 2) {
+                outToggle = 0;
+            } else {
+                outToggle = 2;
+            }
+        }
 
-        lastRightBumper = gamepad2.y;
+
+//        lastRightBumper = gamepad2.y;
 
         //when right bumper is pressed, start outtake unless it was previously on in which outtake stops (gamepad 2 power shot power)
         /*if(!lastLeftBumper2 && gamepad2.left_bumper) {
