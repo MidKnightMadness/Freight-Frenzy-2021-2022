@@ -139,7 +139,7 @@ public class ForCarnival extends OpMode {
 //                drive.drive(gamepad1.left_stick_y / 3, gamepad1.left_stick_x / 3, gamepad1.right_stick_x / 3);
 //                telemetry.addLine("slow mode enabled");
 //            } else {
-                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+                drive.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x / 2);
 //            }
 //        }
         //reset drive angle
@@ -240,20 +240,23 @@ public class ForCarnival extends OpMode {
 //                outToggle = 3;
 //            }
 //        }
-        lastLeftTrigger2 = gamepad2.left_trigger != 0;
+//        lastLeftTrigger2 = gamepad2.left_trigger != 0;
         if(outToggle == 0) {
             outtake.stop();
         }
+
         else if(outToggle == 1) {
-            outtake.start();
+            outtake.startHeidi();
         }
         else if(outToggle == 2) {
-            outtake.startPowerShot();
+            outtake.startMacho();
         }
+
+ /*
 //        else if(outToggle == 3) {
 //            outtake.startFar();
 //        }
-
+*/
         //when right trigger is pressed, outtake servo is moved to push ring forwards unless (gamepad 1)
         //it is already in that position in which it moves back to its starting position (gamepad 1)
         if(gamepad2.right_trigger != 1) {
