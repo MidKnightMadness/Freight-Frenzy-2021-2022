@@ -12,15 +12,6 @@ public class GamepadTest extends OpMode {
 
     }
 
-    /*
-     * Testing if the gamepad will update asynchronously (independent of the code)
-     * Basically, if the gamepad's values will update while in a loop
-     *
-     * This is especially important for driver assist (safety) features
-     * If it does update asynchronously, we can use the gamepad for canceling driver assist
-     *
-     * yes, it updates asynchronously
-     */
     @Override
     public void loop() {
 
