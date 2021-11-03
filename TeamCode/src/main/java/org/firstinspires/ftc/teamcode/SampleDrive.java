@@ -29,10 +29,10 @@ public class SampleDrive {
     }
 
     public void drive(double xx, double yy, double rotation) {
-        //FRMotor.setPower(xx + yy + rotation);
-        //FLMotor.setPower(xx - yy + rotation);
-        //BRMotor.setPower(-xx + yy + rotation);
-        //BLMotor.setPower(-xx - yy + rotation);
+        //FRMotor.setPower(xx - yy + rotation);
+        //FLMotor.setPower(xx + yy + rotation);
+        //BRMotor.setPower(-xx - yy + rotation);
+        //BLMotor.setPower(-xx + yy + rotation);
 
         FRMotor.setVelocity((xx - yy + rotation) * 1000);
         FLMotor.setVelocity((xx + yy + rotation) * 1000);
