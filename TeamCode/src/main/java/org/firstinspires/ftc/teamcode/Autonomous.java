@@ -14,7 +14,7 @@ public class Autonomous extends LinearOpMode {
 
         // Detecting Team Shipping Element and Placing Pre-Load Box (7 seconds)
         drive.drive(-1, 0.8, 0); //drive to alliance shipping hub
-        sleep(800);
+        sleep(1200);
 
         drive.drive(0,0,0);
         sleep(3000);
@@ -23,7 +23,7 @@ public class Autonomous extends LinearOpMode {
         //drive.drive(0,0,-1); //drive to carousel from shipping hub
         //sleep(1000);
         drive.drive(-1,-0.5,0);
-        sleep(2000);
+        sleep(2200);
 
         drive.drive(0,0,0);
         sleep(3000);
