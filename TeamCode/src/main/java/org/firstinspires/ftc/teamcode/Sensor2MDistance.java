@@ -23,6 +23,8 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+I2C 0
 */
 package org.firstinspires.ftc.teamcode;
 
@@ -45,8 +47,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  *
  * @see <a href="http://revrobotics.com">REV Robotics Web Page</a>
  */
-@TeleOp(name = "2M Distance Sensor")
-@Disabled
+@TeleOp(name = "2M Distance Sensor", group = "Sensor")
+//@Disabled
 public class Sensor2MDistance extends LinearOpMode {
 
     private DistanceSensor sensorRange;
