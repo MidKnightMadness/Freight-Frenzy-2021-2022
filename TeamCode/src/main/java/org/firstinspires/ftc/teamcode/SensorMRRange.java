@@ -46,17 +46,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  *
  * @see <a href="http://modernroboticsinc.com/range-sensor">MR Range Sensor</a>
+ *
+ * Expansion I2C 1 (Front sensor)
  */
-@TeleOp(name = "Sensor: MR range sensor", group = "Sensor")
+@TeleOp(name = "MR Range Sensor", group = "Sensor")
 //@Disabled   // comment out or remove this line to enable this opmode
-public class SensorRange extends LinearOpMode {
+public class SensorMRRange extends LinearOpMode {
 
     ModernRoboticsI2cRangeSensor rangeSensor;
 
     @Override public void runOpMode() {
 
         // get a reference to our compass
-        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range");
+        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "RangeF");
 
         // wait for the start button to be pressed
         waitForStart();
