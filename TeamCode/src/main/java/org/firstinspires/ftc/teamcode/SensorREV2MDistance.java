@@ -57,9 +57,6 @@ public class SensorREV2MDistance extends LinearOpMode {
     @Override
     public void runOpMode() {
         // you can use this as a regular DistanceSensor.
-        sensorRangeLeft = hardwareMap.get(DistanceSensor.class, "sensor_range_left");
-        sensorRangeMiddle = hardwareMap.get(DistanceSensor.class, "sensor_range_middle");
-        sensorRangeRight = hardwareMap.get(DistanceSensor.class, "sensor_range_right");
 
         telemetry.addData(">>", "Press start to continue");
         telemetry.update();
