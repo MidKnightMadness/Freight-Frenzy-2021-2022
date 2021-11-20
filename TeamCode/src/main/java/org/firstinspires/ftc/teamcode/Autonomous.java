@@ -25,7 +25,7 @@ public class Autonomous extends LinearOpMode {
 
         waitForStart();
 
-        while(opModeIsActive()) {
+        //while(opModeIsActive()) {
             // Detecting Team Shipping Element and Placing Pre-Load Box (7 seconds)
             telemetry.addData("deviceName", sensorRangeL.getDeviceName());
             telemetry.addData("Left Sensor Range", String.format("%.01f cm", sensorRangeL.getDistance(DistanceUnit.CM)));
@@ -37,15 +37,18 @@ public class Autonomous extends LinearOpMode {
 
             if (sensorRangeL.getDistance(DistanceUnit.CM) < sensorRangeM.getDistance(DistanceUnit.CM) && sensorRangeL.getDistance(DistanceUnit.CM) < sensorRangeR.getDistance(DistanceUnit.CM)) {
                 barcodeLocation = 1;
-            } else if (sensorRangeM.getDistance(DistanceUnit.CM) < sensorRangeR.getDistance(DistanceUnit.CM)) {
+            } else if (sensorRangeM.getDistance(DistanceUnit.CM) < sensorRangeR.getDistance(DistanceUnit.CM) && sensorRangeM.getDistance(DistanceUnit.CM) < sensorRangeL.getDistance(DistanceUnit.CM)) {
                 barcodeLocation = 2;
-            } else {
+            } else if (sensorRangeR.getDistance(DistanceUnit.CM) < sensorRangeM.getDistance(DistanceUnit.CM) && sensorRangeR.getDistance(DistanceUnit.CM) < sensorRangeL.getDistance(DistanceUnit.CM)){
                 barcodeLocation = 3;
+            } else {
+                barcodeLocation = 0;
             }
+
             telemetry.addData("Barcode Location", barcodeLocation);
-        }
-        /*drive.drive(-1, 0.8, 0); //drive to alliance shipping hub
-        sleep(1200);
+        //}
+        drive.drive(-1, 0.8, 0); //drive to alliance shipping hub
+        sleep(1500);
 
         drive.drive(0,0,0);
         sleep(1000);
@@ -53,32 +56,37 @@ public class Autonomous extends LinearOpMode {
         // Deliver Duck Through Carousel (5 seconds)
         //drive.drive(0,0,-1); //drive to carousel from shipping hub
         //sleep(1000);
-        drive.drive(-1,-0.2,0);
-        sleep(2400);
+        drive.drive(-1,-0.5,0);
+        sleep(2500);
         drive.drive(0,0,0);
         sleep(1000);
 
          //Placing Duck on Alliance Shipping Hub
-        drive.drive(1,0.2,0); //drive to alliance shipping hub from carousel
+        drive.drive(1,0.5,0); //drive to alliance shipping hub from carousel
         sleep(2500);
         drive.drive(0,0,0);
         sleep(1000);
 
         // Placing 2 Freight from Warehouse to Alliance Shipping Hub (10 seconds)
-        drive.drive(-1, 0.8, 0); //drive to warehouse from alliance shipping hub
-        sleep(500);
+        drive.drive(1, -0.8, 0); //drive to warehouse from alliance shipping hub
+        sleep(1500);
         drive.drive(0,1,0);
         sleep(1000);
 
-        drive.drive(0,0,-1); //drive to alliance shipping hub from warehouse
-        sleep(200);
+        drive.drive(0,0,0);
+        sleep(1000);
+
+        drive.drive(0,-1, 0); //drive to alliance shipping hub from warehouse
+        sleep(1000);
+        drive.drive(-1, 0.8, 0);
+        sleep(1500);
         drive.drive(1,1,0);
         sleep(1000);
 
         // Completely Parking in Warehouse (4 seconds)
         // drive to warehouse from alliance shipping hub
 
-        drive.drive(0,0,0);*/
+        drive.drive(0,0,0);
     }
 
 }
