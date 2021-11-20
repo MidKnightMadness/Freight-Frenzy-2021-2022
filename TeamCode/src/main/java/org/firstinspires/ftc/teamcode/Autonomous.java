@@ -47,7 +47,7 @@ public class Autonomous extends LinearOpMode {
 
             telemetry.addData("Barcode Location", barcodeLocation);
         //}
-        drive.drive(-1, 0.8, 0); //drive to alliance shipping hub
+        drive.drive(-1, 0.6, 0); //drive to alliance shipping hub
         sleep(1500);
 
         drive.drive(0,0,0);
@@ -56,14 +56,14 @@ public class Autonomous extends LinearOpMode {
         // Deliver Duck Through Carousel (5 seconds)
         //drive.drive(0,0,-1); //drive to carousel from shipping hub
         //sleep(1000);
-        drive.drive(-1,-0.5,0);
-        sleep(2500);
+        drive.drive(-1,-0.65,0);
+        sleep(2800);
         drive.drive(0,0,0);
         sleep(1000);
 
          //Placing Duck on Alliance Shipping Hub
-        drive.drive(1,0.5,0); //drive to alliance shipping hub from carousel
-        sleep(2500);
+        drive.drive(1,0.6,0); //drive to alliance shipping hub from carousel
+        sleep(3000);
         drive.drive(0,0,0);
         sleep(1000);
 
