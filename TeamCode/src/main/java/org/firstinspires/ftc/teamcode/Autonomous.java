@@ -37,18 +37,19 @@ public class Autonomous extends LinearOpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         drive = new SampleDrive(hardwareMap);
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
         sensorRangeL = hardwareMap.get(DistanceSensor.class, "sensor_range_left");
         sensorRangeM = hardwareMap.get(DistanceSensor.class, "sensor_range_middle");
         sensorRangeR = hardwareMap.get(DistanceSensor.class, "sensor_range_right");
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-        //offsetY = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
+        sleep(500);
 
         waitForStart();
+        offsetY = angles().firstAngle;
 
         //while(opModeIsActive()) {
             // Detecting Team Shipping Element and Placing Pre-Load Box (7 seconds)
-            /*telemetry.addData("deviceName", sensorRangeL.getDeviceName());
+            telemetry.addData("deviceName", sensorRangeL.getDeviceName());
             telemetry.addData("Left Sensor Range", String.format("%.01f cm", sensorRangeL.getDistance(DistanceUnit.CM)));
             telemetry.addData("deviceName", sensorRangeM.getDeviceName());
             telemetry.addData("Middle Sensor Range", String.format("%.01f cm", sensorRangeM.getDistance(DistanceUnit.CM)));
@@ -66,86 +67,60 @@ public class Autonomous extends LinearOpMode {
                 barcodeLocation = 0;
             }
 
-            telemetry.addData("Barcode Location", barcodeLocation);*/
+            telemetry.addData("Barcode Location", barcodeLocation);
         //}
 
-        drive.drive(-1, 0.6, 0); //drive to alliance shipping hub
-        sleep(1500);
-
-        drive.drive(0,0,0);
-        sleep(1000);
+        drive.setPos(-1, 0.6, 0); //drive to alliance shipping hub
 
         while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
-            drive.drive(0, 0, (angles().firstAngle - offsetY)/45);
+            drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
             sleep(1);
-            telemetry.addData("Angle - offset", angles().firstAngle - offsetY);
+            telemetry.addData("Angle - Offset", angles().firstAngle - offsetY);
             telemetry.addData("Angle", angles().firstAngle);
-            telemetry.addData("offset", offsetY);
+            telemetry.addData("Offset", offsetY);
             telemetry.addData("Angle", angles().secondAngle);
             telemetry.addData("Angle", angles().thirdAngle);
             telemetry.update();
         }
-
-        drive.drive(0,0,0);
         sleep(1000);
 
         // Deliver Duck Through Carousel (5 seconds)
-        //drive.drive(0,0,-1); //drive to carousel from shipping hub
-        //sleep(1000);
-        drive.drive(-1,-0.70,0);
-        sleep(2800);
+        drive.setPos(-1,-0.5,0); //drive to carousel from shipping hub
 
-        while(angles().firstAngle < -1 || angles().firstAngle > 1) {
-            drive.drive(0, 0, (angles().firstAngle - offsetY)/45);
+        while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
+            drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
             sleep(1);
-            telemetry.addData("Angle", angles().firstAngle);
-            telemetry.update();
         }
-
-        drive.drive(0,0,0);
         sleep(1000);
 
          //Placing Duck on Alliance Shipping Hub
-        drive.drive(1,-0.65,0);
-        sleep(2800);
+        drive.setPos(-1,-0.5,0); //drive to shipping hub from carousel
 
-        while(angles().firstAngle < -1 || angles().firstAngle > 1) {
-            drive.drive(0, 0, (angles().firstAngle - offsetY)/45);
+        while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
+            drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
             sleep(1);
-            telemetry.addData("Angle", angles().firstAngle);
-            telemetry.update();
         }
-
-        drive.drive(0,0,0);
         sleep(1000);
 
         // Placing 2 Freight from Warehouse to Alliance Shipping Hub (10 seconds)
-        drive.drive(0, 1, -1); //drive to warehouse from alliance shipping hub
-        sleep(1500);
-        drive.drive(0,-1,0);
-        sleep(1000);
+        drive.setPos(0, 1, -1); //drive to warehouse from alliance shipping hub
+        drive.setPos(0,-1,0);
 
-        while(angles().firstAngle < -1 || angles().firstAngle > 1) {
-            drive.drive(0, 0, (angles().firstAngle - offsetY)/45);
-                sleep(1);
-            telemetry.addData("Angle", angles().firstAngle);
-            telemetry.update();
+        while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
+            drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
+            sleep(1);
         }
-
-        drive.drive(0,0,0);
         sleep(1000);
 
-        /*drive.drive(0,-1, 0); //drive to alliance shipping hub from warehouse
+        /*drive.setPos(0,-1, 0); //drive to alliance shipping hub from warehouse
         sleep(1000);
-        drive.drive(-1, 0.8, 0);
+        drive.setPos(-1, 0.8, 0);
         sleep(1500);
-        drive.drive(1,1,0);
+        drive.setPos(1,1,0);
         sleep(1000);*/
 
         // Completely Parking in Warehouse (4 seconds)
         // drive to warehouse from alliance shipping hub
-
-        drive.drive(0,0,0);
     }
 
     public Orientation angles() {

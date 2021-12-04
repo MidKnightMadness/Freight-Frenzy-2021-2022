@@ -15,6 +15,6 @@ public class TestOpMode extends OpMode {
 
     @Override
     public void loop() {
-        drive.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+        drive.setPos(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
     }
 }

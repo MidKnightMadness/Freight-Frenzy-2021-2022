@@ -29,16 +29,30 @@ public class SampleDrive {
         BLMotor = hardwareMap.get(DcMotorEx.class, "BL");
     }
 
-    public void drive(double xx, double yy, double rotation) {
-        //FRMotor.setPower(xx + yy + rotation);
-        //FLMotor.setPower(xx - yy + rotation);
-        //BRMotor.setPower(-xx + yy + rotation);
-        //BLMotor.setPower(-xx - yy + rotation);
+    public void drive(double x, double y, double rotation) {
+        //FRMotor.setPower(x + y + rotation);
+        //FLMotor.setPower(x - y + rotation);
+        //BRMotor.setPower(-x + y + rotation);
+        //BLMotor.setPower(-x - y + rotation);
 
-        FRMotor.setVelocity((xx - yy + rotation) * 1000);
-        FLMotor.setVelocity((xx + yy + rotation) * 1000);
-        BRMotor.setVelocity((-xx - yy + rotation) * 1000);
-        BLMotor.setVelocity((-xx + yy + rotation) * 1000);
+        FRMotor.setVelocity((x - y + rotation) * 1000);
+        FLMotor.setVelocity((x + y + rotation) * 1000);
+        BRMotor.setVelocity((-x - y + rotation) * 1000);
+        BLMotor.setVelocity((-x + y + rotation) * 1000);
+    }
 
+    public void setPos(double x, double y, double rotation) {
+        /*FRMotor.setTargetPosition(0);//(int)((x - y + rotation) * 1000) + FRMotor.getTargetPosition());
+        FLMotor.setTargetPosition(0);//(int)((x + y + rotation) * 1000) + FLMotor.getTargetPosition());
+        BRMotor.setTargetPosition(0);//(int)((-x - y + rotation) * 1000) + BRMotor.getTargetPosition());
+        BLMotor.setTargetPosition(0);//(int)((-x + y + rotation) * 1000) + BLMotor.getTargetPosition());*/
+        FRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FRMotor.setPower(1.0);
+        FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FLMotor.setPower(1.0);
+        BRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BRMotor.setPower(1.0);
+        BLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BLMotor.setPower(1.0);
     }
 }
