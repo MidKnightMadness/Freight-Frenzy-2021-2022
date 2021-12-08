@@ -46,13 +46,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * @see <a href="http://revrobotics.com">REV Robotics Web Page</a>
  * Control I2C 0
  */
-//@TeleOp(name = "REV 2M Distance Sensor", group = "Sensor")
+@TeleOp(name = "REV 2M Distance Sensor", group = "Sensor")
 //@Disabled
 public class SensorREV2MDistance extends LinearOpMode {
-
     private DistanceSensor sensorRangeLeft;
     private DistanceSensor sensorRangeMiddle;
     private DistanceSensor sensorRangeRight;
+    int barcodeLocation = 0;
 
     @Override
     public void runOpMode() {
@@ -63,6 +63,9 @@ public class SensorREV2MDistance extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
+            sensorRangeLeft = hardwareMap.get(DistanceSensor.class, "sensor_range_left");
+            sensorRangeMiddle = hardwareMap.get(DistanceSensor.class, "sensor_range_middle");
+            sensorRangeRight = hardwareMap.get(DistanceSensor.class, "sensor_range_right");
             // generic DistanceSensor methods.
             telemetry.addData("deviceName",sensorRangeLeft.getDeviceName() );
             telemetry.addData("Left Sensor Range", String.format("%.01f cm", sensorRangeLeft.getDistance(DistanceUnit.CM)));
@@ -70,6 +73,18 @@ public class SensorREV2MDistance extends LinearOpMode {
             telemetry.addData("Middle Sensor Range", String.format("%.01f cm", sensorRangeMiddle.getDistance(DistanceUnit.CM)));
             telemetry.addData("deviceName",sensorRangeRight.getDeviceName() );
             telemetry.addData("Right Sensor Range", String.format("%.01f cm", sensorRangeRight.getDistance(DistanceUnit.CM)));
+
+            if (sensorRangeLeft.getDistance(DistanceUnit.CM) < sensorRangeMiddle.getDistance(DistanceUnit.CM) && sensorRangeLeft.getDistance(DistanceUnit.CM) < sensorRangeRight.getDistance(DistanceUnit.CM)) {
+                barcodeLocation = 1;
+            } else if (sensorRangeMiddle.getDistance(DistanceUnit.CM) < sensorRangeRight.getDistance(DistanceUnit.CM) && sensorRangeMiddle.getDistance(DistanceUnit.CM) < sensorRangeLeft.getDistance(DistanceUnit.CM)) {
+                barcodeLocation = 2;
+            } else if (sensorRangeRight.getDistance(DistanceUnit.CM) < sensorRangeMiddle.getDistance(DistanceUnit.CM) && sensorRangeRight.getDistance(DistanceUnit.CM) < sensorRangeLeft.getDistance(DistanceUnit.CM)){
+                barcodeLocation = 3;
+            } else {
+                barcodeLocation = 0;
+            }
+
+            telemetry.addData("Barcode Location", barcodeLocation);
             telemetry.update();
         }
     }

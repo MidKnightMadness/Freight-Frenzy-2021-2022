@@ -22,7 +22,7 @@ public class Autonomous extends LinearOpMode {
     private DistanceSensor sensorRangeR; //right sensor
     BNO055IMU imu;
     Orientation angles;
-    double offsetY = 0.0;
+    double offsetY;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -48,29 +48,30 @@ public class Autonomous extends LinearOpMode {
         offsetY = angles().firstAngle;
 
         //while(opModeIsActive()) {
-            // Detecting Team Shipping Element and Placing Pre-Load Box (7 seconds)
-            telemetry.addData("deviceName", sensorRangeL.getDeviceName());
-            telemetry.addData("Left Sensor Range", String.format("%.01f cm", sensorRangeL.getDistance(DistanceUnit.CM)));
-            telemetry.addData("deviceName", sensorRangeM.getDeviceName());
-            telemetry.addData("Middle Sensor Range", String.format("%.01f cm", sensorRangeM.getDistance(DistanceUnit.CM)));
-            telemetry.addData("deviceName", sensorRangeR.getDeviceName());
-            telemetry.addData("Right Sensor Range", String.format("%.01f cm", sensorRangeR.getDistance(DistanceUnit.CM)));
-            telemetry.update();
+        // Detecting Team Shipping Element and Placing Pre-Load Box (7 seconds)
+        telemetry.addData("deviceName", sensorRangeL.getDeviceName());
+        telemetry.addData("Left Sensor Range", String.format("%.01f cm", sensorRangeL.getDistance(DistanceUnit.CM)));
+        telemetry.addData("deviceName", sensorRangeM.getDeviceName());
+        telemetry.addData("Middle Sensor Range", String.format("%.01f cm", sensorRangeM.getDistance(DistanceUnit.CM)));
+        telemetry.addData("deviceName", sensorRangeR.getDeviceName());
+        telemetry.addData("Right Sensor Range", String.format("%.01f cm", sensorRangeR.getDistance(DistanceUnit.CM)));
 
-            if (sensorRangeL.getDistance(DistanceUnit.CM) < sensorRangeM.getDistance(DistanceUnit.CM) && sensorRangeL.getDistance(DistanceUnit.CM) < sensorRangeR.getDistance(DistanceUnit.CM)) {
-                barcodeLocation = 1;
-            } else if (sensorRangeM.getDistance(DistanceUnit.CM) < sensorRangeR.getDistance(DistanceUnit.CM) && sensorRangeM.getDistance(DistanceUnit.CM) < sensorRangeL.getDistance(DistanceUnit.CM)) {
-                barcodeLocation = 2;
-            } else if (sensorRangeR.getDistance(DistanceUnit.CM) < sensorRangeM.getDistance(DistanceUnit.CM) && sensorRangeR.getDistance(DistanceUnit.CM) < sensorRangeL.getDistance(DistanceUnit.CM)){
-                barcodeLocation = 3;
-            } else {
-                barcodeLocation = 0;
-            }
+        if (sensorRangeL.getDistance(DistanceUnit.CM) < sensorRangeM.getDistance(DistanceUnit.CM) && sensorRangeL.getDistance(DistanceUnit.CM) < sensorRangeR.getDistance(DistanceUnit.CM)) {
+            barcodeLocation = 1;
+        } else if (sensorRangeM.getDistance(DistanceUnit.CM) < sensorRangeR.getDistance(DistanceUnit.CM) && sensorRangeM.getDistance(DistanceUnit.CM) < sensorRangeL.getDistance(DistanceUnit.CM)) {
+            barcodeLocation = 2;
+        } else if (sensorRangeR.getDistance(DistanceUnit.CM) < sensorRangeM.getDistance(DistanceUnit.CM) && sensorRangeR.getDistance(DistanceUnit.CM) < sensorRangeL.getDistance(DistanceUnit.CM)){
+            barcodeLocation = 3;
+        } else {
+            barcodeLocation = 0;
+        }
 
-            telemetry.addData("Barcode Location", barcodeLocation);
+        telemetry.addData("Barcode Location", barcodeLocation);
+        telemetry.update();
         //}
 
-        drive.setPos(-1, 0.6, 0); //drive to alliance shipping hub
+        drive.setPos(-8, 5, 0); //drive to alliance shipping hub
+        drive.telemetry(telemetry);
 
         while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
             drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
@@ -85,7 +86,7 @@ public class Autonomous extends LinearOpMode {
         sleep(1000);
 
         // Deliver Duck Through Carousel (5 seconds)
-        drive.setPos(-1,-0.5,0); //drive to carousel from shipping hub
+        drive.setPos(-10,-5, 0); //drive to carousel from shipping hub
 
         while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
             drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
@@ -93,7 +94,7 @@ public class Autonomous extends LinearOpMode {
         }
         sleep(1000);
 
-         //Placing Duck on Alliance Shipping Hub
+        //Placing Duck on Alliance Shipping Hub
         drive.setPos(-1,-0.5,0); //drive to shipping hub from carousel
 
         while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {

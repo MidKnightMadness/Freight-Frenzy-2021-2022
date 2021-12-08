@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import static java.lang.Thread.sleep;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class SampleDrive {
     //DcMotor FRMotor;
@@ -42,10 +46,10 @@ public class SampleDrive {
     }
 
     public void setPos(double x, double y, double rotation) {
-        /*FRMotor.setTargetPosition(0);//(int)((x - y + rotation) * 1000) + FRMotor.getTargetPosition());
-        FLMotor.setTargetPosition(0);//(int)((x + y + rotation) * 1000) + FLMotor.getTargetPosition());
-        BRMotor.setTargetPosition(0);//(int)((-x - y + rotation) * 1000) + BRMotor.getTargetPosition());
-        BLMotor.setTargetPosition(0);//(int)((-x + y + rotation) * 1000) + BLMotor.getTargetPosition());*/
+        FRMotor.setTargetPosition((int)(( x - y + rotation) * 200) + FRMotor.getCurrentPosition());
+        FLMotor.setTargetPosition((int)(( x + y + rotation) * 200) + FLMotor.getCurrentPosition());
+        BRMotor.setTargetPosition((int)((-x - y + rotation) * 200) + BRMotor.getCurrentPosition());
+        BLMotor.setTargetPosition((int)((-x + y + rotation) * 200) + BLMotor.getCurrentPosition());
         FRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         FRMotor.setPower(1.0);
         FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -54,5 +58,24 @@ public class SampleDrive {
         BRMotor.setPower(1.0);
         BLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BLMotor.setPower(1.0);
+        while(!atTarget()) { }
+    }
+
+    public boolean atTarget() {
+        if(FRMotor.getCurrentPosition() > FRMotor.getTargetPosition() - 1 && FRMotor.getCurrentPosition() < FRMotor.getTargetPosition() + 1 &&
+                FLMotor.getCurrentPosition() > FLMotor.getTargetPosition() - 1 && FLMotor.getCurrentPosition() < FLMotor.getTargetPosition() + 1 &&
+                BRMotor.getCurrentPosition() > BRMotor.getTargetPosition() - 1 && BRMotor.getCurrentPosition() < BRMotor.getTargetPosition() + 1 &&
+                BLMotor.getCurrentPosition() > BLMotor.getTargetPosition() - 1 && BLMotor.getCurrentPosition() < BLMotor.getTargetPosition() + 1)
+            return true;
+        else
+            return false;
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("FR Motor Position", FRMotor.getCurrentPosition());
+        telemetry.addData("FL Motor Position", FLMotor.getCurrentPosition());
+        telemetry.addData("BR Motor Position", BRMotor.getCurrentPosition());
+        telemetry.addData("BL Motor Position", BLMotor.getCurrentPosition());
+        telemetry.update();
     }
 }
