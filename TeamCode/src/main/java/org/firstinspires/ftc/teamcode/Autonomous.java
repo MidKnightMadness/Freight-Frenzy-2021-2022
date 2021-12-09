@@ -42,10 +42,10 @@ public class Autonomous extends LinearOpMode {
         sensorRangeL = hardwareMap.get(DistanceSensor.class, "sensor_range_left");
         sensorRangeM = hardwareMap.get(DistanceSensor.class, "sensor_range_middle");
         sensorRangeR = hardwareMap.get(DistanceSensor.class, "sensor_range_right");
-        sleep(500);
+        sleep(100);
 
         waitForStart();
-        offsetY = angles().firstAngle;
+        offsetY = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
         //while(opModeIsActive()) {
         // Detecting Team Shipping Element and Placing Pre-Load Box (7 seconds)
@@ -72,46 +72,19 @@ public class Autonomous extends LinearOpMode {
 
         drive.setPos(-8, 5, 0); //drive to alliance shipping hub
         drive.telemetry(telemetry);
-
-        while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
-            drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
-            sleep(1);
-            telemetry.addData("Angle - Offset", angles().firstAngle - offsetY);
-            telemetry.addData("Angle", angles().firstAngle);
-            telemetry.addData("Offset", offsetY);
-            telemetry.addData("Angle", angles().secondAngle);
-            telemetry.addData("Angle", angles().thirdAngle);
-            telemetry.update();
-        }
-        sleep(1000);
+        orient();
 
         // Deliver Duck Through Carousel (5 seconds)
-        drive.setPos(-10,-5, 0); //drive to carousel from shipping hub
-
-        while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
-            drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
-            sleep(1);
-        }
-        sleep(1000);
+        drive.setPos(-12,-6, 0); //drive to carousel from shipping hub
+        orient();
 
         //Placing Duck on Alliance Shipping Hub
-        drive.setPos(-1,-0.5,0); //drive to shipping hub from carousel
-
-        while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
-            drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
-            sleep(1);
-        }
-        sleep(1000);
+        drive.setPos(12,6,0); //drive to shipping hub from carousel
+        orient();
 
         // Placing 2 Freight from Warehouse to Alliance Shipping Hub (10 seconds)
-        drive.setPos(0, 1, -1); //drive to warehouse from alliance shipping hub
-        drive.setPos(0,-1,0);
-
-        while(angles().firstAngle - offsetY < -1 || angles().firstAngle - offsetY > 1) {
-            drive.setPos(0, 0, (angles().firstAngle - offsetY)/30);
-            sleep(1);
-        }
-        sleep(1000);
+        drive.setPos(0, -12, -5); //drive to warehouse from alliance shipping hub
+        drive.setPos(0,-5,0);
 
         /*drive.setPos(0,-1, 0); //drive to alliance shipping hub from warehouse
         sleep(1000);
@@ -124,8 +97,13 @@ public class Autonomous extends LinearOpMode {
         // drive to warehouse from alliance shipping hub
     }
 
-    public Orientation angles() {
-        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    public void orient() {
+        while(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY < -2 ||
+              imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY > 2) {
+            drive.setPos(0, 0, (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY)/15);
+            sleep(1);
+        }
+
     }
 
 }
