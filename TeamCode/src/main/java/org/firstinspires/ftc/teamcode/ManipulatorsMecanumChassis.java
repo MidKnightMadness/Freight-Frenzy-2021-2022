@@ -26,6 +26,7 @@ public class ManipulatorsMecanumChassis extends LinearOpMode{
     }
 
     public void runOpMode(){
+        //drive = new WestCoastDrive(hardwareMap); // testing
         double[] power = new double[2];
         waitForStart();
         while(opModeIsActive()){
