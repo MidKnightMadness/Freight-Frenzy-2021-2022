@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+
 @TeleOp
 public class MainWestCoast extends LinearOpMode{
     DcMotorEx fl;
@@ -14,6 +15,7 @@ public class MainWestCoast extends LinearOpMode{
     DcMotorEx br;
     DcMotor leftIntake;
     DcMotor rightIntake;
+
 
     public MainWestCoast(HardwareMap hardwareMap){
         fl = hardwareMap.get(DcMotorEx.class, "fl");
@@ -84,6 +86,21 @@ public class MainWestCoast extends LinearOpMode{
             telemetry.addData("Back right: ", String.valueOf(br.getPower()));
 
             telemetry.update();
+
+            int intakeCounter= 0;
+            boolean intaking = false;
+
+            if(gamepad1.x && intakeCounter== 0){
+                intakeCounter= 300;
+                intaking= !intaking;
+            }
+            if(intakeCounter>0){
+                intakeCounter=intakeCounter-1;
+            }
+            telemetry.addData("Intake Status", intakeCounter);
+            telemetry.update();
+
+
         }
     }
 }
