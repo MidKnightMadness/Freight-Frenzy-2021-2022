@@ -9,12 +9,11 @@ import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRRangeSenso
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp
-
 public class TestOpMode extends OpMode {
     SampleDrive drive;
 
     private DistanceSensor sensorDistanceL; //left front sensor
-    private ModernRoboticsI2cRangeSensor sensorRangeM; //left front sensor
+    private ModernRoboticsI2cRangeSensor sensorRangeM; //middle front range sensor
     private DistanceSensor sensorDistanceR; //right front sensor
 
     @Override
@@ -34,8 +33,12 @@ public class TestOpMode extends OpMode {
             drive.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             drive.telemetry(telemetry);
         }
+        telemetry.addData("deviceName", sensorDistanceL.getDeviceName());
+        telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
         telemetry.addData("deviceName", sensorRangeM.getDeviceName());
         telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorRangeM.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("deviceName", sensorDistanceR.getDeviceName());
+        telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
         telemetry.update();
     }
 }

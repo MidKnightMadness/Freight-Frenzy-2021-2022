@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -18,11 +18,11 @@ public class AutonomousMecanumRed1 extends LinearOpMode {
     SensorREV2MDistance distance_sensor;
 
     //Three Front 2 meter distance sensors
-    private DistanceSensor sensorRangeL; //left front sensor
-    private DistanceSensor sensorRangeR; //right front sensor
+    private DistanceSensor sensorDistanceL; //left front sensor
+    private ModernRoboticsI2cRangeSensor sensorRangeM; //middle front range sensor
+    private DistanceSensor sensorDistanceR; //right front sensor
     BNO055IMU imu;
     double offsetY;
-    int[] barcodeLocationArray = new int[3]; //barcode location left, middle, and right
     int barcodeLocation = 0;
 
     @Override
@@ -38,32 +38,26 @@ public class AutonomousMecanumRed1 extends LinearOpMode {
         drive = new SampleDrive(hardwareMap);
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
-        sensorRangeL = hardwareMap.get(DistanceSensor.class, "sensor_range_left");
-        sensorRangeR = hardwareMap.get(DistanceSensor.class, "sensor_range_right");
+        sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
+        sensorRangeM = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
+        sensorDistanceR = hardwareMap.get(DistanceSensor.class, "sensor_distance_right");
         sleep(1000);
 
         waitForStart();
         offsetY = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
-        /*while(opModeIsActive()) {
-            drive.telemetry(telemetry);
-        }*/
-
-        // Detecting Team Shipping Element(2 seconds)
-        if (sensorRangeL.getDistance(DistanceUnit.INCH) < 100 && sensorRangeL.getDistance(DistanceUnit.INCH) < sensorRangeR.getDistance(DistanceUnit.INCH)) {
+        // Detecting Team Shipping Element(0 seconds)
+        if (sensorDistanceL.getDistance(DistanceUnit.INCH) < 100 && sensorDistanceL.getDistance(DistanceUnit.INCH) < sensorDistanceR.getDistance(DistanceUnit.INCH)) {
             barcodeLocation = 0;
-        } else if (sensorRangeR.getDistance(DistanceUnit.INCH) < 100 && sensorRangeR.getDistance(DistanceUnit.INCH) < sensorRangeL.getDistance(DistanceUnit.INCH)) {
+        } else if (sensorDistanceR.getDistance(DistanceUnit.INCH) < 100) {
             barcodeLocation = 1;
         } else {
             barcodeLocation = 2;
         }
-        telemetry.addData("deviceName", sensorRangeL.getDeviceName());
-        telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorRangeL.getDistance(DistanceUnit.INCH)));
-        telemetry.addData("deviceName", sensorRangeR.getDeviceName());
-        telemetry.addData("Right Sensor Range", String.format("%.01f in", sensorRangeR.getDistance(DistanceUnit.INCH)));
-        telemetry.addData("Left Barcode Array", barcodeLocationArray[0]);
-        telemetry.addData("Middle Barcode Array", barcodeLocationArray[1]);
-        telemetry.addData("Right Barcode Array", barcodeLocationArray[2]);
+        telemetry.addData("deviceName", sensorDistanceL.getDeviceName());
+        telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("deviceName", sensorDistanceR.getDeviceName());
+        telemetry.addData("Right Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
         telemetry.addData("Barcode Location", barcodeLocation);
         telemetry.update();
 
