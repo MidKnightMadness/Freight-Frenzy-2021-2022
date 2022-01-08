@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/*package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -19,4 +19,5 @@ public class TestMotor extends OpMode {
             test.run();
         }
     }
-}
+}*/
+//commented out by heidi 12/8/21 bc of compilation errors

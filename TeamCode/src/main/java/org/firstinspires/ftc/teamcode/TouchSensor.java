@@ -1,3 +1,10 @@
+package org.firstinspires.ftc.teamcode;
+//package org.firstinspires.ftc.robotcontroller.external.samples;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
 /* Copyright (c) 2017 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -27,12 +34,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
+        import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+        import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 /*
  * This is an example LinearOpMode that shows how to use
@@ -45,7 +50,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
  */
 @TeleOp(name = "Sensor: Digital touch", group = "Sensor")
 //@Disabled
-public class SensorDigitalTouch extends LinearOpMode {
+public class TouchSensor extends LinearOpMode {
     /**
      * The REV Robotics Touch Sensor
      * is treated as a digital channel.  It is HIGH if the button is unpressed.
@@ -57,6 +62,7 @@ public class SensorDigitalTouch extends LinearOpMode {
      */
 
     DigitalChannel digitalTouch;  // Hardware Device Object
+    boolean hasFreight;
 
     @Override
     public void runOpMode() {
@@ -78,11 +84,14 @@ public class SensorDigitalTouch extends LinearOpMode {
             // if the digital channel returns true it's HIGH and the button is unpressed.
             if (digitalTouch.getState() == true) {
                 telemetry.addData("Digital Touch", "Is Not Pressed");
+                hasFreight = false;
             } else {
                 telemetry.addData("Digital Touch", "Is Pressed");
+                hasFreight = true;
             }
 
             telemetry.update();
         }
     }
 }
+
