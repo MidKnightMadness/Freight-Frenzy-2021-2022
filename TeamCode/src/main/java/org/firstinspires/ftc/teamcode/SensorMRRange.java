@@ -58,7 +58,7 @@ public class SensorMRRange extends LinearOpMode {
     @Override public void runOpMode() {
 
         // get a reference to our compass
-        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "RangeF");
+        rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
 
         // wait for the start button to be pressed
         waitForStart();
