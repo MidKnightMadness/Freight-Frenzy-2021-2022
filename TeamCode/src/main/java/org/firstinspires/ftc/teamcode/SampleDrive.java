@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -11,46 +12,44 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class SampleDrive {
-    //DcMotor FRMotor;
-    //DcMotor FLMotor;
-    //DcMotor BRMotor;
-    //DcMotor BLMotor;
-
     DcMotorEx FRMotor;
     DcMotorEx FLMotor;
     DcMotorEx BRMotor;
     DcMotorEx BLMotor;
 
-    private DistanceSensor sensorRangeL; //left front sensor
+    private DcMotor catapultMotor; //outtake
+    private DcMotor surgicalTubingMotor; //intake
+    private CRServo flapServo; //intake flap
+
+    private DistanceSensor sensorDistanceL; //left front sensor
     ModernRoboticsI2cRangeSensor sensorRangeM;
-    private DistanceSensor sensorRangeR; //right front sensor
+    private DistanceSensor sensorDistanceR; //right front sensor
 
     public SampleDrive(HardwareMap hardwareMap) {
-        //FRMotor = hardwareMap.dcMotor.get("FR");
-        //FLMotor = hardwareMap.dcMotor.get("FL");
-        //BRMotor = hardwareMap.dcMotor.get("BR");
-        //BLMotor = hardwareMap.dcMotor.get("BL");
-
         FRMotor = hardwareMap.get(DcMotorEx.class, "FR");
         FLMotor = hardwareMap.get(DcMotorEx.class, "FL");
         BRMotor = hardwareMap.get(DcMotorEx.class, "BR");
         BLMotor = hardwareMap.get(DcMotorEx.class, "BL");
 
-        sensorRangeL = hardwareMap.get(DistanceSensor.class, "sensor_range_left");
+        catapultMotor = hardwareMap.get(DcMotor.class, "Catapult");
+        surgicalTubingMotor = hardwareMap.get(DcMotor.class, "Surgical Tubing");
+        flapServo = hardwareMap.get(CRServo.class, "Intake Flap");
+
+        sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
         sensorRangeM = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
-        sensorRangeR = hardwareMap.get(DistanceSensor.class, "sensor_range_right");
+        sensorDistanceR = hardwareMap.get(DistanceSensor.class, "sensor_distance_right");
     }
 
     public void drive(double x, double y, double rotation) {
-        //FRMotor.setPower(x + y + rotation);
-        //FLMotor.setPower(x - y + rotation);
-        //BRMotor.setPower(-x + y + rotation);
-        //BLMotor.setPower(-x - y + rotation);
+        FRMotor.setPower(x + y + rotation);
+        FLMotor.setPower(x - y + rotation);
+        BRMotor.setPower(-x + y + rotation);
+        BLMotor.setPower(-x - y + rotation);
 
-        FRMotor.setVelocity((x - y + rotation) * 1000);
-        FLMotor.setVelocity((x + y + rotation) * 1000);
-        BRMotor.setVelocity((-x - y + rotation) * 1000);
-        BLMotor.setVelocity((-x + y + rotation) * 1000);
+        //FRMotor.setVelocity((x - y + rotation) * 1000);
+        //FLMotor.setVelocity((x + y + rotation) * 1000);
+        //BRMotor.setVelocity((-x - y + rotation) * 1000);
+        //BLMotor.setVelocity((-x + y + rotation) * 1000);
     }
 
     public void setPos(double x, double y, double rotation) {
@@ -71,21 +70,32 @@ public class SampleDrive {
 
     public boolean atTarget() {
         if(FRMotor.getCurrentPosition() > FRMotor.getTargetPosition() - 10 && FRMotor.getCurrentPosition() < FRMotor.getTargetPosition() + 10 &&
-                FLMotor.getCurrentPosition() > FLMotor.getTargetPosition() - 10 && FLMotor.getCurrentPosition() < FLMotor.getTargetPosition() + 10 &&
-                BRMotor.getCurrentPosition() > BRMotor.getTargetPosition() - 10 && BRMotor.getCurrentPosition() < BRMotor.getTargetPosition() + 10 &&
-                BLMotor.getCurrentPosition() > BLMotor.getTargetPosition() - 10 && BLMotor.getCurrentPosition() < BLMotor.getTargetPosition() + 10)
+           FLMotor.getCurrentPosition() > FLMotor.getTargetPosition() - 10 && FLMotor.getCurrentPosition() < FLMotor.getTargetPosition() + 10 &&
+           BRMotor.getCurrentPosition() > BRMotor.getTargetPosition() - 10 && BRMotor.getCurrentPosition() < BRMotor.getTargetPosition() + 10 &&
+           BLMotor.getCurrentPosition() > BLMotor.getTargetPosition() - 10 && BLMotor.getCurrentPosition() < BLMotor.getTargetPosition() + 10)
             return true;
         else
             return false;
     }
 
+    public void catapult(float position) {
+        catapultMotor.setTargetPosition((int)(position * 500));
+        catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        catapultMotor.setPower(1.0);
+    }
+
+    public void surgicalTubing(boolean intake) {
+
+    }
+
     public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Left 2MDistance Sensor Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("Middle Range Sensor Range", String.format("%.01f in", sensorRangeM.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("Right 2MDistance Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
         telemetry.addData("FR Motor Position", FRMotor.getCurrentPosition());
         telemetry.addData("FL Motor Position", FLMotor.getCurrentPosition());
         telemetry.addData("BR Motor Position", BRMotor.getCurrentPosition());
         telemetry.addData("BL Motor Position", BLMotor.getCurrentPosition());
-        telemetry.addData("deviceName", sensorRangeM.getDeviceName());
-        telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorRangeM.getDistance(DistanceUnit.INCH)));
         telemetry.update();
     }
 }

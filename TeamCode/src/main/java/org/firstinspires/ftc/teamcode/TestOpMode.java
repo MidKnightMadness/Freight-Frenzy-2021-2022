@@ -27,18 +27,13 @@ public class TestOpMode extends OpMode {
     @Override
     public void loop() {
         //drive to shipping hub position
-        if((sensorRangeM.getDistance(DistanceUnit.INCH) <= 9 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 11) && gamepad1.a) {
-            drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 10)/100, 0);
+        if((sensorRangeM.getDistance(DistanceUnit.INCH) <= 4.5 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 5.5) && gamepad1.a && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
+            drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 5)/10, 0);
         } else {
             drive.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+            drive.catapult(gamepad1.right_trigger);
+            drive.surgicalTubing(gamepad1.right_bumper);
             drive.telemetry(telemetry);
         }
-        telemetry.addData("deviceName", sensorDistanceL.getDeviceName());
-        telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
-        telemetry.addData("deviceName", sensorRangeM.getDeviceName());
-        telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorRangeM.getDistance(DistanceUnit.INCH)));
-        telemetry.addData("deviceName", sensorDistanceR.getDeviceName());
-        telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
-        telemetry.update();
     }
 }
