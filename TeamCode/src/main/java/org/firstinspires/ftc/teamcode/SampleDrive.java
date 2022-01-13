@@ -78,14 +78,16 @@ public class SampleDrive {
             return false;
     }
 
-    public void catapult(float position) {
-        catapultMotor.setTargetPosition((int)(position * 500));
-        catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1.0);
+    public void surgicalTubing() {
+        surgicalTubingMotor.setPower(1);
     }
 
-    public void surgicalTubing(boolean intake) {
+    public void spinCarousel() {
+        flapServo.setPower(1);
+    }
 
+    public void intakeFlap() {
+        flapServo.setPower(1);
     }
 
     public void telemetry(Telemetry telemetry) {
