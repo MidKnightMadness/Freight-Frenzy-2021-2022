@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+/*package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -7,7 +7,7 @@ public class SampleMotor {
     DcMotorEx TestMotor;
 
     public SampleMotor(HardwareMap hardwareMap) {
-        SampleMotor.java
+        SampleMotor.java;
         TestMotor = hardwareMap.get(DcMotorEx.class, "TEST");
     }
 
@@ -15,4 +15,5 @@ public class SampleMotor {
         TestMotor.setMode(RUN_WITHOUT_ENCODERS);
         TestMotor.setPower(1);
     }
-}
+}*/
+//commented out by heidi 12/8/21 bc of compilation errors
