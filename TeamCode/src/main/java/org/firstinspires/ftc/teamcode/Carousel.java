@@ -15,7 +15,7 @@ public class Carousel {
     }
 
     public void spinRed() {
-        cServo.setPower(1.0);
+        cServo.setPower(-1.0);
     }
 
     public void spinOff() {
