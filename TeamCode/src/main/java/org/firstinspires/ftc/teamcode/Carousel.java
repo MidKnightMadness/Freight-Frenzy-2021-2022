@@ -10,7 +10,11 @@ public class Carousel {
         cServo = hardwareMap.get(CRServo.class, "carouselServo");
     }
 
-    public void spinOn() {
+    public void spinBlue() {
+        cServo.setPower(1.0);
+    }
+
+    public void spinRed() {
         cServo.setPower(1.0);
     }
 
