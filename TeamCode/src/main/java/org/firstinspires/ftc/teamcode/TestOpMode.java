@@ -12,6 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class TestOpMode extends OpMode {
     SampleDrive drive;
     Catapult catapult;
+    Carousel carousel;
+    Intake intake;
 
     private DistanceSensor sensorDistanceL; //left front sensor
     private ModernRoboticsI2cRangeSensor sensorRangeM; //middle front range sensor
@@ -27,6 +29,9 @@ public class TestOpMode extends OpMode {
     @Override
     public void init() {
         drive = new SampleDrive(hardwareMap);
+        catapult = new Catapult(hardwareMap);
+        carousel = new Carousel(hardwareMap);
+        intake = new Intake(hardwareMap);
         sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
         sensorRangeM = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
         sensorDistanceR = hardwareMap.get(DistanceSensor.class, "sensor_distance_right");
@@ -35,22 +40,23 @@ public class TestOpMode extends OpMode {
     @Override
     public void loop() {
         //drive to shipping hub position
-        if((sensorRangeM.getDistance(DistanceUnit.INCH) <= 4.5 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 5.5) && gamepad1.a && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
-            drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 5)/10, 0);
+        if((sensorRangeM.getDistance(DistanceUnit.INCH) <= 8.5 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 9.5) &&
+            gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
+            drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 9)/10, 0);
         } else {
             drive.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             drive.telemetry(telemetry);
         }
 
         //catapult
-        if(gamepad1.a) {
-            catapult.lower();
+        if(gamepad1.y) {
+            catapult.upper();
         }
         else if(gamepad1.b) {
             catapult.middle();
         }
-        else if(gamepad1.y) {
-            catapult.upper();
+        else if(gamepad1.a) {
+            catapult.lower();
         }
         else {
             catapult.returnPosition();
@@ -61,7 +67,10 @@ public class TestOpMode extends OpMode {
             surgicalToggle = !surgicalToggle;
         }
         if(surgicalToggle) {
-            drive.surgicalTubing();
+            intake.surgicalTubingOn();
+        }
+        else {
+            intake.surgicalTubingOff();
         }
         lastPressedSurgical = gamepad1.right_bumper;
 
@@ -70,7 +79,10 @@ public class TestOpMode extends OpMode {
             carouselToggle = !carouselToggle;
         }
         if(carouselToggle) {
-            drive.spinCarousel();
+            carousel.spinRed();
+        }
+        else {
+            carousel.spinOff();
         }
         lastPressedCarousel = gamepad1.left_bumper;
 
@@ -79,8 +91,11 @@ public class TestOpMode extends OpMode {
             flapToggle = !flapToggle;
         }
         if(flapToggle) {
-            drive.intakeFlap();
+            intake.intakeFlapOn();
         }
-        lastPressedFlap = gamepad1.b;
+        else {
+            intake.intakeFlapOff();
+        }
+        lastPressedFlap = gamepad1.x;
     }
 }

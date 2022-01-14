@@ -7,7 +7,7 @@ public class Carousel {
     CRServo cServo;
 
     public Carousel(HardwareMap hardwareMap){
-        cServo = hardwareMap.get(CRServo.class, "carouselServo");
+        cServo = hardwareMap.get(CRServo.class, "carousel");
     }
 
     public void spinBlue() {

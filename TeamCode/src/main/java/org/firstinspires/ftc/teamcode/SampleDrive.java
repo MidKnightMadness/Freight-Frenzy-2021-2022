@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -16,10 +17,6 @@ public class SampleDrive {
     DcMotorEx FLMotor;
     DcMotorEx BRMotor;
     DcMotorEx BLMotor;
-
-    private DcMotor catapultMotor; //outtake
-    private DcMotor surgicalTubingMotor; //intake
-    private CRServo flapServo; //intake flap
 
     private DistanceSensor sensorDistanceL; //left front sensor
     ModernRoboticsI2cRangeSensor sensorRangeM;
@@ -31,16 +28,13 @@ public class SampleDrive {
         BRMotor = hardwareMap.get(DcMotorEx.class, "BR");
         BLMotor = hardwareMap.get(DcMotorEx.class, "BL");
 
-        catapultMotor = hardwareMap.get(DcMotor.class, "Catapult");
-        surgicalTubingMotor = hardwareMap.get(DcMotor.class, "Surgical Tubing");
-        flapServo = hardwareMap.get(CRServo.class, "Intake Flap");
-
         sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
         sensorRangeM = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
         sensorDistanceR = hardwareMap.get(DistanceSensor.class, "sensor_distance_right");
     }
 
     public void drive(double x, double y, double rotation) {
+        y = -y;
         FRMotor.setPower(x + y + rotation);
         FLMotor.setPower(x - y + rotation);
         BRMotor.setPower(-x + y + rotation);
@@ -76,18 +70,6 @@ public class SampleDrive {
             return true;
         else
             return false;
-    }
-
-    public void surgicalTubing() {
-        surgicalTubingMotor.setPower(1);
-    }
-
-    public void spinCarousel() {
-        flapServo.setPower(1);
-    }
-
-    public void intakeFlap() {
-        flapServo.setPower(1);
     }
 
     public void telemetry(Telemetry telemetry) {
