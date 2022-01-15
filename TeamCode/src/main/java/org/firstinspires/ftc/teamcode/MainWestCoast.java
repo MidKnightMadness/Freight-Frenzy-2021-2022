@@ -88,18 +88,17 @@ public class MainWestCoast extends LinearOpMode{
             telemetry.update();
 
             int intakeCounter= 0;
-            boolean intaking = false;
+            boolean intaking= false;
 
             if(gamepad1.x && intakeCounter== 0){
                 intakeCounter= 300;
-                intaking= !intaking;
+                intaking= true;
             }
             if(intakeCounter>0){
                 intakeCounter=intakeCounter-1;
             }
             telemetry.addData("Intake Status", intakeCounter);
             telemetry.update();
-
 
         }
     }
