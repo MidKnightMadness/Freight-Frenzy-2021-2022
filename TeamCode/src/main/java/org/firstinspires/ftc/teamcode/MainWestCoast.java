@@ -87,11 +87,6 @@ public class MainWestCoast extends LinearOpMode{
 
             telemetry.update();
 
-            //intake motors
-            leftIntake=hardwareMap.get(DcMotor.class,"leftIntake");
-            fl.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rightIntake=hardwareMap.get(DcMotor.class,"rightIntake");
-
             int intakeCounter= 0;
             boolean intaking= false;
 
