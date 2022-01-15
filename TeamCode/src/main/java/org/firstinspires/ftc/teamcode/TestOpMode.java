@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp
 public class TestOpMode extends OpMode {
-    SampleDrive drive;
+    //SampleDrive drive;
     Catapult catapult;
     Carousel carousel;
     Intake intake;
@@ -23,12 +23,14 @@ public class TestOpMode extends OpMode {
     private boolean surgicalToggle = false;
     private boolean lastPressedFlap = false;
     private boolean flapToggle = false;
-    private boolean lastPressedCarousel = false;
-    private boolean carouselToggle = false;
+    private boolean lastPressedCarouselLeft = false;
+    private boolean lastPressedCarouselRight = false;
+    private boolean carouselToggleLeft = false;
+    private boolean carouselToggleRight = false;
 
     @Override
     public void init() {
-        drive = new SampleDrive(hardwareMap);
+        //drive = new SampleDrive(hardwareMap);
         catapult = new Catapult(hardwareMap);
         carousel = new Carousel(hardwareMap);
         intake = new Intake(hardwareMap);
@@ -40,51 +42,51 @@ public class TestOpMode extends OpMode {
     @Override
     public void loop() {
         //drive to shipping hub position
-        if((sensorRangeM.getDistance(DistanceUnit.INCH) <= 8.5 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 9.5) &&
-            gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
-            drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 9)/10, 0);
+        /*if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 8.5 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 9.5) &&
+                gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
+            drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 9) / 10, 0);
         } else {
             drive.drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             drive.telemetry(telemetry);
-        }
+        }*/
 
         //catapult
-        if(gamepad1.y) {
+        if (gamepad1.y) {
             catapult.upper();
-        }
-        else if(gamepad1.b) {
+        } else if (gamepad1.b) {
             catapult.middle();
-        }
-        else if(gamepad1.a) {
+        } else if (gamepad1.a) {
             catapult.lower();
-        }
-        else {
+        } else {
             catapult.returnPosition();
         }
 
         //surgical tubing
-        if(gamepad1.right_bumper && !lastPressedSurgical) {
+        if (gamepad1.right_bumper && !lastPressedSurgical) {
             surgicalToggle = !surgicalToggle;
         }
-        if(surgicalToggle) {
+        if (surgicalToggle) {
             intake.surgicalTubingOn();
-        }
-        else {
+        } else {
             intake.surgicalTubingOff();
         }
         lastPressedSurgical = gamepad1.right_bumper;
 
         //spinning carousel
-        if(gamepad1.left_bumper && !lastPressedCarousel) {
-            carouselToggle = !carouselToggle;
+        if(gamepad1.dpad_left && !lastPressedCarouselLeft) {
+            carouselToggleLeft = !carouselToggleLeft;
+        } else if(gamepad1.dpad_right && !lastPressedCarouselRight) {
+            carouselToggleRight = !carouselToggleRight;
         }
-        if(carouselToggle) {
+        if(carouselToggleLeft) {
             carousel.spinRed();
-        }
-        else {
+        } else if(carouselToggleRight) {
+            carousel.spinBlue();
+        } else {
             carousel.spinOff();
         }
-        lastPressedCarousel = gamepad1.left_bumper;
+        lastPressedCarouselLeft = gamepad1.dpad_left;
+        lastPressedCarouselRight = gamepad1.dpad_right;
 
         //turn flap
         if(gamepad1.x && !lastPressedFlap) {

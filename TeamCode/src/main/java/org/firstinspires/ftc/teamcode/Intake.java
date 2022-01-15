@@ -2,16 +2,19 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
     private DcMotor surgicalTubingMotor; //intake
     private Servo flapServo; //intake flap
+    //private TouchSensor intakeTouch; //touch sensor inside of intake
 
     public Intake(HardwareMap hardwareMap){
         surgicalTubingMotor = hardwareMap.get(DcMotor.class, "surgical_tubing");
         flapServo = hardwareMap.get(Servo.class, "intake_flap");
+        //intakeTouch = hardwareMap.get(TouchSensor.class, "touchSensor");
     }
 
     public void surgicalTubingOn() {

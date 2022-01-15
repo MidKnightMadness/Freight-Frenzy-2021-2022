@@ -12,31 +12,33 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Catapult {
     private DcMotor catapultMotor; //outtake
+    private int startPosition;
 
     public Catapult(HardwareMap hardwareMap) {
         catapultMotor = hardwareMap.get(DcMotor.class, "catapult");
+        startPosition = catapultMotor.getCurrentPosition();
     }
 
     public void upper() {
-        catapultMotor.setTargetPosition(300);
+        catapultMotor.setTargetPosition(300 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         catapultMotor.setPower(1.0);
     }
 
     public void middle() {
-        catapultMotor.setTargetPosition(400);
+        catapultMotor.setTargetPosition(400 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         catapultMotor.setPower(1.0);
     }
 
     public void lower() {
-        catapultMotor.setTargetPosition(500);
+        catapultMotor.setTargetPosition(500 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         catapultMotor.setPower(1.0);
     }
 
     public void returnPosition() {
-        catapultMotor.setTargetPosition(0);
+        catapultMotor.setTargetPosition(startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         catapultMotor.setPower(1.0);
     }
