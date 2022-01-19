@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Catapult {
     private DcMotor catapultMotor; //outtake
+    private Servo headServo; //catapult flap
     private Servo flapServo; //catapult flap
     private int startPosition;
 
@@ -46,8 +47,20 @@ public class Catapult {
         catapultMotor.setPower(1.0);
     }
 
+    public void headLeft() {
+        headServo.setPosition(0);
+    }
+
+    public void headRight() {
+        headServo.setPosition(1);
+    }
+
+    public void headReturn() {
+        headServo.setPosition(0.5);
+    }
+
     public void flapOn() {
-        flapServo.setPosition(100);
+        flapServo.setPosition(1);
     }
 
     public void flapOff() {
