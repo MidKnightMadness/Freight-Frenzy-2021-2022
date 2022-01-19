@@ -8,13 +8,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Intake {
     private DcMotor surgicalTubingMotor; //intake
-    private Servo flapServo; //intake flap
     //private TouchSensor intakeTouch; //touch sensor inside of intake
 
     public Intake(HardwareMap hardwareMap){
         surgicalTubingMotor = hardwareMap.get(DcMotor.class, "surgical_tubing");
-        flapServo = hardwareMap.get(Servo.class, "intake_flap");
-        //intakeTouch = hardwareMap.get(TouchSensor.class, "touchSensor");
+        //intakeTouch = hardwareMap.get(TouchSensor.class, "intake_touch");
     }
 
     public void surgicalTubingOn() {
@@ -25,11 +23,4 @@ public class Intake {
         surgicalTubingMotor.setPower(0);
     }
 
-    public void intakeFlapOn() {
-        flapServo.setPosition(100);
-    }
-
-    public void intakeFlapOff() {
-        flapServo.setPosition(0);
-    }
 }

@@ -6,16 +6,19 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Catapult {
     private DcMotor catapultMotor; //outtake
+    private Servo flapServo; //catapult flap
     private int startPosition;
 
     public Catapult(HardwareMap hardwareMap) {
         catapultMotor = hardwareMap.get(DcMotor.class, "catapult");
+        flapServo = hardwareMap.get(Servo.class, "intake_flap");
         startPosition = catapultMotor.getCurrentPosition();
     }
 
@@ -41,5 +44,13 @@ public class Catapult {
         catapultMotor.setTargetPosition(startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         catapultMotor.setPower(1.0);
+    }
+
+    public void flapOn() {
+        flapServo.setPosition(100);
+    }
+
+    public void flapOff() {
+        flapServo.setPosition(0);
     }
 }
