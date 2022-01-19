@@ -15,8 +15,8 @@ y (toggle) = catapult to upper
 b (toggle) = catapult to middle
 a (toggle) = catapult to lower
 x (toggle) = catapult flap
-left bumper (toggle) = team shipping element motor
-left trigger (toggle) = team shipping element servo
+left bumper (toggle) = team shipping lift lift motor
+left trigger (toggle) = team shipping lift lift servo
 right bumper (toggle) = surgical tubing
 dpad up (hold) = go to shipping hub position
 dpad left (hold) = spin carousel left
@@ -26,13 +26,14 @@ Player 2
 dpad left (toggle) = rotate catapult head left
 dpad right (toggle) = rotate catapult head right
 */
+
 @TeleOp
 public class TestOpMode extends OpMode {
     SampleDrive drive;
     Catapult catapult;
     Carousel carousel;
     Intake intake;
-    ShippingElement shipElement;
+    Lift lift;
 
     private DistanceSensor sensorDistanceL; //left front sensor
     private ModernRoboticsI2cRangeSensor sensorRangeM; //middle front range sensor
@@ -53,10 +54,10 @@ public class TestOpMode extends OpMode {
 
     private boolean lastPressedSurgical = false;
     private boolean surgicalToggle = false;
-    private boolean lastPressedElementMotor = false;
-    private boolean elementMotorToggle = false;
-    private boolean lastPressedElementServo = false;
-    private boolean elementServoToggle = false;
+    private boolean lastPressedLiftMotor = false;
+    private boolean liftMotorToggle = false;
+    private boolean lastPressedLiftServo = false;
+    private boolean liftServoToggle = false;
 
     @Override
     public void init() {
@@ -137,26 +138,26 @@ public class TestOpMode extends OpMode {
         catapultHeadLeftToggle = gamepad2.dpad_left;
         catapultHeadRightToggle = gamepad2.dpad_right;
 
-        //team shipping element
-        if (gamepad1.left_bumper && !lastPressedElementMotor) {
-            elementMotorToggle = !elementMotorToggle;
+        //team shipping element lift
+        if (gamepad1.left_bumper && !lastPressedLiftMotor) {
+            liftMotorToggle = !liftMotorToggle;
         }
-        if (elementMotorToggle) {
-            shipElement.lift();
+        if (liftMotorToggle) {
+            lift.lift();
         } else {
-            shipElement.lower();
+            lift.lower();
         }
-        lastPressedElementMotor = gamepad1.left_bumper;
+        lastPressedLiftMotor = gamepad1.left_bumper;
 
-        if (gamepad1.left_trigger > 0 && !lastPressedElementServo) {
-            elementServoToggle = !elementServoToggle;
+        if (gamepad1.left_trigger > 0 && !lastPressedLiftServo) {
+            liftServoToggle = !liftServoToggle;
         }
-        if (elementMotorToggle) {
-            shipElement.open();
+        if (liftMotorToggle) {
+            lift.open();
         } else {
-            shipElement.close();
+            lift.close();
         }
-        lastPressedElementServo = (gamepad1.left_trigger > 0);
+        lastPressedLiftServo = (gamepad1.left_trigger > 0);
 
         //surgical tubing
         if (gamepad1.right_bumper && !lastPressedSurgical) {
