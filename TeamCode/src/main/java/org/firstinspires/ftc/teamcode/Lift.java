@@ -10,8 +10,8 @@ public class Lift {
     private int motorStartPosition;
 
     public Lift(HardwareMap hardwareMap) {
-        liftServo = hardwareMap.get(Servo.class, "ship_element_servo");
-        liftMotor = hardwareMap.get(DcMotor.class, "ship_element_motor");
+        liftServo = hardwareMap.get(Servo.class, "lift_servo");
+        liftMotor = hardwareMap.get(DcMotor.class, "lift_motor");
         motorStartPosition = liftMotor.getCurrentPosition();
     }
 
