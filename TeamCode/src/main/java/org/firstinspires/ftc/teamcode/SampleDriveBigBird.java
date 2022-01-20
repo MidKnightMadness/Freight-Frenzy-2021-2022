@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-public class SampleDrive {
+public class SampleDriveBigBird {
     DcMotorEx FRMotor;
     DcMotorEx FLMotor;
     DcMotorEx BRMotor;
@@ -22,7 +22,7 @@ public class SampleDrive {
     ModernRoboticsI2cRangeSensor sensorRangeM;
     private DistanceSensor sensorDistanceR; //right front sensor
 
-    public SampleDrive(HardwareMap hardwareMap) {
+    public SampleDriveBigBird(HardwareMap hardwareMap) {
         FRMotor = hardwareMap.get(DcMotorEx.class, "FR");
         FLMotor = hardwareMap.get(DcMotorEx.class, "FL");
         BRMotor = hardwareMap.get(DcMotorEx.class, "BR");
@@ -35,8 +35,8 @@ public class SampleDrive {
 
     public void drive(double x, double y, double rotation) {
         y = -y;
-        FRMotor.setPower(x - y - rotation);
-        FLMotor.setPower(x + y - rotation);
+        FRMotor.setPower(x + y + rotation);
+        FLMotor.setPower(x - y + rotation);
         BRMotor.setPower(-x + y + rotation);
         BLMotor.setPower(-x - y + rotation);
 
@@ -64,9 +64,9 @@ public class SampleDrive {
 
     public boolean atTarget() {
         if(FRMotor.getCurrentPosition() > FRMotor.getTargetPosition() - 10 && FRMotor.getCurrentPosition() < FRMotor.getTargetPosition() + 10 &&
-           FLMotor.getCurrentPosition() > FLMotor.getTargetPosition() - 10 && FLMotor.getCurrentPosition() < FLMotor.getTargetPosition() + 10 &&
-           BRMotor.getCurrentPosition() > BRMotor.getTargetPosition() - 10 && BRMotor.getCurrentPosition() < BRMotor.getTargetPosition() + 10 &&
-           BLMotor.getCurrentPosition() > BLMotor.getTargetPosition() - 10 && BLMotor.getCurrentPosition() < BLMotor.getTargetPosition() + 10)
+                FLMotor.getCurrentPosition() > FLMotor.getTargetPosition() - 10 && FLMotor.getCurrentPosition() < FLMotor.getTargetPosition() + 10 &&
+                BRMotor.getCurrentPosition() > BRMotor.getTargetPosition() - 10 && BRMotor.getCurrentPosition() < BRMotor.getTargetPosition() + 10 &&
+                BLMotor.getCurrentPosition() > BLMotor.getTargetPosition() - 10 && BLMotor.getCurrentPosition() < BLMotor.getTargetPosition() + 10)
             return true;
         else
             return false;
