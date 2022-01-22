@@ -77,6 +77,7 @@ public class AutonomousMecanumBlue1 extends LinearOpMode {
         carousel.spinRed(); //rotate carousel
         intake.surgicalTubingOn(); //intake freight
         intake.surgicalTubingOff();
+        carousel.spinOff();
 
         //Placing Duck on Alliance Shipping Hub
         drive.setPos(-2200,900,0); //drive to alliance shipping hub from carousel

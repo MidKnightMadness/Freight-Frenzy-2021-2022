@@ -16,7 +16,7 @@ public class Lift {
     }
 
     public void lift() {
-        liftMotor.setTargetPosition(300 + motorStartPosition);
+        liftMotor.setTargetPosition(1000 + motorStartPosition);
         liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         liftMotor.setPower(1.0);
     }

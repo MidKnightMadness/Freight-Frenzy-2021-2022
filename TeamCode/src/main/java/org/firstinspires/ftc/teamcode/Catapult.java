@@ -19,12 +19,13 @@ public class Catapult {
 
     public Catapult(HardwareMap hardwareMap) {
         catapultMotor = hardwareMap.get(DcMotor.class, "catapult");
-        flapServo = hardwareMap.get(Servo.class, "intake_flap");
+        headServo = hardwareMap.get(Servo.class, "head");
+        flapServo = hardwareMap.get(Servo.class, "flap");
         startPosition = catapultMotor.getCurrentPosition();
     }
 
     public void upper() {
-        catapultMotor.setTargetPosition(300 + startPosition);
+        catapultMotor.setTargetPosition(500 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         catapultMotor.setPower(1.0);
     }
@@ -36,7 +37,7 @@ public class Catapult {
     }
 
     public void lower() {
-        catapultMotor.setTargetPosition(500 + startPosition);
+        catapultMotor.setTargetPosition(300 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         catapultMotor.setPower(1.0);
     }
