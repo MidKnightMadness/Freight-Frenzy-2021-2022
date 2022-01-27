@@ -27,12 +27,12 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
  * THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package org.firstinspires.ftc.robotcontroller.external.samples;
-
+package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.system.Deadline;
@@ -49,8 +49,8 @@ import java.util.concurrent.TimeUnit;
  *
  * Displays the first pattern upon init.
  */
-@TeleOp(name="BlinkinExample")
-public class SampleRevBlinkinLedDriver extends OpMode {
+@TeleOp(name="TestBlinkin")
+public class TestBlinkin extends OpMode {
 
     /*
      * Change the pattern every 10 seconds in AUTO mode.
@@ -95,17 +95,22 @@ public class SampleRevBlinkinLedDriver extends OpMode {
     @Override
     public void loop()
     {
-        handleGamepad();
+        if(gamepad1.a){
+            telemetry.addLine("pressing a button");
+            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_OCEAN_PALETTE);
+            telemetry.update();
+        }
+        //handleGamepad();
 
 
-        if (displayKind == DisplayKind.AUTO) {
+        /*if (displayKind == DisplayKind.AUTO) {
             doAutoDisplay();
-        } else {
+        } else {*.
             /*
              * MANUAL mode: Nothing to do, setting the pattern as a result of a gamepad event.
              */
-        }
     }
+
 
     /*
      * handleGamepad

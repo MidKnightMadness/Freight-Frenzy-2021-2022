@@ -18,7 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import java.util.Locale;
 
 @TeleOp
-public class TestCarouselPosV2 extends LinearOpMode {
+public class RedTestCarouselPosV2 extends LinearOpMode {
     SampleDriveBigBird drive;
 
     private DistanceSensor sensorDistanceL; //left sensor
@@ -59,10 +59,13 @@ public class TestCarouselPosV2 extends LinearOpMode {
             telemetry.addData("math of distance left: ", String.format("%f in", (sensorDistanceL.getDistance(DistanceUnit.INCH) - 9)/20));
             telemetry.addData("math of distance back: ", String.format("%f in", (sensorDistanceB.getDistance(DistanceUnit.INCH) - 10)/20));
             telemetry.addData("joystick value: ", gamepad1.left_stick_x);
+            telemetry.update();
             //drive to carousel spot un-angled
             if((sensorDistanceL.getDistance(DistanceUnit.INCH) >= 9) || (sensorDistanceB.getDistance(DistanceUnit.INCH) >= 10)) {
                 drive.drive(-(sensorDistanceL.getDistance(DistanceUnit.INCH) - 9) / 20, -(sensorDistanceB.getDistance(DistanceUnit.INCH) - 10)/20, 0);
-            } else {
+            }
+            if(((sensorDistanceL.getDistance(DistanceUnit.INCH) > 9) && (sensorDistanceL.getDistance(DistanceUnit.INCH) < 11)) &&
+                    ((sensorDistanceB.getDistance(DistanceUnit.INCH) > 9) && (sensorDistanceB.getDistance(DistanceUnit.INCH) < 11))){
                 break;
             }
 
@@ -70,19 +73,20 @@ public class TestCarouselPosV2 extends LinearOpMode {
         angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         startTurning = angles.firstAngle;
         while(opModeIsActive()){
-            if ((sensorDistanceB.getDistance(DistanceUnit.INCH) < 10) && (sensorDistanceL.getDistance(DistanceUnit.INCH) < 9)) {
-                drive.drive(0, 0, 0);
-                telemetry.addData("heading angle: ", formatAngle(angles.angleUnit, angles.firstAngle));
-                telemetry.addData("startTurning: ", startTurning);
-                telemetry.addLine("should be greater than");
-                telemetry.addData("angles.firstAngle+37: ", angles.firstAngle+37);
-                telemetry.update();
-                if (startTurning > (angles.firstAngle + 37)) {
-                    telemetry.addLine("trying to turn");
-                    telemetry.update();
-                    drive.drive(0, 0, (startTurning - 37) / 10);
-                }
+            angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            telemetry.addData("heading angle: ", formatAngle(angles.angleUnit, angles.firstAngle));
+            telemetry.addData("startTurning: ", startTurning);
+            telemetry.addData("angles.firstAngle: ", angles.firstAngle);
+            telemetry.addLine("should be greater than");
+            telemetry.addData("startTurning+37: ", startTurning+37);
+            if (angles.firstAngle < (startTurning + 37)) {
+                angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                telemetry.addLine("trying to turn");
+                drive.drive(0, 0, -(startTurning - 15) / 100);
+            } else {
+                break;
             }
+            telemetry.update();
         }
     }
     String formatDegrees(double degrees){
