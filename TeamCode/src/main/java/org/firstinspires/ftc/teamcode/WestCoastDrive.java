@@ -1,73 +1,79 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp
-public class WestCoastDrive extends LinearOpMode{
-    DcMotorEx fl;
-    DcMotorEx fr;
-    DcMotorEx bl;
-    DcMotorEx br;
-    
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-    public WestCoastDrive(HardwareMap hardwareMap){
-        fl = hardwareMap.get(DcMotorEx.class, "fl");
-        fr = hardwareMap.get(DcMotorEx.class, "fr");
-        bl = hardwareMap.get(DcMotorEx.class, "bl");
-        br = hardwareMap.get(DcMotorEx.class, "br");
+public class WestCoastDrive {
+    DcMotorEx FR;
+    DcMotorEx FL;
+    DcMotorEx BR;
+    DcMotorEx BL;
+
+    private DistanceSensor sensorDistanceL; //left front sensor
+    ModernRoboticsI2cRangeSensor sensorRangeM;
+    private DistanceSensor sensorDistanceR; //right front sensor
+
+    public WestCoastDrive(HardwareMap hardwareMap) {
+        FR = hardwareMap.get(DcMotorEx.class, "FR");
+        FL = hardwareMap.get(DcMotorEx.class, "FL");
+        BR = hardwareMap.get(DcMotorEx.class, "BR");
+        BL = hardwareMap.get(DcMotorEx.class, "BL");
+
+        sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
+        sensorRangeM = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
+        sensorDistanceR = hardwareMap.get(DistanceSensor.class, "sensor_distance_right");
     }
 
-    public void drive(double xx, double yy, double rotation){
-        fl.setVelocity((xx - yy + rotation) * 1000);
-        fr.setVelocity((xx + yy + rotation) * 1000);
-        bl.setVelocity((xx + yy + rotation) * 1000); //- and +?
-        br.setVelocity((xx + yy + rotation) * 1000);
+    public void drive(double y, double rotation) {
+        FR.setPower(-y + rotation);
+        FL.setPower(y + rotation);
+        BR.setPower(-y + rotation);
+        BL.setPower(y + rotation);
     }
 
-    public void runOpMode(){
-        double[] power = new double[4];
-        waitForStart();
-        while(opModeIsActive()){
-            power[0]=0; //front left
-            power[1]=0; //front right
-            power[2]=0; //back left
-            power[3]=0; //back right
+    public void setPos(double y, double rotation) {
+        FR.setTargetPosition((int)(-y + rotation) + FR.getCurrentPosition());
+        FL.setTargetPosition((int)(y + rotation) + FL.getCurrentPosition());
+        BR.setTargetPosition((int)(-y + rotation) + BR.getCurrentPosition());
+        BL.setTargetPosition((int)(y + rotation) + BL.getCurrentPosition());
+        FR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FR.setPower(0.2);
+        FL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FL.setPower(0.2);
+        BR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BR.setPower(0.2);
+        BL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BL.setPower(0.2);
+        while(!atTarget()) { }
+    }
 
-            //turn left
-            if(this.gamepad1.left_stick_x<0){
-                power[0]-=this.gamepad1.left_stick_x;
-                power[1]+=this.gamepad1.left_stick_x;
-                power[2]-=this.gamepad1.left_stick_x;
-                power[3]+=this.gamepad1.left_stick_x;
-            }
+    public boolean atTarget() {
+        if(FR.getCurrentPosition() > FR.getTargetPosition() - 10 && FR.getCurrentPosition() < FR.getTargetPosition() + 10 &&
+                FL.getCurrentPosition() > FL.getTargetPosition() - 10 && FL.getCurrentPosition() < FL.getTargetPosition() + 10 &&
+                BR.getCurrentPosition() > BR.getTargetPosition() - 10 && BR.getCurrentPosition() < BR.getTargetPosition() + 10 &&
+                BL.getCurrentPosition() > BL.getTargetPosition() - 10 && BL.getCurrentPosition() < BL.getTargetPosition() + 10)
+            return true;
+        else
+            return false;
+    }
 
-            //turn right
-            if(this.gamepad1.left_stick_x>0){
-                power[0]+=this.gamepad1.left_stick_x;
-                power[1]-=this.gamepad1.left_stick_x;
-                power[2]+=this.gamepad1.left_stick_x;
-                power[3]-=this.gamepad1.left_stick_x;
-            }
-
-            //scooch forward
-            if(this.gamepad1.left_stick_y>0){
-                power[0]+=this.gamepad1.left_stick_y;
-                power[1]+=this.gamepad1.left_stick_y;
-                power[2]+=this.gamepad1.left_stick_y;
-                power[3]+=this.gamepad1.left_stick_y;
-            }
-
-            //scooch backward
-            if(this.gamepad1.left_stick_y<0){
-                power[0]-=this.gamepad1.left_stick_y;
-                power[1]-=this.gamepad1.left_stick_y;
-                power[2]-=this.gamepad1.left_stick_y;
-                power[3]-=this.gamepad1.left_stick_y;
-            }
-        }
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Left 2MDistance Sensor Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("Middle Range Sensor Range", String.format("%.01f in", sensorRangeM.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("Right 2MDistance Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("FR Motor Position", FR.getCurrentPosition());
+        telemetry.addData("FL Motor Position", FL.getCurrentPosition());
+        telemetry.addData("BR Motor Position", BR.getCurrentPosition());
+        telemetry.addData("BL Motor Position", BL.getCurrentPosition());
+        telemetry.update();
     }
 }
