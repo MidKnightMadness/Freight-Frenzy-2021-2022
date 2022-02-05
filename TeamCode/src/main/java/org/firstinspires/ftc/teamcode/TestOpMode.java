@@ -82,10 +82,9 @@ public class TestOpMode extends OpMode {
             drive.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             drive.telemetry(telemetry);
         }
-        catapult.setPosition(gamepad2.right_stick_y, telemetry);
 
         //catapult
-        /*if (gamepad2.y && !lastPressedCatapultUpper) {
+        if (gamepad2.y && !lastPressedCatapultUpper) {
             catapultUpperToggle = !catapultUpperToggle;
             catapultMiddleToggle = false;
             catapultLowerToggle = false;
@@ -109,7 +108,7 @@ public class TestOpMode extends OpMode {
         }
         lastPressedCatapultUpper = gamepad2.y;
         lastPressedCatapultMiddle = gamepad2.b;
-        lastPressedCatapultLower = gamepad2.a;*/
+        lastPressedCatapultLower = gamepad2.a;
 
         //turn flap
         if(gamepad2.x && !lastPressedFlap) {
@@ -168,12 +167,11 @@ public class TestOpMode extends OpMode {
 
         //intake holder
         if(gamepad2.right_trigger > 0 && !lastPressedIntakeHolder) {
-            flapToggle = !flapToggle;
+            intakeHolderToggle = !intakeHolderToggle;
         }
-        if(flapToggle) {
+        if(intakeHolderToggle) {
             intake.dropIntake();
-        }
-        else {
+        } else {
             intake.returnIntakeHolder();
         }
         lastPressedIntakeHolder = (gamepad2.right_trigger > 0);

@@ -24,36 +24,33 @@ public class Catapult {
         startPosition = catapultMotor.getCurrentPosition();
     }
 
-    public void upper() {
-        catapultMotor.setTargetPosition(500 + startPosition);
+    public void upper() {//12.2 in
+        catapultMotor.setTargetPosition(140 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(0.1);
+        catapultMotor.setPower(1);
     }
 
-    public void middle() {
-        catapultMotor.setTargetPosition(400 + startPosition);
+    public void middle() {//13 in
+        catapultMotor.setTargetPosition(155 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(0.1);
+        catapultMotor.setPower(1);
     }
 
-    public void lower() {
-        catapultMotor.setTargetPosition(300 + startPosition);
+    public void lower() {//14 in
+        catapultMotor.setTargetPosition(175 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(0.1);
+        catapultMotor.setPower(1);
     }
 
     public void returnPosition() {
         catapultMotor.setTargetPosition(startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(0.1);
+        catapultMotor.setPower(1);
     }
 
-    public void setPosition(double y, Telemetry telemetry) {
-        catapultMotor.setTargetPosition(catapultMotor.getCurrentPosition() + (int)(-y * 100));
-        catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1);
-        telemetry.addData("Catapult Motor Position", catapultMotor.getCurrentPosition());
-        telemetry.update();
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Catapult Motor Current Position", catapultMotor.getCurrentPosition());
+        telemetry.addData("Catapult Motor Target Position", catapultMotor.getTargetPosition());
     }
 
     public void headLeft() {
@@ -65,10 +62,10 @@ public class Catapult {
     }
 
     public void flapOn() {
-        flapServo.setPosition(1);
+        flapServo.setPosition(0);
     }
 
     public void flapOff() {
-        flapServo.setPosition(0);
+        flapServo.setPosition(0.5);
     }
 }
