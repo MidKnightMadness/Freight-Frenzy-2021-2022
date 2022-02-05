@@ -15,6 +15,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Autonomous
 public class AutonomousMecanumRed1 extends LinearOpMode {
     SampleDrive drive;
+    Catapult catapult;
+    Carousel carousel;
+    Intake intake;
+    Lift lift;
     SensorREV2MDistance distance_sensor;
 
     //Three Front 2 meter distance sensors
@@ -36,6 +40,10 @@ public class AutonomousMecanumRed1 extends LinearOpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         drive = new SampleDrive(hardwareMap);
+        catapult = new Catapult(hardwareMap);
+        carousel = new Carousel(hardwareMap);
+        intake = new Intake(hardwareMap);
+        lift = new Lift(hardwareMap);
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
@@ -61,45 +69,65 @@ public class AutonomousMecanumRed1 extends LinearOpMode {
         telemetry.addData("Barcode Location", barcodeLocation);
         telemetry.update();
 /*
-        // Placing Pre-Load Box (5 seconds)
+        /* Placing Pre-Load Box (5 seconds)
         drive.setPos(1400, 700, 0); //drive to alliance shipping hub
         //outtake pre-load box onto alliance shipping hub
         drive.telemetry(telemetry);
-        orient();
+        orient();*/
+
+        drive.telemetry(telemetry);
+        drive.setPos(1000, 600, 0, telemetry); //drive to alliance shipping hub
+        drive.telemetry(telemetry);
+        intake.dropIntake();
+        sleep(2000);
+
+        double time = getRuntime();
+        while(getRuntime() < 2 + time)
+            catapult.upper(); //outtake pre-load box onto alliance shipping hub
+        sleep(1000);
+        catapult.headReturn();
+        sleep(3000);
+        catapult.flapOn();
+        sleep(3000);
+        catapult.returnPosition();
+
+        drive.setPos(0, -900, -1000, telemetry); //drive to warehouse from alliance shipping hub
+        //intake.surgicalTubingOn(); //intake freight
+        drive.setPos(0,-4000,0, telemetry);
 
         // Deliver Duck Through Carousel (5 seconds)
-        drive.setPos(-2400,-1250, 0); //drive to carousel from shipping hub
+        //drive.setPos(-2400,-1250, 0); //drive to carousel from shipping hub
         //rotate carousel
         //intake duck
-        orient();
+        //orient();
 
         //Placing Duck on Alliance Shipping Hub
-        drive.setPos(2200,900,0); //drive to alliance shipping hub from carousel
+        //drive.setPos(2200,900,0); //drive to alliance shipping hub from carousel
         //outtake duck onto alliance shipping hub
-        orient();
+        //orient();
 
         // Placing 2 Freight from Warehouse to Alliance Shipping Hub (10 seconds)
         //for(int i = 0; i < 2; i++) {
-        drive.setPos(0, -1100, -1000); //drive to warehouse from alliance shipping hub
+        //drive.setPos(0, -1100, -1000); //drive to warehouse from alliance shipping hub
         //drive.setPos(0,-2000,0);
         //intake freight
         //drive.setPos(0,2000,0); //drive to alliance shipping hub from warehouse
-        drive.setPos(0, 1100, 1000);
+        //drive.setPos(0, 1100, 1000);
         //outtake freight onto alliance shipping hub
         //}
 
         // Completely Parking in Warehouse (4 seconds)
         // drive to warehouse from alliance shipping hub
-        drive.setPos(0, -1000, -1000); //drive to warehouse from alliance shipping hub
+        //drive.setPos(0, -1000, -1000); //drive to warehouse from alliance shipping hub
         //drive.setPos(0,-2000,0);
     }
 
     public void orient() {
         while(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY < -5 ||
                 imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY > 5) {
-            drive.setPos(0, 0, (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY) * 10);
+            //drive.setPos(0, 0, (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY) * 10);
             sleep(1);
-        }*/
+        }
 
     }
 

@@ -18,6 +18,7 @@ public class AutonomousMecanumRed2 extends LinearOpMode {
     Catapult catapult;
     Carousel carousel;
     Intake intake;
+    Lift lift;
     SensorREV2MDistance distance_sensor;
 
     //Three Front 2 meter distance sensors
@@ -39,6 +40,10 @@ public class AutonomousMecanumRed2 extends LinearOpMode {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         drive = new SampleDrive(hardwareMap);
+        catapult = new Catapult(hardwareMap);
+        carousel = new Carousel(hardwareMap);
+        intake = new Intake(hardwareMap);
+        lift = new Lift(hardwareMap);
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
         sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
@@ -66,17 +71,34 @@ public class AutonomousMecanumRed2 extends LinearOpMode {
         drive.setPos(-1400, -700, 0, telemetry); //drive to alliance shipping hub
         //outtake pre-load box onto alliance shipping hub
         drive.telemetry(telemetry);
-        orient();
+        intake.dropIntake();
+        sleep(2000);
+        //orient();
+
+        double time = getRuntime();
+        while(getRuntime() < 2 + time)
+            catapult.upper();
+        sleep(1000);
+        catapult.headReturn();
+        sleep(3000);
+        catapult.flapOn();
+        sleep(3000);
+        catapult.returnPosition();
+
+        //values must be fixed
+        drive.setPos(0, -900, -1000, telemetry); //drive to warehouse from alliance shipping hub
+        //intake.surgicalTubingOn(); //intake freight
+        drive.setPos(0,-4000,0, telemetry);
 
         // Deliver Duck Through Carousel (5 seconds)
-        drive.setPos(2400,1250, 0, telemetry); //drive to carousel from shipping hub
+        //drive.setPos(2400,1250, 0, telemetry); //drive to carousel from shipping hub
         //rotate carousel
         //intake duck
-        orient();
+        //orient();
 
         // Completely Parking in Warehouse (4 seconds)
         // drive to warehouse from alliance shipping hub
-        drive.setPos(1000, -1000, 0, telemetry); //drive to warehouse from alliance shipping hub
+        //drive.setPos(1000, -1000, 0, telemetry); //drive to warehouse from alliance shipping hub
         //drive.setPos(0,-2000,0);
     }
 
