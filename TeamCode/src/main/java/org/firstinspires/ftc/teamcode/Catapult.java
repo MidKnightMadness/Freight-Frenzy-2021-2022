@@ -12,40 +12,65 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Catapult {
-    private DcMotor catapultMotor; //outtake
+    private DcMotorEx catapultMotor; //outtake
     private Servo headServo; //catapult flap
     private Servo flapServo; //catapult flap
     private int startPosition;
 
     public Catapult(HardwareMap hardwareMap) {
-        catapultMotor = hardwareMap.get(DcMotor.class, "catapult");
+        catapultMotor = hardwareMap.get(DcMotorEx.class, "catapult");
         headServo = hardwareMap.get(Servo.class, "head");
         flapServo = hardwareMap.get(Servo.class, "flap");
         startPosition = catapultMotor.getCurrentPosition();
+        catapultMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void setPower(double power) {
+        catapultMotor.setPower(power);
     }
 
     public void upper() {//12.2 in
         catapultMotor.setTargetPosition(140 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1);
+        if(catapultMotor.getCurrentPosition() > startPosition + 80 && catapultMotor.getCurrentPosition() < catapultMotor.getTargetPosition() - 10) {
+            catapultMotor.setPower(0);
+        } else {
+            catapultMotor.setPower(1);
+        }
     }
 
     public void middle() {//13 in
         catapultMotor.setTargetPosition(155 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1);
+        if(catapultMotor.getCurrentPosition() > startPosition + 80 && catapultMotor.getCurrentPosition() < catapultMotor.getTargetPosition() - 10) {
+            catapultMotor.setPower(0);
+        } else {
+            catapultMotor.setPower(1);
+        }
     }
 
     public void lower() {//14 in
         catapultMotor.setTargetPosition(175 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1);
+        if(catapultMotor.getCurrentPosition() > startPosition + 80 && catapultMotor.getCurrentPosition() < catapultMotor.getTargetPosition() - 10) {
+            catapultMotor.setPower(0);
+        } else {
+            catapultMotor.setPower(1);
+        }
     }
 
     public void returnPosition() {
         catapultMotor.setTargetPosition(startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1);
+        if(catapultMotor.getCurrentPosition() < startPosition + 80) {
+            catapultMotor.setPower(0);
+        } else {
+            catapultMotor.setPower(1);
+        }
+    }
+
+    public double getVelocity() {
+        return catapultMotor.getVelocity();
     }
 
     public void telemetry(Telemetry telemetry) {

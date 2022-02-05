@@ -52,18 +52,18 @@ public class SampleDrive {
     }
 
     public void setPos(double x, double y, double rotation, Telemetry telemetry) {
-        FRMotor.setTargetPosition((int)(-x - y - rotation) + FRMotor.getCurrentPosition());
-        FLMotor.setTargetPosition((int)(-x + y - rotation) + FLMotor.getCurrentPosition());
-        BRMotor.setTargetPosition((int)(-x + y + rotation) + BRMotor.getCurrentPosition());
-        BLMotor.setTargetPosition((int)(-x - y + rotation) + BLMotor.getCurrentPosition());
+        FRMotor.setTargetPosition((int)(-x + y - rotation) + FRMotor.getCurrentPosition());
+        FLMotor.setTargetPosition((int)(-x - y - rotation) + FLMotor.getCurrentPosition());
+        BRMotor.setTargetPosition((int)(-x - y + rotation) + BRMotor.getCurrentPosition());
+        BLMotor.setTargetPosition((int)(-x + y + rotation) + BLMotor.getCurrentPosition());
         FRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FRMotor.setPower(0.2);
+        FRMotor.setPower(0.5);
         FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FLMotor.setPower(0.2);
+        FLMotor.setPower(0.5);
         BRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BRMotor.setPower(0.2);
+        BRMotor.setPower(0.5);
         BLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BLMotor.setPower(0.2);
+        BLMotor.setPower(0.5);
         while(!atTarget()) {
             telemetry.addData("FR Motor Position", FRMotor.getCurrentPosition());
             telemetry.addData("FL Motor Position", FLMotor.getCurrentPosition());
