@@ -49,7 +49,7 @@ public class Catapult {
     }
 
     public void setPosition(double y, Telemetry telemetry) {
-        catapultMotor.setTargetPosition(catapultMotor.getCurrentPosition() + (int)(y * 100));
+        catapultMotor.setTargetPosition(catapultMotor.getCurrentPosition() + (int)(-y * 100));
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         catapultMotor.setPower(1);
         telemetry.addData("Catapult Motor Position", catapultMotor.getCurrentPosition());

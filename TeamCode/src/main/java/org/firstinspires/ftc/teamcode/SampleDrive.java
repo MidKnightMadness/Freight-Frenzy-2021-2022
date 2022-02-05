@@ -80,7 +80,7 @@ public class SampleDrive {
             return false;
     }
 
-    public void telemetry(Telemetry telemetry) {
+    public void telemetry(Telemetry telemetry) {/*
         telemetry.addData("Left 2MDistance Sensor Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
         telemetry.addData("Middle Range Sensor Range", String.format("%.01f in", sensorRangeM.getDistance(DistanceUnit.INCH)));
         telemetry.addData("Right 2MDistance Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
@@ -89,6 +89,6 @@ public class SampleDrive {
         telemetry.addData("BR Motor Position", BRMotor.getCurrentPosition());
         telemetry.addData("BL Motor Position", BLMotor.getCurrentPosition());
         carousel.telemetry(telemetry);
-        telemetry.update();
+        telemetry.update();*/
     }
 }
