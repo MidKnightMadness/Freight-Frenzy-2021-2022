@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Carousel {
     CRServo carouselServo;
 
@@ -20,5 +22,10 @@ public class Carousel {
 
     public void spinOff() {
         carouselServo.setPower(0.0);
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Carousel Power", carouselServo.getPower());
+        telemetry.update();
     }
 }

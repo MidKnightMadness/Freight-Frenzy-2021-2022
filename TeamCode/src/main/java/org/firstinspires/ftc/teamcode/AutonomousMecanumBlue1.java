@@ -63,56 +63,42 @@ public class AutonomousMecanumBlue1 extends LinearOpMode {
         telemetry.update();
 
         // Placing Pre-Load Box (7 seconds)
-        drive.setPos(1400, 700, 0); //drive to alliance shipping hub
-        orient();
-        catapult.upper(); //outtake pre-load box onto alliance shipping hub
-        catapult.flapOff();
+        drive.telemetry(telemetry);
+        drive.setPos(-1400, -700, 0, telemetry); //drive to alliance shipping hub
+        drive.telemetry(telemetry);
+        //orient();
+        //catapult.upper(); //outtake pre-load box onto alliance shipping hub
+        //catapult.flapOff();
         sleep(1000);
-        catapult.flapOn();
-        catapult.returnPosition();
-
-        // Deliver Duck Through Carousel (5 seconds)
-        drive.setPos(2400,-1250, 0); //drive to carousel from shipping hub
-        orient();
-        carousel.spinRed(); //rotate carousel
-        intake.surgicalTubingOn(); //intake freight
-        intake.surgicalTubingOff();
-        carousel.spinOff();
-
-        //Placing Duck on Alliance Shipping Hub
-        drive.setPos(-2200,900,0); //drive to alliance shipping hub from carousel
-        orient();
-        catapult.upper(); //outtake duck onto alliance shipping hub
-        catapult.flapOff();
-        sleep(1000);
-        catapult.flapOn();
-        catapult.returnPosition();
+        //catapult.flapOn();
+        //catapult.returnPosition();
 
         // Placing 2 Freight from Warehouse to Alliance Shipping Hub (10 seconds)
-        for(int i = 0; i < 2; i++) {
-            drive.setPos(0, -1100, 1000); //drive to warehouse from alliance shipping hub
+        intake.dropIntake();
+        //for(int i = 0; i < 2; i++) {
+            drive.setPos(0, -1100, 1000, telemetry); //drive to warehouse from alliance shipping hub
             intake.surgicalTubingOn(); //intake freight
-            drive.setPos(0,-2000,0);
-            sleep(3000);
-            intake.surgicalTubingOff();
-            drive.setPos(0,2000,0); //drive to alliance shipping hub from warehouse
-            drive.setPos(0, 1100, -1000);
-            catapult.upper(); //outtake freight onto alliance shipping hub
-            catapult.flapOff();
+            drive.setPos(0,-2000,0, telemetry);
             sleep(1000);
-            catapult.flapOn();
-            catapult.returnPosition();
-        }
+            intake.surgicalTubingOff();
+            drive.setPos(0,2000,0, telemetry); //drive to alliance shipping hub from warehouse
+            drive.setPos(0, 1100, -1000, telemetry);
+            //catapult.upper(); //outtake freight onto alliance shipping hub
+            //catapult.flapOff();
+            sleep(1000);
+            //catapult.flapOn();
+            //catapult.returnPosition();
+        //}
 
         // Completely Parking in Warehouse (4 seconds)
-        drive.setPos(0, -1000, 1000); //drive to warehouse from alliance shipping hub
-        drive.setPos(0,-2000,0);
+        drive.setPos(0, -1100, 1000, telemetry); //drive to warehouse from alliance shipping hub
+        drive.setPos(0,-2000,0, telemetry);
     }
 
     public void orient() {
         while(imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY < -5 ||
                 imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY > 5) {
-            drive.setPos(0, 0, (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY) * 10);
+            drive.setPos(0, 0, (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY) * 10, telemetry);
             sleep(1);
         }
 

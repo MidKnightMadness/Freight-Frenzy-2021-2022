@@ -22,6 +22,8 @@ public class SampleDrive {
     ModernRoboticsI2cRangeSensor sensorRangeM;
     private DistanceSensor sensorDistanceR; //right front sensor
 
+    Carousel carousel;
+
     public SampleDrive(HardwareMap hardwareMap) {
         FRMotor = hardwareMap.get(DcMotorEx.class, "FR");
         FLMotor = hardwareMap.get(DcMotorEx.class, "FL");
@@ -31,12 +33,13 @@ public class SampleDrive {
         sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
         sensorRangeM = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
         sensorDistanceR = hardwareMap.get(DistanceSensor.class, "sensor_distance_right");
+
+        carousel = new Carousel(hardwareMap);
     }
 
     public void drive(double x, double y, double rotation) {
-        y = -y;
-        FRMotor.setPower(x - y - rotation);
-        FLMotor.setPower(x + y - rotation);
+        FRMotor.setPower(-x - y - rotation);
+        FLMotor.setPower(-x + y - rotation);
         BRMotor.setPower(-x + y + rotation);
         BLMotor.setPower(-x - y + rotation);
 
@@ -46,11 +49,11 @@ public class SampleDrive {
         //BLMotor.setVelocity((-x + y + rotation) * 1000);
     }
 
-    public void setPos(double x, double y, double rotation) {
-        FRMotor.setTargetPosition((int)( x - y + rotation) + FRMotor.getCurrentPosition());
-        FLMotor.setTargetPosition((int)( x + y + rotation) + FLMotor.getCurrentPosition());
-        BRMotor.setTargetPosition((int)(-x - y + rotation) + BRMotor.getCurrentPosition());
-        BLMotor.setTargetPosition((int)(-x + y + rotation) + BLMotor.getCurrentPosition());
+    public void setPos(double x, double y, double rotation, Telemetry telemetry) {
+        FRMotor.setTargetPosition((int)(-x - y - rotation) + FRMotor.getCurrentPosition());
+        FLMotor.setTargetPosition((int)(-x + y - rotation) + FLMotor.getCurrentPosition());
+        BRMotor.setTargetPosition((int)(-x + y + rotation) + BRMotor.getCurrentPosition());
+        BLMotor.setTargetPosition((int)(-x - y + rotation) + BLMotor.getCurrentPosition());
         FRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         FRMotor.setPower(0.2);
         FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -59,7 +62,12 @@ public class SampleDrive {
         BRMotor.setPower(0.2);
         BLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BLMotor.setPower(0.2);
-        while(!atTarget()) { }
+        while(!atTarget()) {
+            telemetry.addData("FR Motor Position", FRMotor.getCurrentPosition());
+            telemetry.addData("FL Motor Position", FLMotor.getCurrentPosition());
+            telemetry.addData("BR Motor Position", BRMotor.getCurrentPosition());
+            telemetry.addData("BL Motor Position", BLMotor.getCurrentPosition());
+            telemetry.update();}
     }
 
     public boolean atTarget() {
@@ -80,6 +88,7 @@ public class SampleDrive {
         telemetry.addData("FL Motor Position", FLMotor.getCurrentPosition());
         telemetry.addData("BR Motor Position", BRMotor.getCurrentPosition());
         telemetry.addData("BL Motor Position", BLMotor.getCurrentPosition());
+        carousel.telemetry(telemetry);
         telemetry.update();
     }
 }
