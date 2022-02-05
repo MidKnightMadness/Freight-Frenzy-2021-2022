@@ -27,37 +27,41 @@ public class Catapult {
     public void upper() {
         catapultMotor.setTargetPosition(500 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1.0);
+        catapultMotor.setPower(0.1);
     }
 
     public void middle() {
         catapultMotor.setTargetPosition(400 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1.0);
+        catapultMotor.setPower(0.1);
     }
 
     public void lower() {
         catapultMotor.setTargetPosition(300 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1.0);
+        catapultMotor.setPower(0.1);
     }
 
     public void returnPosition() {
         catapultMotor.setTargetPosition(startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        catapultMotor.setPower(1.0);
+        catapultMotor.setPower(0.1);
+    }
+
+    public void setPosition(double y, Telemetry telemetry) {
+        catapultMotor.setTargetPosition(catapultMotor.getCurrentPosition() + (int)(-y * 100));
+        catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        catapultMotor.setPower(1);
+        telemetry.addData("Catapult Motor Position", catapultMotor.getCurrentPosition());
+        telemetry.update();
     }
 
     public void headLeft() {
         headServo.setPosition(0);
     }
 
-    public void headRight() {
-        headServo.setPosition(1);
-    }
-
     public void headReturn() {
-        headServo.setPosition(0.5);
+        headServo.setPosition(1);
     }
 
     public void flapOn() {

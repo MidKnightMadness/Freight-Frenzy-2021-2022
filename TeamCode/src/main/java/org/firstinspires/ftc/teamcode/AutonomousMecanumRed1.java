@@ -60,7 +60,7 @@ public class AutonomousMecanumRed1 extends LinearOpMode {
         telemetry.addData("Right Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
         telemetry.addData("Barcode Location", barcodeLocation);
         telemetry.update();
-
+/*
         // Placing Pre-Load Box (5 seconds)
         drive.setPos(1400, 700, 0); //drive to alliance shipping hub
         //outtake pre-load box onto alliance shipping hub
@@ -99,7 +99,7 @@ public class AutonomousMecanumRed1 extends LinearOpMode {
                 imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY > 5) {
             drive.setPos(0, 0, (imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - offsetY) * 10);
             sleep(1);
-        }
+        }*/
 
     }
 
