@@ -18,7 +18,7 @@ public class Intake {
     }
 
     public void surgicalTubingOn() {
-        surgicalTubingMotor.setPower(1);
+        surgicalTubingMotor.setPower(-1);
     }
 
     public void surgicalTubingOff() {
@@ -26,11 +26,11 @@ public class Intake {
     }
 
     public void returnIntakeHolder() {
-        intakeHolderServo.setPosition(0);
+        intakeHolderServo.setPosition(1);
     }
 
     public void dropIntake() {
-        intakeHolderServo.setPosition(1);
+        intakeHolderServo.setPosition(0);
     }
 
 }

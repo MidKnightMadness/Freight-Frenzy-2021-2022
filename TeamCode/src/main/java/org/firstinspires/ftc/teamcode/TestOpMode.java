@@ -75,17 +75,16 @@ public class TestOpMode extends OpMode {
     @Override
     public void loop() {
         //drive to shipping hub position
-        if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 8.5 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 9.5) &&
+        if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 11.5 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 12.5) &&
              gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
             drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 9) / 10, 0);
         } else {
             drive.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
             drive.telemetry(telemetry);
         }
-        catapult.setPosition(gamepad2.right_stick_y, telemetry);
 
         //catapult
-        /*if (gamepad2.y && !lastPressedCatapultUpper) {
+        if (gamepad2.y && !lastPressedCatapultUpper) {
             catapultUpperToggle = !catapultUpperToggle;
             catapultMiddleToggle = false;
             catapultLowerToggle = false;
@@ -109,7 +108,8 @@ public class TestOpMode extends OpMode {
         }
         lastPressedCatapultUpper = gamepad2.y;
         lastPressedCatapultMiddle = gamepad2.b;
-        lastPressedCatapultLower = gamepad2.a;*/
+        lastPressedCatapultLower = gamepad2.a;
+        //catapult.setPower(gamepad2.left_stick_y);
 
         //turn flap
         if(gamepad2.x && !lastPressedFlap) {
@@ -155,6 +155,10 @@ public class TestOpMode extends OpMode {
         }
         lastPressedLiftServo = (gamepad2.left_trigger > 0);*/
 
+        if(catapult.getVelocity() < 0) {
+            surgicalToggle = false;
+        }
+
         //surgical tubing
         if (gamepad2.right_bumper && !lastPressedSurgical) {
             surgicalToggle = !surgicalToggle;
@@ -168,12 +172,11 @@ public class TestOpMode extends OpMode {
 
         //intake holder
         if(gamepad2.right_trigger > 0 && !lastPressedIntakeHolder) {
-            flapToggle = !flapToggle;
+            intakeHolderToggle = !intakeHolderToggle;
         }
-        if(flapToggle) {
+        if(intakeHolderToggle) {
             intake.dropIntake();
-        }
-        else {
+        } else {
             intake.returnIntakeHolder();
         }
         lastPressedIntakeHolder = (gamepad2.right_trigger > 0);
