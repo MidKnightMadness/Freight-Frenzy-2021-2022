@@ -8,22 +8,22 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorMRRangeSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 /*
-Player 1
-left stick (hold) = shifting
-right stick (hold) = rotating
-dpad up (hold) = go to shipping hub position
+Player 1 (gamepad1)
+left stick      (hold)      shifting
+right stick     (hold)      rotating
+dpad up         (hold)      go to shipping hub position
 
-Player 2
-y (toggle) = catapult to upper
-b (toggle) = catapult to middle
-a (toggle) = catapult to lower
-x (toggle) = catapult flap
-left bumper (toggle) = team shipping element lift motor
-left trigger (toggle) = team shipping element lift servo
-right bumper (toggle) = surgical tubing
-dpad down (toggle) = rotate catapult head left
-dpad left (hold) = spin carousel left
-dpad right (hold) = spin carousel right
+Player 2 (gamepad2)
+y               (toggle)    catapult to upper
+b               (toggle)    catapult to middle
+a               (toggle)    catapult to lower
+x               (toggle)    catapult flap
+left bumper     (toggle)    team shipping element lift motor
+left trigger    (toggle)    team shipping element lift servo
+right bumper    (toggle)    surgical tubing
+dpad down       (toggle)    rotate catapult head left
+dpad left       (hold)      spin carousel left
+dpad right      (hold)      spin carousel right
 */
 
 @TeleOp
@@ -68,22 +68,35 @@ public class TestOpMode extends OpMode {
         sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
         sensorRangeM = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
         sensorDistanceR = hardwareMap.get(DistanceSensor.class, "sensor_distance_right");
-
-        catapult.headReturn();
     }
 
     @Override
     public void loop() {
+        //telemetry
+        sensorTelemetry();
+        drive.telemetry(telemetry);
+        carousel.telemetry(telemetry);
+        catapult.telemetry(telemetry);
+        intake.telemetry(telemetry);
+        lift.telemetry(telemetry);
+
+        //DRIVER ASSIST
         //drive to shipping hub position
         if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 11.5 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 12.5) &&
              gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
-            drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 9) / 10, 0);
+            drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 12) / 10, 0);
         } else {
             drive.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-            drive.telemetry(telemetry);
         }
 
-        //catapult
+        //turns off surgical intake when catapult is moving back to the default position
+        if (catapult.getVelocity() < 0) {
+            surgicalToggle = false;
+        }
+
+
+
+        //CATAPULT BODY
         if (gamepad2.y && !lastPressedCatapultUpper) {
             catapultUpperToggle = !catapultUpperToggle;
             catapultMiddleToggle = false;
@@ -109,32 +122,30 @@ public class TestOpMode extends OpMode {
         lastPressedCatapultUpper = gamepad2.y;
         lastPressedCatapultMiddle = gamepad2.b;
         lastPressedCatapultLower = gamepad2.a;
-        //catapult.setPower(gamepad2.left_stick_y);
 
-        //turn flap
-        if(gamepad2.x && !lastPressedFlap) {
+        //CATAPULT FLAP
+        if (gamepad2.x && !lastPressedFlap) {
             flapToggle = !flapToggle;
         }
-        if(flapToggle) {
-            catapult.flapOn();
-        }
-        else {
-            catapult.flapOff();
+        if (flapToggle) {
+            catapult.flapOpen();
+        } else {
+            catapult.flapClose();
         }
         lastPressedFlap = gamepad2.x;
 
-        //catapult head
+        //CATAPULT HEAD
         if (gamepad2.dpad_down && !lastPressedCatapultHeadLeft) {
             catapultHeadLeftToggle = !catapultHeadLeftToggle;
         }
         if (catapultHeadLeftToggle) {
-            catapult.headLeft();
+            catapult.headFold();
         } else {
-            catapult.headReturn();
+            catapult.headUnfold();
         }
         lastPressedCatapultHeadLeft = gamepad2.dpad_down;
 
-        //team shipping element lift
+        //TEAM SHIPPING ELEMENT LIFT
         /*if (gamepad2.left_bumper && !lastPressedLiftMotor) {
             liftMotorToggle = !liftMotorToggle;
         }
@@ -155,11 +166,7 @@ public class TestOpMode extends OpMode {
         }
         lastPressedLiftServo = (gamepad2.left_trigger > 0);*/
 
-        if(catapult.getVelocity() < 0) {
-            surgicalToggle = false;
-        }
-
-        //surgical tubing
+        //SURGICAL TUBING INTAKE
         if (gamepad2.right_bumper && !lastPressedSurgical) {
             surgicalToggle = !surgicalToggle;
         }
@@ -170,7 +177,7 @@ public class TestOpMode extends OpMode {
         }
         lastPressedSurgical = gamepad1.right_bumper;
 
-        //intake holder
+        //INTAKE HOLDER
         if(gamepad2.right_trigger > 0 && !lastPressedIntakeHolder) {
             intakeHolderToggle = !intakeHolderToggle;
         }
@@ -181,7 +188,7 @@ public class TestOpMode extends OpMode {
         }
         lastPressedIntakeHolder = (gamepad2.right_trigger > 0);
 
-        //spinning carousel
+        //CAROUSEL SPINNER
         if(gamepad2.dpad_left) {
             carousel.spinRed();
         } else if(gamepad2.dpad_right) {
@@ -189,5 +196,11 @@ public class TestOpMode extends OpMode {
         } else {
             carousel.spinOff();
         }
+    }
+
+    public void sensorTelemetry() {
+        telemetry.addData("Left 2MDistance Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("Middle Range Range", String.format("%.01f in", sensorRangeM.getDistance(DistanceUnit.INCH)));
+        telemetry.addData("Right 2MDistance Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
     }
 }

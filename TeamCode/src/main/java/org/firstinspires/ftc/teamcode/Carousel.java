@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Carousel {
     CRServo carouselServo;
+    DcMotorEx carouselMotor;
 
     public Carousel(HardwareMap hardwareMap){
         carouselServo = hardwareMap.get(CRServo.class, "carousel");

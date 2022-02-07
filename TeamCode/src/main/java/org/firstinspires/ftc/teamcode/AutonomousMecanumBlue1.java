@@ -26,7 +26,7 @@ public class AutonomousMecanumBlue1 extends LinearOpMode {
     private ModernRoboticsI2cRangeSensor sensorRangeM; //middle front range sensor
     private DistanceSensor sensorDistanceR; //right front sensor
     BNO055IMU imu;
-    double offsetY;
+    double offsetY = 0.0;
     int barcodeLocation = 0;
 
     @Override
@@ -45,67 +45,97 @@ public class AutonomousMecanumBlue1 extends LinearOpMode {
         intake = new Intake(hardwareMap);
         lift = new Lift(hardwareMap);
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
         sensorDistanceL = hardwareMap.get(DistanceSensor.class, "sensor_distance_left");
         sensorRangeM = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "sensor_range_middle");
         sensorDistanceR = hardwareMap.get(DistanceSensor.class, "sensor_distance_right");
+        imu.initialize(parameters);
         sleep(1000);
 
         waitForStart();
         offsetY = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle;
 
-        // Detecting Team Shipping Element(0 seconds)
+        // DETECTING TEAM SHIPPING ELEMENT (0 SECONDS)
         if (sensorDistanceL.getDistance(DistanceUnit.INCH) < 100 && sensorDistanceL.getDistance(DistanceUnit.INCH) < sensorDistanceR.getDistance(DistanceUnit.INCH)) {
-            barcodeLocation = 0;
-        } else if (sensorDistanceR.getDistance(DistanceUnit.INCH) < 100) {
-            barcodeLocation = 1;
-        } else {
             barcodeLocation = 2;
+        } else if (sensorDistanceR.getDistance(DistanceUnit.INCH) < 100) {
+            barcodeLocation = 3;
+        } else {
+            barcodeLocation = 1;
         }
         telemetry.addData("Left Sensor Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
         telemetry.addData("Right Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
         telemetry.addData("Barcode Location", barcodeLocation);
         telemetry.update();
 
-        // Placing Pre-Load Box (7 seconds)
-        drive.telemetry(telemetry);
-        drive.setPos(-1000, -600, 0, telemetry); //drive to alliance shipping hub
-        drive.telemetry(telemetry);
-        intake.dropIntake();
-        sleep(2000);
-        //orient();
-        //if(barcodeLocation == 0)
+        //barcodeLocation = 1;
+        //barcodeLocation = 2;
+        //barcodeLocation = 3;
+
+        // PLACING PRE-LOAD BOX (7 SECONDS)
+        catapult.flapClose(); //secure pre-load box
         double time = getRuntime();
-        while(getRuntime() < 2 + time)
-            catapult.upper(); //outtake pre-load box onto alliance shipping hub
+        if (barcodeLocation == 1) { //drive to alliance shipping hub depending on barcode location
+            drive.setPos(0, -400, 0, telemetry);
+            /*while(getRuntime() < 2 + time) {
+                if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 13.7 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 14.3) && gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
+                    drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 14) / 10, 0);
+                }
+            }*/
+        } else if (barcodeLocation == 2) {
+            drive.setPos(0, -550, 0, telemetry);
+            /*while(getRuntime() < 2 + time) {
+                if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 12.7 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 13.3) && gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
+                    drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 13) / 10, 0);
+                }
+            }*/
+        } else {
+            drive.setPos(0, -700, 0, telemetry);
+            /*while(getRuntime() < 2 + time) {
+                if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 11.9 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 12.5) && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
+                    drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 12.2) / 10, 0);
+                }
+            }*/
+        }
+        drive.setPos(0, 0, 500, telemetry);
+        intake.dropIntake(); //drop surgical tubing down
         sleep(1000);
-        catapult.headReturn();
-        sleep(3000);
+
+        time = getRuntime();
+        while(getRuntime() < 2 + time) { //set catapult position depending on barcode location
+            if(barcodeLocation == 1) {
+                catapult.lower();
+            } else if (barcodeLocation == 2) {
+                catapult.middle();
+            } else {
+                catapult.upper();
+            }
+        }
+        catapult.headUnfold(); //unfold catapult head
+        sleep(1000);
+        catapult.flapOpen(); //open up flap for outtake
+        sleep(1000);
+        catapult.returnPosition(); //return catapult to starting position
+
+        // PLACING 2 FREIGHT FROM WAREHOUSE TO ALLIANCE SHIPPING HUB (10 SECONDS)
+        /*drive.setPos(0, 900, 1000, telemetry); //drive to warehouse from alliance shipping hub
+        intake.surgicalTubingOn(); //intake freight
+        drive.setPos(0,2000,0, telemetry);
+        sleep(1000);
+        catapult.flapOff();
+        intake.surgicalTubingOff();
+        drive.setPos(0,-4000,0, telemetry); //drive to alliance shipping hub from warehouse
+        drive.setPos(0, -1100, -1000, telemetry);
+        time = getRuntime();
+        while(getRuntime() < 2 + time)
+            catapult.upper(); //outtake freight onto alliance shipping hub
         catapult.flapOn();
         sleep(3000);
-        catapult.returnPosition();
+        catapult.returnPosition();*/
 
-        // Placing 2 Freight from Warehouse to Alliance Shipping Hub (10 seconds)
-        //for(int i = 0; i < 2; i++) {
-            drive.setPos(0, 900, 1000, telemetry); //drive to warehouse from alliance shipping hub
-            //intake.surgicalTubingOn(); //intake freight
-            drive.setPos(0,4000,0, telemetry);
-            /*sleep(1000);
-            catapult.flapOff();
-            intake.surgicalTubingOff();
-            drive.setPos(0,-4000,0, telemetry); //drive to alliance shipping hub from warehouse
-            drive.setPos(0, -1100, -1000, telemetry);
-            time = getRuntime();
-            while(getRuntime() < 2 + time)
-                catapult.upper(); //outtake freight onto alliance shipping hub
-            catapult.flapOn();
-            sleep(3000);
-            catapult.returnPosition();
-        //}
-
-        // Completely Parking in Warehouse (4 seconds)
-        drive.setPos(0, 1100, 1000, telemetry); //drive to warehouse from alliance shipping hub
-        drive.setPos(0,2000,0, telemetry);*/
+        // COMPLETELY PARK IN WAREHOUSE (4 SECONDS)
+        drive.setPos(0, 0, 500, telemetry); //drive to warehouse from alliance shipping hub
+        drive.setPos(-4000, 0, 0, telemetry);
+        drive.setPos(0,3000,0, telemetry);
     }
 
     public void orient() {
@@ -118,4 +148,3 @@ public class AutonomousMecanumBlue1 extends LinearOpMode {
     }
 
 }
-

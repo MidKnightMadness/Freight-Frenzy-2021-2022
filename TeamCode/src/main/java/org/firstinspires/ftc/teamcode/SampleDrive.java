@@ -24,6 +24,8 @@ public class SampleDrive {
 
     Carousel carousel;
     Catapult catapult;
+    Intake intake;
+    Lift lift;
 
     public SampleDrive(HardwareMap hardwareMap) {
         FRMotor = hardwareMap.get(DcMotorEx.class, "FR");
@@ -37,6 +39,8 @@ public class SampleDrive {
 
         carousel = new Carousel(hardwareMap);
         catapult = new Catapult(hardwareMap);
+        intake = new Intake(hardwareMap);
+        lift = new Lift(hardwareMap);
     }
 
     public void drive(double x, double y, double rotation) {
@@ -83,14 +87,9 @@ public class SampleDrive {
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("Left 2MDistance Sensor Range", String.format("%.01f in", sensorDistanceL.getDistance(DistanceUnit.INCH)));
-        telemetry.addData("Middle Range Sensor Range", String.format("%.01f in", sensorRangeM.getDistance(DistanceUnit.INCH)));
-        telemetry.addData("Right 2MDistance Sensor Range", String.format("%.01f in", sensorDistanceR.getDistance(DistanceUnit.INCH)));
         telemetry.addData("FR Motor Position", FRMotor.getCurrentPosition());
         telemetry.addData("FL Motor Position", FLMotor.getCurrentPosition());
         telemetry.addData("BR Motor Position", BRMotor.getCurrentPosition());
         telemetry.addData("BL Motor Position", BLMotor.getCurrentPosition());
-        carousel.telemetry(telemetry);
-        catapult.telemetry(telemetry);
     }
 }

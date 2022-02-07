@@ -96,10 +96,10 @@ public class MainWestCoast extends OpMode {
             flapToggle = !flapToggle;
         }
         if(flapToggle) {
-            catapult.flapOn();
+            catapult.flapOpen();
         }
         else {
-            catapult.flapOff();
+            catapult.flapClose();
         }
         lastPressedFlap = gamepad1.x;
 
@@ -112,11 +112,9 @@ public class MainWestCoast extends OpMode {
             catapultHeadLeftToggle = false;
         }
         if (catapultHeadLeftToggle) {
-            catapult.headLeft();
-        } else if (catapultHeadRightToggle) {
-            catapult.headRight();
+            catapult.headFold();
         } else {
-            catapult.headReturn();
+            catapult.headUnfold();
         }
         catapultHeadLeftToggle = gamepad2.dpad_left;
         catapultHeadRightToggle = gamepad2.dpad_right;

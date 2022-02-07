@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Intake {
     private DcMotor surgicalTubingMotor; //intake
     private Servo intakeHolderServo; //intake holder
@@ -31,6 +33,11 @@ public class Intake {
 
     public void dropIntake() {
         intakeHolderServo.setPosition(0);
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Surgical Tubing Motor Power", surgicalTubingMotor.getPower());
+        telemetry.addData("Intake Holder Servo Position", intakeHolderServo.getPosition());
     }
 
 }

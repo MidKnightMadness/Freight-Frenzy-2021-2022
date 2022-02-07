@@ -73,24 +73,26 @@ public class Catapult {
         return catapultMotor.getVelocity();
     }
 
-    public void telemetry(Telemetry telemetry) {
-        telemetry.addData("Catapult Motor Current Position", catapultMotor.getCurrentPosition());
-        telemetry.addData("Catapult Motor Target Position", catapultMotor.getTargetPosition());
-    }
-
-    public void headLeft() {
+    public void headFold() {
         headServo.setPosition(0);
     }
 
-    public void headReturn() {
+    public void headUnfold() {
         headServo.setPosition(1);
     }
 
-    public void flapOn() {
+    public void flapOpen() {
         flapServo.setPosition(0);
     }
 
-    public void flapOff() {
+    public void flapClose() {
         flapServo.setPosition(0.5);
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Catapult Motor Current", catapultMotor.getCurrentPosition());
+        telemetry.addData("Catapult Motor Target", catapultMotor.getTargetPosition());
+        telemetry.addData("Catapult Head Position", headServo.getPosition());
+        telemetry.addData("Catapult Flap Position", flapServo.getPosition());
     }
 }

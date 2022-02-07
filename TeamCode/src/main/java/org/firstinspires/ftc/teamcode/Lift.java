@@ -1,17 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Lift {
-    private DcMotor liftMotor;
+    private DcMotorEx liftMotor;
     private Servo liftServo;
     private int motorStartPosition;
 
     public Lift(HardwareMap hardwareMap) {
         liftServo = hardwareMap.get(Servo.class, "lift_servo");
-        liftMotor = hardwareMap.get(DcMotor.class, "lift_motor");
+        liftMotor = hardwareMap.get(DcMotorEx.class, "lift_motor");
         motorStartPosition = liftMotor.getCurrentPosition();
     }
 
@@ -33,5 +36,11 @@ public class Lift {
 
     public void close() {
         liftServo.setPosition(0);
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Lift Motor Current", liftMotor.getCurrentPosition());
+        telemetry.addData("Lift Motor Target", liftMotor.getTargetPosition());
+        telemetry.addData("Lift Servo Position", liftServo.getPosition());
     }
 }
