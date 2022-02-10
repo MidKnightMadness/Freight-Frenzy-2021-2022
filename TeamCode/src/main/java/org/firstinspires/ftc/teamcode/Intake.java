@@ -20,7 +20,7 @@ public class Intake {
     }
 
     public void surgicalTubingOn() {
-        surgicalTubingMotor.setPower(-1);
+        surgicalTubingMotor.setPower(-250/300);
     }
 
     public void surgicalTubingOff() {
@@ -38,6 +38,10 @@ public class Intake {
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("Surgical Tubing Motor Power", surgicalTubingMotor.getPower());
         telemetry.addData("Intake Holder Servo Position", intakeHolderServo.getPosition());
+    }
+
+    public void testMotor(double power) {
+        surgicalTubingMotor.setPower(power);
     }
 
 }

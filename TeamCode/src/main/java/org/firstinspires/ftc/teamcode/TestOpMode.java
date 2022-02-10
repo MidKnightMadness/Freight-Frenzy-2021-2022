@@ -58,6 +58,8 @@ public class TestOpMode extends OpMode {
     private boolean lastPressedLiftServo = false;
     private boolean liftServoToggle = false;
 
+    //private double time;
+
     @Override
     public void init() {
         drive = new SampleDrive(hardwareMap);
@@ -86,7 +88,7 @@ public class TestOpMode extends OpMode {
              gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
             drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 12) / 10, 0);
         } else {
-            drive.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+            drive.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x); //drive function
         }
 
         //turns off surgical intake when catapult is moving back to the default position
@@ -191,8 +193,14 @@ public class TestOpMode extends OpMode {
         //CAROUSEL SPINNER
         if(gamepad2.dpad_left) {
             carousel.spinRed();
+            /*final double time = getRuntime();
+            if(getRuntime() > time + 2)
+                carousel.spinMotor(time);*/
         } else if(gamepad2.dpad_right) {
             carousel.spinBlue();
+            /*final double time = getRuntime();
+            if(getRuntime() > time + 2)
+                carousel.spinMotor(time);*/
         } else {
             carousel.spinOff();
         }
