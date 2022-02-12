@@ -68,19 +68,39 @@ public class SampleDrive {
         BRMotor.setPower(0.5);
         BLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         BLMotor.setPower(0.5);
-        while(!atTarget()) {
-            telemetry.addData("FR Motor Position", FRMotor.getCurrentPosition());
-            telemetry.addData("FL Motor Position", FLMotor.getCurrentPosition());
-            telemetry.addData("BR Motor Position", BRMotor.getCurrentPosition());
-            telemetry.addData("BL Motor Position", BLMotor.getCurrentPosition());
-            telemetry.update();}
+        while(FRMotor.isBusy() && FLMotor.isBusy() && BRMotor.isBusy() && BLMotor.isBusy()) { telemetry(telemetry); }
     }
 
-    public boolean atTarget() {
-        return (FRMotor.getCurrentPosition() > FRMotor.getTargetPosition() - 10 && FRMotor.getCurrentPosition() < FRMotor.getTargetPosition() + 10 &&
-                FLMotor.getCurrentPosition() > FLMotor.getTargetPosition() - 10 && FLMotor.getCurrentPosition() < FLMotor.getTargetPosition() + 10 &&
-                BRMotor.getCurrentPosition() > BRMotor.getTargetPosition() - 10 && BRMotor.getCurrentPosition() < BRMotor.getTargetPosition() + 10 &&
-                BLMotor.getCurrentPosition() > BLMotor.getTargetPosition() - 10 && BLMotor.getCurrentPosition() < BLMotor.getTargetPosition() + 10);
+    public void moveDistance(double power, int distance) { //idk in progres
+        FLMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        FRMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        BRMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        BLMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
+        FRMotor.setTargetPosition(distance);
+        FLMotor.setTargetPosition(distance);
+        BRMotor.setTargetPosition(distance);
+        BLMotor.setTargetPosition(distance);
+
+        FRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        BLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while(FRMotor.isBusy() && FLMotor.isBusy() && BRMotor.isBusy() && BLMotor.isBusy()) { }
+
+
+        FRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BRMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        BLMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void moveForward(double power) {
+        FRMotor.setPower(power);
+        FLMotor.setPower(power);
+        BRMotor.setPower(power);
+        BLMotor.setPower(power);
     }
 
     public void telemetry(Telemetry telemetry) {

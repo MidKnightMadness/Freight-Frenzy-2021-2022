@@ -43,5 +43,4 @@ public class Intake {
     public void testMotor(double power) {
         surgicalTubingMotor.setPower(power);
     }
-
 }

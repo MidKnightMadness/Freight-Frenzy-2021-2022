@@ -34,4 +34,8 @@ public class Carousel {
     public void telemetry(Telemetry telemetry) {
         telemetry.addData("Carousel Power", carouselServo.getPower());
     }
+
+    public void testServo(double power) {
+        carouselServo.setPower(power);
+    }
 }
