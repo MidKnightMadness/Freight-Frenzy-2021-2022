@@ -41,9 +41,9 @@ public class Arm {
         winchMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         winchMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, new PIDFCoefficients(10.00, 0.05, 0.0, 0.0, MotorControlAlgorithm.LegacyPID));
         telemetry.addData("PID", winchMotor.getPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION));
-        Servo rotMotor = hardwareMap.get(Servo.class, "rot");
-        Servo cubeMotor = hardwareMap.get(Servo.class, "cube");
-        Servo teamElementMotor = hardwareMap.get(Servo.class, "teamElement");
+        rotMotor = hardwareMap.get(Servo.class, "rot");
+        cubeMotor = hardwareMap.get(Servo.class, "cube");
+        teamElementMotor = hardwareMap.get(Servo.class, "teamElement");
     }
 
     boolean prevPress = false;
@@ -102,16 +102,10 @@ public class Arm {
         prevPress2 = pressed;
     }
 
-//    public void rotateLeft(boolean pressed){
-//        if(pressed){
-//
-//        }
-//    }
-
     //Custom position
-    public void AutoRotateArm(int position){
-            rotMotor.setPosition(position);
-        }
+    public void armSetPosition(double position){
+        rotMotor.setPosition(position);
+    }
     //Initial position of the arm
     public void resetArmPosition(){
         rotMotor.setPosition(rotPos);
@@ -142,6 +136,7 @@ public class Arm {
             }
         }
     }
+
 
 
 
