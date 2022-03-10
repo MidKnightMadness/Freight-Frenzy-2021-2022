@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class TestMotor extends OpMode {
     SampleDrive drive;
     Intake intake;
+    Catapult catapult;
 
     public void init() {
         drive = new SampleDrive(hardwareMap);
@@ -17,6 +18,6 @@ public class TestMotor extends OpMode {
     }
 
     public void loop() {
-        intake.testMotor(-0.833333333333);
+        catapult.testMotor(-0.833333333333);
     }
 }

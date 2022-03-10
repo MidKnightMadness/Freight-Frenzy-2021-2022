@@ -95,4 +95,8 @@ public class Catapult {
         telemetry.addData("Catapult Head Position", headServo.getPosition());
         telemetry.addData("Catapult Flap Position", flapServo.getPosition());
     }
+
+    public void testMotor(double power) {
+        catapultMotor.setPower(power);
+    }
 }
