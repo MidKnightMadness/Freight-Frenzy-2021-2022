@@ -1,22 +1,32 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 
 public class TestServo extends OpMode {
-    SampleDrive drive;
-    Intake intake;
-    Carousel carousel;
+    private int i;
+    private Servo headServo;
 
     public void init() {
-        drive = new SampleDrive(hardwareMap);
-        intake = new Intake(hardwareMap);
-        carousel = new Carousel(hardwareMap);
+        headServo = hardwareMap.get(Servo.class, "head");
+        i = 0;
     }
 
     public void loop() {
-        carousel.testServo(10);
+        if(gamepad1.dpad_up)
+            i+=0.01;
+        if(gamepad1.dpad_down)
+            i-=0.01;
+
+        headServo.setPosition(i);
+        telemetry.addData("Head Servo", headServo.getPosition());
+        telemetry.addData("i", i);
+        telemetry.update();
     }
 }

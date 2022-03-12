@@ -30,43 +30,32 @@ public class Catapult {
     }
 
     public void upper() {//12.2 in
-        catapultMotor.setTargetPosition(140 + startPosition);
+        catapultMotor.setTargetPosition(630 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if(catapultMotor.getCurrentPosition() > startPosition + 80 && catapultMotor.getCurrentPosition() < catapultMotor.getTargetPosition() - 10) {
+        catapultMotor.setPower(0.25);
+        /*if(catapultMotor.getCurrentPosition() > startPosition + 80 && catapultMotor.getCurrentPosition() < catapultMotor.getTargetPosition() - 10) {
             catapultMotor.setPower(0);
         } else {
             catapultMotor.setPower(1);
-        }
+        }*/
     }
 
     public void middle() {//13 in
-        catapultMotor.setTargetPosition(155 + startPosition);
+        catapultMotor.setTargetPosition(830 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if(catapultMotor.getCurrentPosition() > startPosition + 80 && catapultMotor.getCurrentPosition() < catapultMotor.getTargetPosition() - 10) {
-            catapultMotor.setPower(0);
-        } else {
-            catapultMotor.setPower(1);
-        }
+        catapultMotor.setPower(0.25);
     }
 
     public void lower() {//14 in
-        catapultMotor.setTargetPosition(175 + startPosition);
+        catapultMotor.setTargetPosition(970 + startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if(catapultMotor.getCurrentPosition() > startPosition + 80 && catapultMotor.getCurrentPosition() < catapultMotor.getTargetPosition() - 10) {
-            catapultMotor.setPower(0);
-        } else {
-            catapultMotor.setPower(1);
-        }
+        catapultMotor.setPower(0.25);
     }
 
     public void returnPosition() {
         catapultMotor.setTargetPosition(startPosition);
         catapultMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if(catapultMotor.getCurrentPosition() < startPosition + 80) {
-            catapultMotor.setPower(0);
-        } else {
-            catapultMotor.setPower(1);
-        }
+        catapultMotor.setPower(0.1);
     }
 
     public double getVelocity() {

@@ -20,7 +20,7 @@ a               (toggle)    catapult to lower
 x               (toggle)    catapult flap
 left bumper     (toggle)    team shipping element lift motor
 left trigger    (toggle)    team shipping element lift servo
-right bumper    (toggle)    surgical tubing
+left bumper     (toggle)    surgical tubing
 dpad down       (toggle)    rotate catapult head left
 dpad left       (hold)      spin carousel left
 dpad right      (hold)      spin carousel right
@@ -169,7 +169,7 @@ public class TestOpMode extends OpMode {
         lastPressedLiftServo = (gamepad2.left_trigger > 0);*/
 
         //SURGICAL TUBING INTAKE
-        if (gamepad2.right_bumper && !lastPressedSurgical) {
+        if (gamepad2.left_bumper && !lastPressedSurgical) {
             surgicalToggle = !surgicalToggle;
         }
         if (surgicalToggle) {
@@ -177,7 +177,7 @@ public class TestOpMode extends OpMode {
         } else {
             intake.surgicalTubingOff();
         }
-        lastPressedSurgical = gamepad1.right_bumper;
+        lastPressedSurgical = gamepad2.left_bumper;
 
         //INTAKE HOLDER
         if(gamepad2.right_trigger > 0 && !lastPressedIntakeHolder) {
