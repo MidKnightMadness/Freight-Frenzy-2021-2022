@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 
 public class TestServo extends OpMode {
-    private int i;
+    private double i;
     private Servo headServo;
 
     public void init() {

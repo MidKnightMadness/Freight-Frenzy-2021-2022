@@ -69,46 +69,47 @@ public class AutonomousMecanumBlue1 extends LinearOpMode {
 
         //barcodeLocation = 1;
         //barcodeLocation = 2;
-        //barcodeLocation = 3;
+        barcodeLocation = 3;
 
         // PLACING PRE-LOAD BOX (7 SECONDS)
         catapult.flapClose(); //secure pre-load box
         double time = getRuntime();
         if (barcodeLocation == 1) { //drive to alliance shipping hub depending on barcode location
-            drive.setPos(0, -400, 0, telemetry);
+            drive.setPos(0, -700, 0, telemetry);
             /*while(getRuntime() < 2 + time) {
                 if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 13.7 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 14.3) && gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
                     drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 14) / 10, 0);
                 }
             }*/
         } else if (barcodeLocation == 2) {
-            drive.setPos(0, -550, 0, telemetry);
+            drive.setPos(0, -700, 0, telemetry);
             /*while(getRuntime() < 2 + time) {
                 if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 12.7 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 13.3) && gamepad1.dpad_up && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
                     drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 13) / 10, 0);
                 }
             }*/
         } else {
-            drive.setPos(0, -700, 0, telemetry);
+            drive.setPos(0, -1200, 0, telemetry);
+            drive.setPos(-200, 0, 0, telemetry);
             /*while(getRuntime() < 2 + time) {
                 if ((sensorRangeM.getDistance(DistanceUnit.INCH) <= 11.9 || sensorRangeM.getDistance(DistanceUnit.INCH) >= 12.5) && sensorRangeM.getDistance(DistanceUnit.INCH) < 100) {
                     drive.drive(0, (sensorRangeM.getDistance(DistanceUnit.INCH) - 12.2) / 10, 0);
                 }
             }*/
         }
-        drive.setPos(0, 0, 500, telemetry);
+        drive.setPos(0, 0, 600, telemetry);
         intake.dropIntake(); //drop surgical tubing down
         sleep(1000);
 
         time = getRuntime();
         while(getRuntime() < 2 + time) { //set catapult position depending on barcode location
-            if(barcodeLocation == 1) {
+            /*if(barcodeLocation == 1) {
                 catapult.lower();
             } else if (barcodeLocation == 2) {
-                catapult.middle();
+                */catapult.middle();/*
             } else {
                 catapult.upper();
-            }
+            }*/
         }
         catapult.headUnfold(); //unfold catapult head
         sleep(1000);
@@ -117,25 +118,29 @@ public class AutonomousMecanumBlue1 extends LinearOpMode {
         catapult.returnPosition(); //return catapult to starting position
 
         // PLACING 2 FREIGHT FROM WAREHOUSE TO ALLIANCE SHIPPING HUB (10 SECONDS)
-        /*drive.setPos(0, 900, 1000, telemetry); //drive to warehouse from alliance shipping hub
+        drive.setPos(0, 0, 300, telemetry); //drive to warehouse from alliance shipping hub
+        drive.setPos(-2500, 0, 0, telemetry); //drive to warehouse from alliance shipping hub
         intake.surgicalTubingOn(); //intake freight
         drive.setPos(0,2000,0, telemetry);
         sleep(1000);
-        catapult.flapOff();
+        catapult.flapClose();
         intake.surgicalTubingOff();
-        drive.setPos(0,-4000,0, telemetry); //drive to alliance shipping hub from warehouse
-        drive.setPos(0, -1100, -1000, telemetry);
+        drive.setPos(-200, 0, 0, telemetry);
+        drive.setPos(0,-2500,0, telemetry); //drive to alliance shipping hub from warehouse
+        drive.setPos(-200, 0, 0, telemetry);
+        drive.setPos(1400, 0, 0, telemetry);
+        drive.setPos(0, 0, -300, telemetry);
         time = getRuntime();
         while(getRuntime() < 2 + time)
             catapult.upper(); //outtake freight onto alliance shipping hub
-        catapult.flapOn();
+        catapult.flapOpen();
         sleep(3000);
-        catapult.returnPosition();*/
+        catapult.returnPosition();
 
         // COMPLETELY PARK IN WAREHOUSE (4 SECONDS)
-        drive.setPos(0, 0, 500, telemetry); //drive to warehouse from alliance shipping hub
-        drive.setPos(-4000, 0, 0, telemetry);
-        drive.setPos(0,3000,0, telemetry);
+        drive.setPos(0, 0, 200, telemetry); //drive to warehouse from alliance shipping hub
+        drive.setPos(-2000, 0, 0, telemetry);
+        drive.setPos(0,2000,0, telemetry);
     }
 
     public void orient() {

@@ -49,6 +49,11 @@ public class SampleDrive {
         BRMotor.setPower(-x + y + rotation);
         BLMotor.setPower(-x - y + rotation);
 
+        FRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BRMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BLMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         //FRMotor.setVelocity((x - y + rotation) * 1000);
         //FLMotor.setVelocity((x + y + rotation) * 1000);
         //BRMotor.setVelocity((-x - y + rotation) * 1000);
@@ -61,13 +66,13 @@ public class SampleDrive {
         BRMotor.setTargetPosition((int)(-x - y + rotation) + BRMotor.getCurrentPosition());
         BLMotor.setTargetPosition((int)(-x + y + rotation) + BLMotor.getCurrentPosition());
         FRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FRMotor.setPower(0.5);
+        FRMotor.setPower(0.2);
         FLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        FLMotor.setPower(0.5);
+        FLMotor.setPower(0.2);
         BRMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BRMotor.setPower(0.5);
+        BRMotor.setPower(0.2);
         BLMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        BLMotor.setPower(0.5);
+        BLMotor.setPower(0.2);
         while(FRMotor.isBusy() && FLMotor.isBusy() && BRMotor.isBusy() && BLMotor.isBusy()) { telemetry(telemetry); }
     }
 
@@ -108,5 +113,6 @@ public class SampleDrive {
         telemetry.addData("FL Motor Position", FLMotor.getCurrentPosition());
         telemetry.addData("BR Motor Position", BRMotor.getCurrentPosition());
         telemetry.addData("BL Motor Position", BLMotor.getCurrentPosition());
+        telemetry.update();
     }
 }

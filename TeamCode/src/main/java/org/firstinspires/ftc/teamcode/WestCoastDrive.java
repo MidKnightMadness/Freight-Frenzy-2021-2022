@@ -30,6 +30,11 @@ public class WestCoastDrive {
         FL.setPower(y + rotation);
         BR.setPower(y + rotation);
         BL.setPower(-y + rotation);
+
+        FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setPos(double y, double rotation) {
